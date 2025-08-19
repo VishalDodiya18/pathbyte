@@ -1,4 +1,4 @@
-package com.labapp;
+package kb.pathbyte.app;
 
 import io.flutter.embedding.android.FlutterActivity;
 

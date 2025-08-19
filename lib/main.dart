@@ -19,8 +19,9 @@ class MyApp extends StatelessWidget {
       designSize: const Size(428, 926),
       builder: (_, child) {
         return GetMaterialApp(
-          title: 'Lap App',
-          debugShowCheckedModeBanner: false,theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+          title: 'Pathbyte',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(scaffoldBackgroundColor: Colors.white),
           home: HomeScreen(),
         );
       },
