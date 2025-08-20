@@ -10,12 +10,13 @@ import 'package:labapp/Constants/textfield_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
 import 'package:labapp/Screens/bookcase_screen/bookcase_widget.dart';
 import 'package:labapp/Screens/bookcase_screen/controller_bookcase_screen.dart';
+import 'package:labapp/utils/app_color.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 class BookCaseScreen extends StatelessWidget {
   BookCaseScreen({super.key});
 
-  final BookCaseController controller = Get.put(BookCaseController());
+  final BookCaseController controller = Get.find<BookCaseController>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class BookCaseScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextConstant(
+              const TextConstant(
                 title: 'Add A New Case',
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -60,7 +61,7 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextConstant(
+                        const TextConstant(
                           title: 'Case ID',
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -81,7 +82,7 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        TextConstant(
+                        const TextConstant(
                           title: 'Date',
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -122,7 +123,7 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextConstant(
+                        const TextConstant(
                           title: 'Referring Doc',
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -152,7 +153,7 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        TextConstant(
+                        const TextConstant(
                           title: 'Center',
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -177,9 +178,9 @@ class BookCaseScreen extends StatelessWidget {
                 ],
               ),
               heightBox(15),
-              Divider(),
+              const Divider(),
               heightBox(10),
-              TextConstant(
+              const TextConstant(
                 title: 'Patient Details',
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -194,7 +195,7 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextConstant(
+                        const TextConstant(
                           title: 'Title',
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -223,7 +224,7 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextConstant(
+                        const TextConstant(
                           title: 'Name',
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -240,6 +241,7 @@ class BookCaseScreen extends StatelessWidget {
               heightBox(12),
               PhoneFormField(
                 initialValue: controller.phoneNumber.value,
+
                 validator: PhoneValidator.compose([
                   PhoneValidator.required(
                     context,
@@ -250,6 +252,7 @@ class BookCaseScreen extends StatelessWidget {
                     errorText: "Enter a valid phone number",
                   ),
                 ]),
+
                 countrySelectorNavigator:
                     CountrySelectorNavigator.draggableBottomSheet(
                       flagSize: 30,
@@ -263,6 +266,7 @@ class BookCaseScreen extends StatelessWidget {
                 autovalidateMode: AutovalidateMode.onUnfocus,
                 onChanged: (phoneNumber) => controller.updatePhone(phoneNumber),
                 enabled: true,
+
                 isCountrySelectionEnabled: true,
                 isCountryButtonPersistent: true,
                 countryButtonStyle: CountryButtonStyle(
@@ -287,7 +291,7 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextConstant(
+                        const TextConstant(
                           title: 'Sex',
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -316,7 +320,7 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        TextConstant(
+                        const TextConstant(
                           title: 'Age',
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -336,7 +340,7 @@ class BookCaseScreen extends StatelessWidget {
                 ],
               ),
               heightBox(15),
-              TextConstant(
+              const TextConstant(
                 title: 'Address',
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -347,28 +351,33 @@ class BookCaseScreen extends StatelessWidget {
                 hintText: 'Address',
               ),
               heightBox(80),
-              TextButton(
-                onPressed: () {},
-                child: TextConstant(
-                  title: '+ Add New Test',
-                  color: Color(0xFF2E37A4),
-                  fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: () {},
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: TextConstant(
+                    title: '+ Add New Test',
+                    color: AppColor.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              Divider(),
-              TextConstant(
+              const Divider(color: AppColor.secondarycolor),
+              heightBox(10),
+
+              const TextConstant(
                 title: 'Payment Details',
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
-              heightBox(12),
+              heightBox(18),
               Column(
                 spacing: 10.h,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextConstant(
+                  const TextConstant(
                     title: 'Mode',
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w500,
                   ),
                   Obx(() {
@@ -400,9 +409,7 @@ class BookCaseScreen extends StatelessWidget {
               Column(
                 children: [
                   buildRow('Total', '1700', false),
-                  buildDivider(),
                   buildRow('Discount', '0', false),
-                  buildDivider(),
                   buildRow('Amount Received', '1000', false),
                   buildRow('Balance', '700', true),
                 ],

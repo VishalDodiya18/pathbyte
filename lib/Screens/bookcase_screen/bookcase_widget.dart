@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
+import 'package:labapp/utils/app_color.dart';
 
 class YMDInput extends StatelessWidget {
   const YMDInput({
@@ -29,7 +30,7 @@ class YMDInput extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: Colors.grey),
+        border: Border.all(color: AppColor.secondarycolor),
       ),
       clipBehavior: Clip.antiAlias,
       child: Row(
@@ -40,8 +41,11 @@ class YMDInput extends StatelessWidget {
               unit: 'Y',
               controller: yearsCtrl,
               maxDigits: 3, // up to 999 years; change as you like
-              onParsed: (v) =>
-                  onChanged?.call(years: v, months: int.tryParse(monthsCtrl.text), days: int.tryParse(daysCtrl.text)),
+              onParsed: (v) => onChanged?.call(
+                years: v,
+                months: int.tryParse(monthsCtrl.text),
+                days: int.tryParse(daysCtrl.text),
+              ),
             ),
           ),
           Container(width: 1),
@@ -53,7 +57,11 @@ class YMDInput extends StatelessWidget {
               maxDigits: 2,
               // clamp 0–12
               validator: (v) => v == null ? null : v.clamp(0, 12),
-              onParsed: (v) => onChanged?.call(years: int.tryParse(yearsCtrl.text), months: v, days: int.tryParse(daysCtrl.text)),
+              onParsed: (v) => onChanged?.call(
+                years: int.tryParse(yearsCtrl.text),
+                months: v,
+                days: int.tryParse(daysCtrl.text),
+              ),
             ),
           ),
           Container(width: 1),
@@ -65,8 +73,11 @@ class YMDInput extends StatelessWidget {
               maxDigits: 2,
               // clamp 0–31
               validator: (v) => v == null ? null : v.clamp(0, 31),
-              onParsed: (v) =>
-                  onChanged?.call(years: int.tryParse(yearsCtrl.text), months: int.tryParse(monthsCtrl.text), days: v),
+              onParsed: (v) => onChanged?.call(
+                years: int.tryParse(yearsCtrl.text),
+                months: int.tryParse(monthsCtrl.text),
+                days: v,
+              ),
             ),
           ),
         ],
@@ -96,7 +107,10 @@ class YMDInput extends StatelessWidget {
                 //contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 border: InputBorder.none,
               ),
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(maxDigits)],
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(maxDigits),
+              ],
               onChanged: (txt) {
                 int? v = int.tryParse(txt);
                 if (validator != null) v = validator(v);
@@ -106,7 +120,9 @@ class YMDInput extends StatelessWidget {
                   // keep caret at end
                   controller
                     ..text = newText
-                    ..selection = TextSelection.collapsed(offset: newText.length);
+                    ..selection = TextSelection.collapsed(
+                      offset: newText.length,
+                    );
                 }
                 onParsed?.call(v);
               },
@@ -118,7 +134,7 @@ class YMDInput extends StatelessWidget {
             height: double.infinity,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Colors.grey.withValues(alpha: 0.3),
+              color: Color(0xffF5F6F8),
               borderRadius: BorderRadius.only(
                 topRight: unit == 'D' ? Radius.circular(12.r) : Radius.zero,
                 bottomRight: unit == 'D' ? Radius.circular(12.r) : Radius.zero,
@@ -141,10 +157,10 @@ Widget buildRow(String label, String value, bool isHighlighted) {
   return Container(
     decoration: BoxDecoration(
       color: isHighlighted ? const Color(0xFFF5E6A3) : Colors.transparent,
-      border: Border.all(color: Colors.grey),
+      border: Border.all(color: AppColor.secondarycolor),
     ),
 
-    padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 0),
+    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -153,8 +169,9 @@ Widget buildRow(String label, String value, bool isHighlighted) {
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 10.h),
             child: TextConstant(
-              title:label,
-              fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey[800],
+              title: label,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
@@ -162,7 +179,7 @@ Widget buildRow(String label, String value, bool isHighlighted) {
           child: Container(
             width: 1,
             height: 50,
-            color: Colors.grey,
+            color: AppColor.secondarycolor,
           ),
         ),
         Expanded(
@@ -173,10 +190,14 @@ Widget buildRow(String label, String value, bool isHighlighted) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextConstant(
-                 title: value,
-                  fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey[800],
+                  title: value,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
                 ),
-                if (isHighlighted) ...[const SizedBox(width: 8), Icon(Icons.warning, color: Colors.red[600], size: 20)],
+                if (isHighlighted) ...[
+                  const SizedBox(width: 8),
+                  Icon(Icons.warning, color: Colors.red[600], size: 20),
+                ],
               ],
             ),
           ),
@@ -187,5 +208,5 @@ Widget buildRow(String label, String value, bool isHighlighted) {
 }
 
 Widget buildDivider() {
-  return Divider(height: 1, thickness: 1, color: Colors.grey[300]);
+  return Divider(height: 1, thickness: 1, color: AppColor.secondarycolor);
 }

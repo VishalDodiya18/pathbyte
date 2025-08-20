@@ -6,6 +6,7 @@ import 'package:labapp/Constants/elevated_button_constant.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/textfield_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
+import 'package:labapp/Screens/bookcase_screen/controller_bookcase_screen.dart';
 import 'package:labapp/Screens/bookcase_screen/ui_bookcase_screen.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
 import 'package:labapp/Screens/home_screen/widget_home_screen.dart';
@@ -28,7 +29,11 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextConstant(title: 'Pathology Lab'),
-                TextConstant(title: 'Goel Diagnostic Center', fontSize: 16, fontWeight: FontWeight.bold),
+                TextConstant(
+                  title: 'Goel Diagnostic Center',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ],
             ),
           ],
@@ -38,7 +43,10 @@ class HomeScreen extends StatelessWidget {
             height: 40.h,
             width: 40.h,
             alignment: Alignment.center,
-            decoration: BoxDecoration(color: Colors.yellow, shape: BoxShape.circle),
+            decoration: BoxDecoration(
+              color: Colors.yellow,
+              shape: BoxShape.circle,
+            ),
             child: TextConstant(title: 'AK'),
           ),
           widthBox(10),
@@ -53,11 +61,16 @@ class HomeScreen extends StatelessWidget {
             elevatedButton(
               title: '+ Book A New Case',
               onPressed: () {
+                Get.lazyPut(() => BookCaseController());
                 Get.to(() => BookCaseScreen());
               },
             ),
             heightBox(14),
-            TextConstant(title: 'Cases', fontSize: 20, fontWeight: FontWeight.bold),
+            TextConstant(
+              title: 'Cases',
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
             heightBox(10),
             Row(
               spacing: 40.w,
@@ -89,35 +102,45 @@ class HomeScreen extends StatelessWidget {
                     child: TextConstant(
                       title: 'All',
                       textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 0 ? FontWeight.bold : FontWeight.w400,
+                      fontWeight: controller.selectedIndex.value == 0
+                          ? FontWeight.bold
+                          : FontWeight.w400,
                     ),
                   ),
                   Tab(
                     child: TextConstant(
                       title: 'New',
                       textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 1 ? FontWeight.bold : FontWeight.w400,
+                      fontWeight: controller.selectedIndex.value == 1
+                          ? FontWeight.bold
+                          : FontWeight.w400,
                     ),
                   ),
                   Tab(
                     child: TextConstant(
                       title: 'In Progress',
                       textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 2 ? FontWeight.bold : FontWeight.w400,
+                      fontWeight: controller.selectedIndex.value == 2
+                          ? FontWeight.bold
+                          : FontWeight.w400,
                     ),
                   ),
                   Tab(
                     child: TextConstant(
                       title: 'Final',
                       textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 3 ? FontWeight.bold : FontWeight.w400,
+                      fontWeight: controller.selectedIndex.value == 3
+                          ? FontWeight.bold
+                          : FontWeight.w400,
                     ),
                   ),
                   Tab(
                     child: TextConstant(
                       title: 'Signed Off',
                       textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 4 ? FontWeight.bold : FontWeight.w400,
+                      fontWeight: controller.selectedIndex.value == 4
+                          ? FontWeight.bold
+                          : FontWeight.w400,
                     ),
                   ),
                 ],

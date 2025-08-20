@@ -15,7 +15,7 @@ class TextConstant extends StatelessWidget {
     this.textDecoration,
     this.fontFamily,
     this.decorationColor,
-    this.softWrap = false,
+    this.softWrap = true,
   });
 
   final FontWeight? fontWeight;
@@ -54,7 +54,7 @@ class TextConstant extends StatelessWidget {
         textDecoration: textDecoration,
         decorationColor: decorationColor,
       ),
-      maxLines: maxLines,
+      maxLines: maxLines ?? 5,
     );
   }
 }

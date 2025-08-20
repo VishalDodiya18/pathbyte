@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
+import 'package:labapp/Screens/case_details/case_details_screen.dart';
+import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
+import 'package:labapp/Screens/report_details/controller_report_details_screen.dart';
+import 'package:labapp/Screens/report_details/report_details_screen.dart';
+import 'package:labapp/utils/app_color.dart';
 
 class HomeScreenWidget {
   Widget tabbarWidget() {
@@ -16,7 +22,14 @@ class HomeScreenWidget {
         final isOdd = index.isOdd;
         return InkWell(
           onTap: () {
-            //Get.to(() => AssignScreen());
+            if (!isOdd) {
+              Get.lazyPut(() => CaseDetailsContoller());
+              Get.to(() => CaseDetailsScreen());
+            } else {
+              Get.lazyPut(() => ReportDetailsContoller());
+
+              Get.to(() => ReportDetailsScreen());
+            }
           },
           child: IntrinsicHeight(
             child: Row(
@@ -30,7 +43,7 @@ class HomeScreenWidget {
                       color: Colors.white,
                       border: Border(
                         bottom: BorderSide(
-                          color: const Color(0xFFE7E8EB), // border color
+                          color: AppColor.secondarycolor, // border color
                           width: 1.w, // border thickness
                         ),
                       ),

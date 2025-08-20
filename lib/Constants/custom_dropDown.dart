@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
+import 'package:labapp/utils/app_color.dart';
 
 class CustomDropdown<T> extends StatelessWidget {
   final List<T> items;
@@ -47,6 +48,7 @@ class CustomDropdown<T> extends StatelessWidget {
             )
             .toList(),
         value: selectedValue,
+        isDense: true,
         onChanged: onChanged,
         dropdownStyleData: DropdownStyleData(
           maxHeight: dropdownHeight,
@@ -59,13 +61,13 @@ class CustomDropdown<T> extends StatelessWidget {
         isExpanded: false,
         underline: const SizedBox.shrink(),
         customButton: Container(
-          height: 50.h,
+          height: 47.h,
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
           decoration: BoxDecoration(
             color: backgroundColor ?? Colors.transparent,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: Colors.grey),
+            border: Border.all(color: AppColor.secondarycolor),
           ),
           alignment: Alignment.centerLeft,
           child: Row(

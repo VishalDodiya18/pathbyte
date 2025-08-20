@@ -190,7 +190,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:labapp/Constants/text_constant.dart';
+import 'package:labapp/utils/app_color.dart';
 
 class TextFieldConstant extends StatelessWidget {
   const TextFieldConstant({
@@ -277,27 +279,28 @@ class TextFieldConstant extends StatelessWidget {
                   ? GestureDetector(
                       onTap: suffixOnTap,
                       child: Padding(
-                        padding: EdgeInsets.only(right: 20.0.w),
-                        child: Icon(suffixIcon),
+                        padding: EdgeInsets.only(right: 0.0.w),
+                        child: Icon(suffixIcon, size: 28.0.h),
                       ),
                     )
                   : suffixIcon)
             : null,
         fillColor: fillColor ?? Colors.transparent,
         filled: true,
+        isDense: T,
         contentPadding:
             contentPadding ??
             EdgeInsets.symmetric(vertical: 15.h, horizontal: 12.w),
         disabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: AppColor.secondarycolor),
           borderRadius: BorderRadius.circular(12),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: AppColor.secondarycolor),
           borderRadius: BorderRadius.circular(12),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: AppColor.secondarycolor),
           borderRadius: BorderRadius.circular(12),
         ),
         errorBorder: OutlineInputBorder(
@@ -353,19 +356,19 @@ InputDecoration buildInputDecoration({
         : null,
     fillColor: fillColor ?? Colors.transparent,
     filled: true,
+    // isDense: true,
     contentPadding:
-        contentPadding ??
-        EdgeInsets.symmetric(vertical: 15.h, horizontal: 12.w),
+        contentPadding ?? EdgeInsets.symmetric(vertical: 0.h, horizontal: 12.w),
     disabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey),
+      borderSide: BorderSide(color: AppColor.secondarycolor),
       borderRadius: BorderRadius.circular(12),
     ),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey),
+      borderSide: BorderSide(color: AppColor.secondarycolor),
       borderRadius: BorderRadius.circular(12),
     ),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey),
+      borderSide: BorderSide(color: AppColor.secondarycolor),
       borderRadius: BorderRadius.circular(12),
     ),
     errorBorder: OutlineInputBorder(
