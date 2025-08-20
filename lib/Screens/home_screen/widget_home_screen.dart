@@ -18,57 +18,75 @@ class HomeScreenWidget {
           onTap: () {
             //Get.to(() => AssignScreen());
           },
-          child: Row(
-            spacing: 14.w,
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Container(
-                  height: 66.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: const Color(0xFFE7E8EB), // border color
-                        width: 1.w, // border thickness
+          child: IntrinsicHeight(
+            child: Row(
+              spacing: 14.w,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: const Color(0xFFE7E8EB), // border color
+                          width: 1.w, // border thickness
+                        ),
                       ),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                    child: const Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextConstant(title: 'Alberto Ripley (#12345)', fontWeight: FontWeight.bold),
-                            TextConstant(title: '#CASE12345'),
-                          ],
-                        ),
-                        Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextConstant(title: '+91 78522 10001'),
-                            Spacer(),
-                            TextConstant(title: '5 Tests'),
-                          ],
-                        ),
-                      ],
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15.w,
+                        vertical: 15.h,
+                      ),
+                      child: const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 3.0,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextConstant(
+                                title: 'Alberto Ripley (#12345)',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13.0,
+                              ),
+                              TextConstant(title: '#CASE12345', fontSize: 13.0),
+                            ],
+                          ),
+                          Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextConstant(
+                                title: '+91 78522 10001',
+                                fontSize: 13.0,
+                              ),
+                              Spacer(),
+                              TextConstant(title: '5 Tests', fontSize: 13.0),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Container(
-                height: 66.h,
-                width: 83.w,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(color: isOdd ? Colors.orange : Colors.green, borderRadius: BorderRadius.circular(10.r)),
-                child: const TextConstant(title: '1700', color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ],
+                Container(
+                  width: 83.w,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: isOdd ? Colors.orange : Colors.green,
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: const TextConstant(
+                    title: '1700',
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

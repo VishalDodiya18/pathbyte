@@ -3,13 +3,19 @@ import 'package:get/get.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 class BookCaseController extends GetxController {
-  TextEditingController caseIdController = TextEditingController(text: '#123345');
+  TextEditingController caseIdController = TextEditingController(
+    text: '#123345',
+  );
   TextEditingController dateController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  final TextEditingController yearsController = TextEditingController(text: '24');
-  final TextEditingController monthsController = TextEditingController(text: '6');
-  final TextEditingController daysController = TextEditingController(text: '14');
+  final TextEditingController yearsController = TextEditingController(
+    text: '24',
+  );
+  final TextEditingController monthsController = TextEditingController(
+    text: '0',
+  );
+  final TextEditingController daysController = TextEditingController(text: '0');
 
   var phoneNumber = PhoneNumber.parse('+91').obs;
 
@@ -18,7 +24,13 @@ class BookCaseController extends GetxController {
     print("Updated phone number: $number");
   }
 
-  List<String> referreingDocList = ['Dr. Parul Singhal', 'Dr. Parul Patel', 'Dr. Mayank Patel', 'Dr. Sanjay Dutt', 'Dr. Om Shah'];
+  List<String> referreingDocList = [
+    'Dr. Parul Singhal',
+    'Dr. Parul Patel',
+    'Dr. Mayank Patel',
+    'Dr. Sanjay Dutt',
+    'Dr. Om Shah',
+  ];
   RxString selectedReferringDoc = 'Dr. Parul Singhal'.obs;
   List<String> centerList = ['Main Lab', 'Office Lab', 'Laboratory Lab'];
   RxString selectedCenter = 'Main Lab'.obs;

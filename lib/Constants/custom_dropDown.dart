@@ -1,4 +1,3 @@
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,7 +40,8 @@ class CustomDropdown<T> extends StatelessWidget {
                 value: item,
                 child: TextConstant(
                   title: itemLabel(item),
-                  fontFamily: 'M',fontSize: 16,
+                  fontFamily: 'M',
+                  fontSize: 16,
                 ),
               ),
             )
@@ -65,18 +65,23 @@ class CustomDropdown<T> extends StatelessWidget {
           decoration: BoxDecoration(
             color: backgroundColor ?? Colors.transparent,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: Colors.grey)
+            border: Border.all(color: Colors.grey),
           ),
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
               TextConstant(
-                title: selectedValue != null ? itemLabel(selectedValue!) : hintText,
+                title: selectedValue != null
+                    ? itemLabel(selectedValue!)
+                    : hintText,
                 fontSize: 16,
-                color: selectedValue != null ? null: theme.hintColor,
+                color: selectedValue != null ? null : theme.hintColor,
               ),
               Spacer(),
-              Icon(TablerIcons.chevron_down, color: Theme.of(context).colorScheme.primary),
+              Icon(
+                TablerIcons.chevron_down,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ],
           ),
         ),

@@ -20,7 +20,10 @@ class BookCaseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(forceMaterialTransparency: true, actions: [const Icon(TablerIcons.dots_vertical), widthBox(10)]),
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+        actions: [const Icon(TablerIcons.dots_vertical), widthBox(10)],
+      ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         child: Row(
@@ -42,7 +45,11 @@ class BookCaseScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextConstant(title: 'Add A New Case', fontSize: 16, fontWeight: FontWeight.bold),
+              TextConstant(
+                title: 'Add A New Case',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
               heightBox(18),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,7 +60,11 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextConstant(title: 'Case ID', fontSize: 16, fontWeight: FontWeight.w500),
+                        TextConstant(
+                          title: 'Case ID',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                         TextFieldConstant(
                           controller: controller.caseIdController,
                           fillColor: Colors.grey.withValues(alpha: 0.1),
@@ -70,7 +81,11 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        TextConstant(title: 'Date', fontSize: 16, fontWeight: FontWeight.w500),
+                        TextConstant(
+                          title: 'Date',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                         TextFieldConstant(
                           onTap: () async {
                             DateTime? result = await pickDateTime(
@@ -80,7 +95,9 @@ class BookCaseScreen extends StatelessWidget {
                               mode: PickerMode.date,
                             );
                             if (result != null) {
-                              final formattedDate = DateFormat('d MMM, yyyy').format(result);
+                              final formattedDate = DateFormat(
+                                'd MMM, yyyy',
+                              ).format(result);
                               controller.dateController.text = formattedDate;
                             }
                           },
@@ -105,14 +122,19 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextConstant(title: 'Referring Doc', fontSize: 16, fontWeight: FontWeight.w500),
+                        TextConstant(
+                          title: 'Referring Doc',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                         Obx(() {
                           controller.selectedReferringDoc.value;
                           return CustomDropdown<String>(
                             dropdownHeight: 300.h,
                             items: controller.referreingDocList,
                             prefixIcon: TablerIcons.chevron_down,
-                            selectedValue: controller.selectedReferringDoc.value,
+                            selectedValue:
+                                controller.selectedReferringDoc.value,
                             itemLabel: (val) => val,
                             hintText: "Select Referring Doctor",
                             onChanged: (value) {
@@ -130,7 +152,11 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        TextConstant(title: 'Center', fontSize: 16, fontWeight: FontWeight.w500),
+                        TextConstant(
+                          title: 'Center',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                         Obx(() {
                           controller.selectedCenter.value;
                           return CustomDropdown<String>(
@@ -153,7 +179,11 @@ class BookCaseScreen extends StatelessWidget {
               heightBox(15),
               Divider(),
               heightBox(10),
-              TextConstant(title: 'Patient Details', fontWeight: FontWeight.bold, fontSize: 16),
+              TextConstant(
+                title: 'Patient Details',
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
               heightBox(15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -164,7 +194,11 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextConstant(title: 'Title', fontSize: 16, fontWeight: FontWeight.w500),
+                        TextConstant(
+                          title: 'Title',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                         Obx(() {
                           controller.selectedTitle.value;
                           return CustomDropdown<String>(
@@ -189,8 +223,15 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextConstant(title: 'Name', fontSize: 16, fontWeight: FontWeight.w500),
-                        TextFieldConstant(controller: controller.nameController, hintText: 'Name'),
+                        TextConstant(
+                          title: 'Name',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        TextFieldConstant(
+                          controller: controller.nameController,
+                          hintText: 'Name',
+                        ),
                       ],
                     ),
                   ),
@@ -200,17 +241,24 @@ class BookCaseScreen extends StatelessWidget {
               PhoneFormField(
                 initialValue: controller.phoneNumber.value,
                 validator: PhoneValidator.compose([
-                  PhoneValidator.required(context, errorText: "You must enter a value"),
-                  PhoneValidator.validMobile(context, errorText: "Enter a valid phone number"),
+                  PhoneValidator.required(
+                    context,
+                    errorText: "You must enter a value",
+                  ),
+                  PhoneValidator.validMobile(
+                    context,
+                    errorText: "Enter a valid phone number",
+                  ),
                 ]),
-                countrySelectorNavigator: CountrySelectorNavigator.draggableBottomSheet(
-                  flagSize: 30,
-                  searchBoxTextStyle: textStyle(fontSize: 16),
-                  titleStyle: textStyle(fontSize: 16),
-                  sortCountries: true,
-                  subtitleStyle: textStyle(fontSize: 16),
-                  showDialCode: false,
-                ),
+                countrySelectorNavigator:
+                    CountrySelectorNavigator.draggableBottomSheet(
+                      flagSize: 30,
+                      searchBoxTextStyle: textStyle(fontSize: 16),
+                      titleStyle: textStyle(fontSize: 16),
+                      sortCountries: true,
+                      subtitleStyle: textStyle(fontSize: 16),
+                      showDialCode: false,
+                    ),
 
                 autovalidateMode: AutovalidateMode.onUnfocus,
                 onChanged: (phoneNumber) => controller.updatePhone(phoneNumber),
@@ -224,7 +272,10 @@ class BookCaseScreen extends StatelessWidget {
                   showFlag: false,
                   flagSize: 16,
                 ),
-                decoration: buildInputDecoration(context: context, hintText: "Phone Number"),
+                decoration: buildInputDecoration(
+                  context: context,
+                  hintText: "Phone Number",
+                ),
               ),
               heightBox(15),
               Row(
@@ -236,7 +287,11 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextConstant(title: 'Sex', fontSize: 16, fontWeight: FontWeight.w500),
+                        TextConstant(
+                          title: 'Sex',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                         Obx(() {
                           controller.selectedSex.value;
                           return CustomDropdown<String>(
@@ -261,7 +316,11 @@ class BookCaseScreen extends StatelessWidget {
                       spacing: 10.h,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        TextConstant(title: 'Age', fontSize: 16, fontWeight: FontWeight.w500),
+                        TextConstant(
+                          title: 'Age',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                         YMDInput(
                           yearsCtrl: controller.yearsController,
                           monthsCtrl: controller.monthsController,
@@ -277,22 +336,41 @@ class BookCaseScreen extends StatelessWidget {
                 ],
               ),
               heightBox(15),
-              TextConstant(title: 'Address', fontSize: 16, fontWeight: FontWeight.w500),
+              TextConstant(
+                title: 'Address',
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
               heightBox(8),
-              TextFieldConstant(controller: controller.addressController, hintText: 'Address'),
+              TextFieldConstant(
+                controller: controller.addressController,
+                hintText: 'Address',
+              ),
               heightBox(80),
               TextButton(
                 onPressed: () {},
-                child: TextConstant(title: '+ Add New Test', color: Color(0xFF2E37A4), fontWeight: FontWeight.bold),
+                child: TextConstant(
+                  title: '+ Add New Test',
+                  color: Color(0xFF2E37A4),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Divider(),
-              TextConstant(title: 'Payment Details', fontSize: 16, fontWeight: FontWeight.bold),
+              TextConstant(
+                title: 'Payment Details',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
               heightBox(12),
               Column(
                 spacing: 10.h,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextConstant(title: 'Mode', fontSize: 16, fontWeight: FontWeight.w500),
+                  TextConstant(
+                    title: 'Mode',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                   Obx(() {
                     controller.selectedMode.value;
                     return SizedBox(
@@ -313,7 +391,11 @@ class BookCaseScreen extends StatelessWidget {
                 ],
               ),
               heightBox(80),
-              elevatedButton(title: 'Cancel', backgroundColor: Colors.black.withValues(alpha: 0.7), onPressed: () {}),
+              elevatedButton(
+                title: 'Cancel',
+                backgroundColor: Colors.black.withValues(alpha: 0.7),
+                onPressed: () {},
+              ),
               heightBox(15),
               Column(
                 children: [

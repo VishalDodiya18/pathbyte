@@ -35,7 +35,8 @@ class TextConstant extends StatelessWidget {
   Widget build(BuildContext context) {
     // Accessing theme's color scheme to adapt text color as per the theme
     final theme = Theme.of(context);
-    final Color defaultColor = theme.colorScheme.onSurface; // Theme-aware default text color
+    final Color defaultColor =
+        theme.colorScheme.onSurface; // Theme-aware default text color
 
     return Text(
       title,
@@ -44,9 +45,11 @@ class TextConstant extends StatelessWidget {
       softWrap: softWrap,
       style: textStyle(
         fontSize: fontSize,
-        fontFamily: fontFamily,
+        fontFamily: fontFamily ?? "Inter",
         fontWeight: fontWeight,
-        color: color ?? defaultColor, // Apply theme color if no specific color is provided
+        color:
+            color ??
+            defaultColor, // Apply theme color if no specific color is provided
         height: height,
         textDecoration: textDecoration,
         decorationColor: decorationColor,

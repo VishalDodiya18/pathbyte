@@ -20,8 +20,12 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return GetMaterialApp(
           title: 'Pathbyte',
+
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white,
+            fontFamily: "Inter",
+          ),
           home: HomeScreen(),
         );
       },

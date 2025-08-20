@@ -262,12 +262,14 @@ class TextFieldConstant extends StatelessWidget {
         prefixIcon: prefixIcon != null
             ? (prefixIcon is IconData
                   ? Padding(
-                    padding: EdgeInsets.only(bottom:  maxLines == 1 ? 0 : 70.h),
-                    child: GestureDetector(
-                      onTap: prefixOnTap,
-                      child: Icon(prefixIcon),
-                    ),
-                  )
+                      padding: EdgeInsets.only(
+                        bottom: maxLines == 1 ? 0 : 70.h,
+                      ),
+                      child: GestureDetector(
+                        onTap: prefixOnTap,
+                        child: Icon(prefixIcon),
+                      ),
+                    )
                   : prefixIcon)
             : null,
         suffixIcon: suffixIcon != null
@@ -283,7 +285,9 @@ class TextFieldConstant extends StatelessWidget {
             : null,
         fillColor: fillColor ?? Colors.transparent,
         filled: true,
-        contentPadding: contentPadding ?? EdgeInsets.symmetric(vertical: 15.h, horizontal: 12.w),
+        contentPadding:
+            contentPadding ??
+            EdgeInsets.symmetric(vertical: 15.h, horizontal: 12.w),
         disabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey),
           borderRadius: BorderRadius.circular(12),
@@ -300,7 +304,10 @@ class TextFieldConstant extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Colors.red, width: 1.0),
         ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(width: 1.0)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1.0),
+        ),
       ),
     );
   }
@@ -346,7 +353,9 @@ InputDecoration buildInputDecoration({
         : null,
     fillColor: fillColor ?? Colors.transparent,
     filled: true,
-    contentPadding: contentPadding ?? EdgeInsets.symmetric(vertical: 15.h, horizontal: 12.w),
+    contentPadding:
+        contentPadding ??
+        EdgeInsets.symmetric(vertical: 15.h, horizontal: 12.w),
     disabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.grey),
       borderRadius: BorderRadius.circular(12),
@@ -363,7 +372,10 @@ InputDecoration buildInputDecoration({
       borderRadius: BorderRadius.circular(12),
       borderSide: const BorderSide(color: Colors.red, width: 1.0),
     ),
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r), borderSide: const BorderSide(width: 1.0)),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.r),
+      borderSide: const BorderSide(width: 1.0),
+    ),
   );
 }
 
@@ -420,7 +432,10 @@ class LimitedDoubleInputFormatter extends TextInputFormatter {
   LimitedDoubleInputFormatter(this.maxIntegerDigits, {this.decimalPlaces = 2});
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     String newText = newValue.text;
 
     // Allow empty value
@@ -458,7 +473,10 @@ class LimitedIntegerInputFormatter extends TextInputFormatter {
   LimitedIntegerInputFormatter(this.maxLength);
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     String newText = newValue.text;
 
     // Allow empty value
@@ -482,7 +500,10 @@ class PhoneNumberInputFormatter extends TextInputFormatter {
   final RegExp _allowedRegex = RegExp(r'^[\d\s\-\+\(\)]*$');
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     if (_allowedRegex.hasMatch(newValue.text)) {
       return newValue;
     }
@@ -492,7 +513,13 @@ class PhoneNumberInputFormatter extends TextInputFormatter {
 
 class UpperCaseTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    return TextEditingValue(text: newValue.text.toUpperCase(), selection: newValue.selection);
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
   }
 }
