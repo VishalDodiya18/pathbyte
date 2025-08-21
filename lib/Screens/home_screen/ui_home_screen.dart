@@ -9,6 +9,7 @@ import 'package:labapp/Constants/widget_constant.dart';
 import 'package:labapp/Screens/bookcase_screen/controller_bookcase_screen.dart';
 import 'package:labapp/Screens/bookcase_screen/ui_bookcase_screen.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
+import 'package:labapp/Screens/home_screen/filter_screen.dart';
 import 'package:labapp/Screens/home_screen/widget_home_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -81,7 +82,19 @@ class HomeScreen extends StatelessWidget {
                     hintText: 'Search By Patient ID/Name/ No/ Report ID',
                   ),
                 ),
-                Icon(TablerIcons.adjustments_horizontal, size: 28.sp),
+                GestureDetector(
+                  onTap: () {
+                    // Open filter bottom sheet
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return const FilterBottomSheet();
+                      },
+                    );
+                  },
+                  child: Icon(TablerIcons.adjustments_horizontal, size: 28.sp),
+                ),
               ],
             ),
             heightBox(14),

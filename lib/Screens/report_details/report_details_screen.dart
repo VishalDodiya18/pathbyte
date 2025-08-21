@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:labapp/Constants/elevated_button_constant.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Screens/report_details/controller_report_details_screen.dart';
 import 'package:labapp/Screens/report_details/report_table.dart';
@@ -45,6 +46,37 @@ class ReportDetailsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Report Details')),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              spacing: 10.0.w,
+              children: [
+                Expanded(
+                  child: elevatedButton(
+                    title: "Save as Draft",
+                    onPressed: () {},
+                  ),
+                ),
+                Expanded(
+                  child: elevatedButton(
+                    title: "Save As Final",
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10.0),
+            elevatedButton(
+              title: "Cancel",
+              onPressed: () {},
+              backgroundColor: AppColor.greycolor,
+            ),
+          ],
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(15.0),
         children: [
@@ -73,6 +105,8 @@ class ReportDetailsScreen extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(height: 15.0),
+          elevatedButton(title: "Preview Report", onPressed: () {}),
           SizedBox(height: 15.0),
           ListView.separated(
             itemCount: 5,

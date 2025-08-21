@@ -57,7 +57,7 @@ class ReportTable extends StatelessWidget {
           style: TextStyle(
             color: Color(0xff0A1B39),
 
-            fontSize: 14.h,
+            fontSize: 16.h,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -71,7 +71,7 @@ class ReportTable extends StatelessWidget {
           "Complete Blood Count (CBC)",
           style: TextStyle(
             fontWeight: FontWeight.w500,
-            fontSize: 14.h,
+            fontSize: 15.h,
             color: Color(0xff0A1B39),
           ),
         ),

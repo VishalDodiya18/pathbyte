@@ -2,12 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController  with GetSingleTickerProviderStateMixin {
-
+class HomeController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   TextEditingController searchController = TextEditingController();
+  TextEditingController startdateController = TextEditingController();
+  TextEditingController enddateController = TextEditingController();
 
   late TabController tabController;
   RxInt selectedIndex = 0.obs;
+
+
+  String? selectedCenter;
+  String? selectedDoctor;
+  String? selectedCaseStatus;
+  String? selectedAmountStatus;
+
+  final List<String> centers = ["Main Lab", "Branch A", "Branch B"];
+  final List<String> doctors = ["Dr. Parul Singhal", "Dr. XYZ", "Dr. ABC"];
+  final List<String> caseStatus = ["Final", "Pending", "Draft"];
+  final List<String> amountStatus = ["Paid", "Unpaid", "Partially Paid"];
 
   @override
   void onInit() {
