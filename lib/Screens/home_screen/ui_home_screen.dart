@@ -129,15 +129,15 @@ class HomeScreen extends StatelessWidget {
                           : FontWeight.w400,
                     ),
                   ),
-                  Tab(
-                    child: TextConstant(
-                      title: 'In Progress',
-                      textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 2
-                          ? FontWeight.bold
-                          : FontWeight.w400,
-                    ),
-                  ),
+                  // Tab(
+                  //   child: TextConstant(
+                  //     title: 'In Progress',
+                  //     textAlign: TextAlign.center,
+                  //     fontWeight: controller.selectedIndex.value == 2
+                  //         ? FontWeight.bold
+                  //         : FontWeight.w400,
+                  //   ),
+                  // ),
                   Tab(
                     child: TextConstant(
                       title: 'Final',
@@ -167,11 +167,11 @@ class HomeScreen extends StatelessWidget {
                   child: TabBarView(
                     controller: controller.tabController,
                     children: [
-                      HomeScreenWidget().tabbarWidget(),
-                      HomeScreenWidget().tabbarWidget(),
-                      HomeScreenWidget().tabbarWidget(),
-                      HomeScreenWidget().tabbarWidget(),
-                      HomeScreenWidget().tabbarWidget(),
+                      HomeScreenWidget().tabbarWidget(0),
+                      HomeScreenWidget().tabbarWidget(1),
+                      // HomeScreenWidget().tabbarWidget(2),
+                      HomeScreenWidget().tabbarWidget(3),
+                      HomeScreenWidget().tabbarWidget(4),
                     ],
                   ),
                 ),
