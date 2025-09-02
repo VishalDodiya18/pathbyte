@@ -9,15 +9,14 @@ import 'package:labapp/Screens/case_details/controller_case_details_screen.dart'
 import 'package:labapp/Screens/report_details/controller_report_details_screen.dart';
 import 'package:labapp/Screens/report_details/report_details_screen.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
+import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/utils/app_color.dart';
-
-import '../../models/caseModel.dart';
 
 class HomeScreenWidget {
   Widget tabbarWidget(int tabIndex) {
     final HomeController controller = Get.find<HomeController>();
 
-    PagingController<int, CaseModel> pagingController;
+    PagingController<int, Cases> pagingController;
     switch (tabIndex) {
       case 0:
         pagingController = controller.allPagingController;
@@ -28,10 +27,10 @@ class HomeScreenWidget {
       // case 2:
       //   pagingController = controller.newPagingController; // temporary
       //   break;
-      case 3:
+      case 2:
         pagingController = controller.finalPagingController;
         break;
-      case 4:
+      case 3:
         pagingController = controller.signOffPagingController;
         break;
       default:
@@ -43,20 +42,25 @@ class HomeScreenWidget {
         pagingController.refresh();
         return Future.value();
       },
-      child: PagedListView<int, CaseModel>(
+      child: PagedListView<int, Cases>(
         pagingController: pagingController,
         physics: AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
-        builderDelegate: PagedChildBuilderDelegate<CaseModel>(
-          noItemsFoundIndicatorBuilder: (context) =>
-              const Center(child: Text("No cases found")),
+        builderDelegate: PagedChildBuilderDelegate<Cases>(
+          noItemsFoundIndicatorBuilder: (context) => Center(
+            child: Text(
+              "No cases found",
+              style: TextStyle(fontSize: 20.h, fontWeight: FontWeight.bold),
+            ),
+          ),
           itemBuilder: (context, item, index) {
             final isOdd = index.isOdd;
             return InkWell(
               onTap: () {
+                Get.lazyPut(() => CaseDetailsContoller(caseId: item.sId));
+                Get.to(() => CaseDetailsScreen());
+                return;
                 if (!isOdd) {
-                  Get.lazyPut(() => CaseDetailsContoller());
-                  Get.to(() => CaseDetailsScreen());
                 } else {
                   Get.lazyPut(() => ReportDetailsContoller());
                   Get.to(() => ReportDetailsScreen());
@@ -95,9 +99,9 @@ class HomeScreenWidget {
                                   children: [
                                     Expanded(
                                       child: TextConstant(
-                                        title: (item.patient ?? []).isEmpty
+                                        title: (item.patient == null)
                                             ? "N/A"
-                                            : "${item.patient?.first.firstName ?? ''} (#${item.patient?.first.patientId ?? ''})",
+                                            : "${item.patient?.firstName ?? ''} (#${item.patient?.patientId ?? ''})",
                                         fontWeight: FontWeight.bold,
                                         fontSize: 13.0,
                                       ),
@@ -111,13 +115,9 @@ class HomeScreenWidget {
                                 Row(
                                   children: [
                                     TextConstant(
-                                      title: (item.patient ?? []).isEmpty
+                                      title: (item.patient == null)
                                           ? "N/A"
-                                          : item
-                                                    .patient
-                                                    ?.first
-                                                    .phoneNumbers
-                                                    ?.first ??
+                                          : item.patient?.phoneNumbers?.first ??
                                                 '',
                                       fontSize: 13.0,
                                     ),

@@ -1,3 +1,4 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -73,33 +74,59 @@ class HomeScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
             heightBox(10),
-            Row(
-              spacing: 40.w,
-              children: [
-                Expanded(
-                  child: TextFieldConstant(
-                    controller: controller.searchController,
-                    hintText: 'Search By Patient ID/Name/ No/ Report ID',
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Open filter bottom sheet
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (context) {
-                        return const FilterBottomSheet();
+            GetBuilder<HomeController>(
+              builder: (controller) {
+                return Row(
+                  spacing: 40.w,
+                  children: [
+                    Expanded(
+                      child: TextFieldConstant(
+                        controller: controller.searchController,
+                        hintText: 'Search By Patient ID/Name/ No/ Report ID',
+                        suffixIcon:
+                            controller.searchController.text.trim().isNotEmpty
+                            ? GestureDetector(
+                                onTap: () {
+                                  controller.searchController.clear();
+                                  controller.update();
+                                  controller.OnRefresh();
+                                },
+                                child: Icon(Icons.clear_rounded, size: 25.h),
+                              )
+                            : null,
+                        onChanged: (p0) {
+                          controller.update();
+
+                          EasyDebounce.debounce(
+                            'case-search-debouncer',
+                            Duration(milliseconds: 500),
+                            () => controller.OnRefresh(),
+                          );
+                        },
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Open filter bottom sheet
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return const FilterBottomSheet();
+                          },
+                        );
                       },
-                    );
-                  },
-                  child: Icon(TablerIcons.adjustments_horizontal, size: 28.sp),
-                ),
-              ],
+                      child: Icon(
+                        TablerIcons.adjustments_horizontal,
+                        size: 28.sp,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
             heightBox(14),
             Obx(() {
-              controller.selectedIndex.value;
               return TabBar(
                 controller: controller.tabController,
                 tabAlignment: TabAlignment.start,
@@ -142,7 +169,7 @@ class HomeScreen extends StatelessWidget {
                     child: TextConstant(
                       title: 'Final',
                       textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 3
+                      fontWeight: controller.selectedIndex.value == 2
                           ? FontWeight.bold
                           : FontWeight.w400,
                     ),
@@ -151,7 +178,7 @@ class HomeScreen extends StatelessWidget {
                     child: TextConstant(
                       title: 'Signed Off',
                       textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 4
+                      fontWeight: controller.selectedIndex.value == 3
                           ? FontWeight.bold
                           : FontWeight.w400,
                     ),
@@ -169,9 +196,8 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       HomeScreenWidget().tabbarWidget(0),
                       HomeScreenWidget().tabbarWidget(1),
-                      // HomeScreenWidget().tabbarWidget(2),
+                      HomeScreenWidget().tabbarWidget(2),
                       HomeScreenWidget().tabbarWidget(3),
-                      HomeScreenWidget().tabbarWidget(4),
                     ],
                   ),
                 ),

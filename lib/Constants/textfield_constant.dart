@@ -255,10 +255,15 @@ class TextFieldConstant extends StatelessWidget {
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmit,
       validator: validator,
+
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       textAlignVertical: TextAlignVertical.center,
-      style: textStyle(fontSize: 14, color: theme.textTheme.bodyMedium?.color),
+
+      style: textStyle(fontSize: 16, color: theme.textTheme.bodyMedium?.color),
+
       decoration: InputDecoration(
         hintText: hintText,
+
         hintStyle: textStyle(fontSize: 14, color: theme.hintColor),
         alignLabelWithHint: true,
         prefixIcon: prefixIcon != null

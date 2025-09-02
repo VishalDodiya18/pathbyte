@@ -9,6 +9,9 @@ import 'package:labapp/Constants/textfield_constant.dart';
 import 'package:labapp/Constants/elevated_button_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
+import 'package:labapp/bottomsheets/common_bottom_sheet.dart';
+import 'package:labapp/models/doctor_model.dart';
+import 'package:labapp/models/lab_center_model.dart';
 import 'package:labapp/utils/app_color.dart';
 
 class FilterBottomSheet extends StatelessWidget {
@@ -58,15 +61,23 @@ class FilterBottomSheet extends StatelessWidget {
                           mode: PickerMode.date,
                         );
                         if (result != null) {
-                          final formattedDate = DateFormat(
-                            'd MMM, yyyy',
-                          ).format(result);
-                          controller.startdateController.text = formattedDate;
+                          controller.startdateController.text = result
+                              .toString();
+                          controller.update();
                         }
                       },
-                      controller: controller.startdateController,
+                      controller: TextEditingController(
+                        text: controller.startdateController.text.isEmpty
+                            ? ""
+                            : DateFormat('d MMM, yyyy').format(
+                                DateTime.parse(
+                                  controller.startdateController.text,
+                                ),
+                              ),
+                      ),
                       hintText: "Date",
                       suffixIcon: TablerIcons.calendar_month,
+
                       textAlign: TextAlign.center,
                       isReadOnly: true,
                     ),
@@ -83,13 +94,19 @@ class FilterBottomSheet extends StatelessWidget {
                           mode: PickerMode.date,
                         );
                         if (result != null) {
-                          final formattedDate = DateFormat(
-                            'd MMM, yyyy',
-                          ).format(result);
-                          controller.enddateController.text = formattedDate;
+                          controller.enddateController.text = result.toString();
+                          controller.update();
                         }
                       },
-                      controller: controller.enddateController,
+                      controller: TextEditingController(
+                        text: controller.enddateController.text.isEmpty
+                            ? ""
+                            : DateFormat('d MMM, yyyy').format(
+                                DateTime.parse(
+                                  controller.enddateController.text,
+                                ),
+                              ),
+                      ),
                       hintText: "Date",
                       suffixIcon: TablerIcons.calendar_month,
                       textAlign: TextAlign.center,
@@ -103,14 +120,45 @@ class FilterBottomSheet extends StatelessWidget {
               /// Center Dropdown
               const TextConstant(title: "Center", fontWeight: FontWeight.w600),
               SizedBox(height: 8.h),
-              CustomDropdown<String>(
-                items: controller.centers,
-                selectedValue: controller.selectedCenter,
-                itemLabel: (item) => item,
+              TextFieldConstant(
+                controller: TextEditingController(
+                  text: controller.selectedCenter?.name ?? "",
+                ),
                 hintText: "Select Center",
-                prefixIcon: Icons.apartment,
-                onChanged: (value) {
-                  controller.selectedCenter = value;
+                isReadOnly: true,
+                suffixIcon: const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 30.0,
+                ),
+
+                onTap: () async {
+                  final selected = await showModalBottomSheet<Lab>(
+                    context: context,
+                    isScrollControlled: true,
+
+                    backgroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (_) {
+                      return PaginatedSelectionSheet<Lab>(
+                        title: "Center",
+                        controller: controller.labPagingController,
+                        itemLabel: (lab) => lab.name ?? "",
+                        selectedItem: controller.selectedCenter,
+                        onSelect: (lab) {
+                          Navigator.pop(context, lab);
+                        },
+                      );
+                    },
+                  );
+
+                  if (selected != null) {
+                    controller.selectedCenter = selected;
+                    controller.update();
+                  }
                 },
               ),
               SizedBox(height: 16.h),
@@ -121,16 +169,49 @@ class FilterBottomSheet extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
               SizedBox(height: 8.h),
-              CustomDropdown<String>(
-                items: controller.doctors,
-                selectedValue: controller.selectedDoctor,
-                itemLabel: (item) => item,
+              TextFieldConstant(
+                controller: TextEditingController(
+                  text: controller.selectedDoctor == null
+                      ? ""
+                      : "${controller.selectedDoctor!.firstName} ${controller.selectedDoctor!.lastName}",
+                ),
                 hintText: "Select Doctor",
-                prefixIcon: Icons.person,
-                onChanged: (value) {
-                  controller.selectedDoctor = value;
+                isReadOnly: true,
+                suffixIcon: const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 30.0,
+                ),
+                onTap: () async {
+                  final selected = await showModalBottomSheet<Doctor>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.white,
+
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (_) {
+                      return PaginatedSelectionSheet<Doctor>(
+                        title: "Doctor",
+                        controller: controller.doctorPagingController,
+                        itemLabel: (doc) => "${doc.firstName} ${doc.lastName}",
+                        selectedItem: controller.selectedDoctor,
+                        onSelect: (doc) {
+                          Navigator.pop(context, doc);
+                        },
+                      );
+                    },
+                  );
+
+                  if (selected != null) {
+                    controller.selectedDoctor = selected;
+                    controller.update();
+                  }
                 },
               ),
+
               SizedBox(height: 16.h),
 
               /// Case Status Dropdown
@@ -147,6 +228,7 @@ class FilterBottomSheet extends StatelessWidget {
                 prefixIcon: Icons.folder,
                 onChanged: (value) {
                   controller.selectedCaseStatus = value;
+                  controller.update();
                 },
               ),
               SizedBox(height: 16.h),
@@ -165,6 +247,7 @@ class FilterBottomSheet extends StatelessWidget {
                 prefixIcon: Icons.money,
                 onChanged: (value) {
                   controller.selectedAmountStatus = value;
+                  controller.update();
                 },
               ),
               SizedBox(height: 20.h),
@@ -175,7 +258,7 @@ class FilterBottomSheet extends StatelessWidget {
                   Expanded(
                     child: elevatedButton(
                       title: "Reset All",
-                      backgroundColor: Color(0xff8B8B8B),
+                      backgroundColor: const Color(0xff8B8B8B),
                       textColor: AppColor.whitecolor,
                       onPressed: () {
                         controller.startdateController.clear();
@@ -185,6 +268,7 @@ class FilterBottomSheet extends StatelessWidget {
                         controller.selectedCaseStatus = null;
                         controller.selectedAmountStatus = null;
                         Get.back();
+                        controller.OnRefresh();
                       },
                     ),
                   ),
@@ -194,6 +278,7 @@ class FilterBottomSheet extends StatelessWidget {
                       title: "Apply Filters",
                       onPressed: () {
                         Get.back();
+                        controller.OnRefresh();
                       },
                     ),
                   ),

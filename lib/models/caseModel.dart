@@ -1,4 +1,58 @@
 class CaseModel {
+  int? code;
+  String? message;
+  Data? data;
+
+  CaseModel({this.code, this.message, this.data});
+
+  CaseModel.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    message = json['message'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class Data {
+  List<Cases>? cases;
+  Pagination? pagination;
+
+  Data({this.cases, this.pagination});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    if (json['cases'] != null) {
+      cases = <Cases>[];
+      json['cases'].forEach((v) {
+        cases!.add(new Cases.fromJson(v));
+      });
+    }
+    pagination = json['pagination'] != null
+        ? new Pagination.fromJson(json['pagination'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.cases != null) {
+      data['cases'] = this.cases!.map((v) => v.toJson()).toList();
+    }
+    if (this.pagination != null) {
+      data['pagination'] = this.pagination!.toJson();
+    }
+    return data;
+  }
+}
+
+class Cases {
   String? sId;
   String? caseId;
   String? patientId;
@@ -7,15 +61,15 @@ class CaseModel {
   int? totalAmount;
   String? discountType;
   int? discountValue;
-  var finalAmount;
+  int? finalAmount;
+  String? amountStatus;
   String? createdAt;
   String? updatedAt;
-  List<Patient>? patient;
-  List? doctor;
+  Patient? patient;
   List<Casetests>? casetests;
-  List? transactions;
+  var transactions;
 
-  CaseModel({
+  Cases({
     this.sId,
     this.caseId,
     this.patientId,
@@ -25,15 +79,15 @@ class CaseModel {
     this.discountType,
     this.discountValue,
     this.finalAmount,
+    this.amountStatus,
     this.createdAt,
     this.updatedAt,
     this.patient,
-    this.doctor,
     this.casetests,
     this.transactions,
   });
 
-  CaseModel.fromJson(Map<String, dynamic> json) {
+  Cases.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     caseId = json['caseId'];
     patientId = json['patientId'];
@@ -43,47 +97,42 @@ class CaseModel {
     discountType = json['discountType'];
     discountValue = json['discountValue'];
     finalAmount = json['finalAmount'];
+    amountStatus = json['amountStatus'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    if (json['patient'] != null) {
-      patient = <Patient>[];
-      json['patient'].forEach((v) {
-        patient!.add(Patient.fromJson(v));
-      });
-    }
-
+    patient = json['patient'] != null
+        ? new Patient.fromJson(json['patient'])
+        : null;
     if (json['casetests'] != null) {
       casetests = <Casetests>[];
       json['casetests'].forEach((v) {
-        casetests!.add(Casetests.fromJson(v));
+        casetests!.add(new Casetests.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['_id'] = sId;
-    data['caseId'] = caseId;
-    data['patientId'] = patientId;
-    data['status'] = status;
-    data['referringDoctor'] = referringDoctor;
-    data['totalAmount'] = totalAmount;
-    data['discountType'] = discountType;
-    data['discountValue'] = discountValue;
-    data['finalAmount'] = finalAmount;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    if (patient != null) {
-      data['patient'] = patient!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['caseId'] = this.caseId;
+    data['patientId'] = this.patientId;
+    data['status'] = this.status;
+    data['referringDoctor'] = this.referringDoctor;
+    data['totalAmount'] = this.totalAmount;
+    data['discountType'] = this.discountType;
+    data['discountValue'] = this.discountValue;
+    data['finalAmount'] = this.finalAmount;
+    data['amountStatus'] = this.amountStatus;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    if (this.patient != null) {
+      data['patient'] = this.patient!.toJson();
     }
-    if (doctor != null) {
-      data['doctor'] = doctor!.map((v) => v.toJson()).toList();
+    if (this.casetests != null) {
+      data['casetests'] = this.casetests!.map((v) => v.toJson()).toList();
     }
-    if (casetests != null) {
-      data['casetests'] = casetests!.map((v) => v.toJson()).toList();
-    }
-    if (transactions != null) {
-      data['transactions'] = transactions!.map((v) => v.toJson()).toList();
+    if (this.transactions != null) {
+      data['transactions'] = this.transactions!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -125,27 +174,28 @@ class Patient {
     gender = json['gender'];
     phoneNumbers = json['phoneNumbers'].cast<String>();
     email = json['email'];
-    address =
-        json['address'] != null ? Address.fromJson(json['address']) : null;
+    address = json['address'] != null
+        ? new Address.fromJson(json['address'])
+        : null;
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['_id'] = sId;
-    data['patientId'] = patientId;
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
-    data['age'] = age;
-    data['gender'] = gender;
-    data['phoneNumbers'] = phoneNumbers;
-    data['email'] = email;
-    if (address != null) {
-      data['address'] = address!.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['patientId'] = this.patientId;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['age'] = this.age;
+    data['gender'] = this.gender;
+    data['phoneNumbers'] = this.phoneNumbers;
+    data['email'] = this.email;
+    if (this.address != null) {
+      data['address'] = this.address!.toJson();
     }
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
     return data;
   }
 }
@@ -177,13 +227,13 @@ class Address {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['line1'] = line1;
-    data['line2'] = line2;
-    data['city'] = city;
-    data['state'] = state;
-    data['postalCode'] = postalCode;
-    data['country'] = country;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['line1'] = this.line1;
+    data['line2'] = this.line2;
+    data['city'] = this.city;
+    data['state'] = this.state;
+    data['postalCode'] = this.postalCode;
+    data['country'] = this.country;
     return data;
   }
 }
@@ -194,12 +244,12 @@ class Casetests {
   String? testId;
   String? categoryId;
   int? price;
+  String? footNote;
   List<Characteristics>? characteristics;
   String? createdAt;
   String? updatedAt;
-  List<Test>? test;
-  List<Category>? category;
-  String? footNote;
+  Test? test;
+  Category? category;
   String? unit;
 
   Casetests({
@@ -208,12 +258,12 @@ class Casetests {
     this.testId,
     this.categoryId,
     this.price,
+    this.footNote,
     this.characteristics,
     this.createdAt,
     this.updatedAt,
     this.test,
     this.category,
-    this.footNote,
     this.unit,
   });
 
@@ -223,51 +273,44 @@ class Casetests {
     testId = json['testId'];
     categoryId = json['categoryId'];
     price = json['price'];
+    footNote = json['footNote'];
     if (json['characteristics'] != null) {
       characteristics = <Characteristics>[];
       json['characteristics'].forEach((v) {
-        characteristics!.add(Characteristics.fromJson(v));
+        characteristics!.add(new Characteristics.fromJson(v));
       });
     }
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    if (json['test'] != null) {
-      test = <Test>[];
-      json['test'].forEach((v) {
-        test!.add(Test.fromJson(v));
-      });
-    }
-    if (json['category'] != null) {
-      category = <Category>[];
-      json['category'].forEach((v) {
-        category!.add(Category.fromJson(v));
-      });
-    }
-    footNote = json['footNote'];
+    test = json['test'] != null ? new Test.fromJson(json['test']) : null;
+    category = json['category'] != null
+        ? new Category.fromJson(json['category'])
+        : null;
     unit = json['unit'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['_id'] = sId;
-    data['caseId'] = caseId;
-    data['testId'] = testId;
-    data['categoryId'] = categoryId;
-    data['price'] = price;
-    if (characteristics != null) {
-      data['characteristics'] =
-          characteristics!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['caseId'] = this.caseId;
+    data['testId'] = this.testId;
+    data['categoryId'] = this.categoryId;
+    data['price'] = this.price;
+    data['footNote'] = this.footNote;
+    if (this.characteristics != null) {
+      data['characteristics'] = this.characteristics!
+          .map((v) => v.toJson())
+          .toList();
     }
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    if (test != null) {
-      data['test'] = test!.map((v) => v.toJson()).toList();
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    if (this.test != null) {
+      data['test'] = this.test!.toJson();
     }
-    if (category != null) {
-      data['category'] = category!.map((v) => v.toJson()).toList();
+    if (this.category != null) {
+      data['category'] = this.category!.toJson();
     }
-    data['footNote'] = footNote;
-    data['unit'] = unit;
+    data['unit'] = this.unit;
     return data;
   }
 }
@@ -275,18 +318,21 @@ class Casetests {
 class Characteristics {
   String? name;
   String? unit;
+  String? stringValue;
 
-  Characteristics({this.name, this.unit});
+  Characteristics({this.name, this.unit, this.stringValue});
 
   Characteristics.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     unit = json['unit'];
+    stringValue = json['stringValue'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['name'] = name;
-    data['unit'] = unit;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['unit'] = this.unit;
+    data['stringValue'] = this.stringValue;
     return data;
   }
 }
@@ -296,24 +342,21 @@ class Test {
   String? testId;
   String? testCode;
   String? name;
-  String? description;
+  String? footNote;
   int? price;
   String? categoryId;
-  List? groupIds;
-  List? headerIds;
-  List? packageIds;
-  List<ReferenceRange>? referenceRange;
-  List<String>? categories;
-  bool? deleted;
-  Null? deletedAt;
-  List<Characteristics>? characteristics;
-  String? createdAt;
-  String? updatedAt;
-  String? footNote;
+  List<String>? groupIds;
+  var packageIds;
   String? testType;
   int? reportingDays;
-  List? possibleStringValues;
-  List? dependecies;
+  var possibleStringValues;
+  List<Characteristics>? characteristics;
+  var dependecies;
+  bool? deleted;
+  dynamic? deletedAt;
+  List<ReferenceRange>? referenceRange;
+  String? createdAt;
+  String? updatedAt;
   String? unit;
   int? numberValue;
 
@@ -322,24 +365,21 @@ class Test {
     this.testId,
     this.testCode,
     this.name,
-    this.description,
+    this.footNote,
     this.price,
     this.categoryId,
     this.groupIds,
-    this.headerIds,
     this.packageIds,
-    this.referenceRange,
-    this.categories,
-    this.deleted,
-    this.deletedAt,
-    this.characteristics,
-    this.createdAt,
-    this.updatedAt,
-    this.footNote,
     this.testType,
     this.reportingDays,
     this.possibleStringValues,
+    this.characteristics,
     this.dependecies,
+    this.deleted,
+    this.deletedAt,
+    this.referenceRange,
+    this.createdAt,
+    this.updatedAt,
     this.unit,
     this.numberValue,
   });
@@ -349,109 +389,104 @@ class Test {
     testId = json['testId'];
     testCode = json['testCode'];
     name = json['name'];
-    description = json['description'];
+    footNote = json['footNote'];
     price = json['price'];
     categoryId = json['categoryId'];
+    groupIds = json['groupIds'].cast<String>();
 
-    if (json['referenceRange'] != null) {
-      referenceRange = <ReferenceRange>[];
-      json['referenceRange'].forEach((v) {
-        referenceRange!.add(ReferenceRange.fromJson(v));
-      });
-    }
-    if (json["categories"] != null) {
-      categories = json['categories'].cast<String>();
-    }
-    deleted = json['deleted'];
-    deletedAt = json['deletedAt'];
+    testType = json['testType'];
+    reportingDays = json['reportingDays'];
+
     if (json['characteristics'] != null) {
       characteristics = <Characteristics>[];
       json['characteristics'].forEach((v) {
-        characteristics!.add(Characteristics.fromJson(v));
+        characteristics!.add(new Characteristics.fromJson(v));
+      });
+    }
+
+    deleted = json['deleted'];
+    deletedAt = json['deletedAt'];
+    if (json['referenceRange'] != null) {
+      referenceRange = <ReferenceRange>[];
+      json['referenceRange'].forEach((v) {
+        referenceRange!.add(new ReferenceRange.fromJson(v));
       });
     }
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    footNote = json['footNote'];
-    testType = json['testType'];
-    reportingDays = json['reportingDays'];
-
     unit = json['unit'];
     numberValue = json['numberValue'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['_id'] = sId;
-    data['testId'] = testId;
-    data['testCode'] = testCode;
-    data['name'] = name;
-    data['description'] = description;
-    data['price'] = price;
-    data['categoryId'] = categoryId;
-    if (groupIds != null) {
-      data['groupIds'] = groupIds!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['testId'] = this.testId;
+    data['testCode'] = this.testCode;
+    data['name'] = this.name;
+    data['footNote'] = this.footNote;
+    data['price'] = this.price;
+    data['categoryId'] = this.categoryId;
+    data['groupIds'] = this.groupIds;
+    if (this.packageIds != null) {
+      data['packageIds'] = this.packageIds!.map((v) => v.toJson()).toList();
     }
-    if (headerIds != null) {
-      data['headerIds'] = headerIds!.map((v) => v.toJson()).toList();
+    data['testType'] = this.testType;
+    data['reportingDays'] = this.reportingDays;
+    if (this.possibleStringValues != null) {
+      data['possibleStringValues'] = this.possibleStringValues!
+          .map((v) => v.toJson())
+          .toList();
     }
-    if (packageIds != null) {
-      data['packageIds'] = packageIds!.map((v) => v.toJson()).toList();
+    if (this.characteristics != null) {
+      data['characteristics'] = this.characteristics!
+          .map((v) => v.toJson())
+          .toList();
     }
-    if (referenceRange != null) {
-      data['referenceRange'] = referenceRange!.map((v) => v.toJson()).toList();
+    if (this.dependecies != null) {
+      data['dependecies'] = this.dependecies!.map((v) => v.toJson()).toList();
     }
-    data['categories'] = categories;
-    data['deleted'] = deleted;
-    data['deletedAt'] = deletedAt;
-    if (characteristics != null) {
-      data['characteristics'] =
-          characteristics!.map((v) => v.toJson()).toList();
+    data['deleted'] = this.deleted;
+    data['deletedAt'] = this.deletedAt;
+    if (this.referenceRange != null) {
+      data['referenceRange'] = this.referenceRange!
+          .map((v) => v.toJson())
+          .toList();
     }
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['footNote'] = footNote;
-    data['testType'] = testType;
-    data['reportingDays'] = reportingDays;
-    if (possibleStringValues != null) {
-      data['possibleStringValues'] =
-          possibleStringValues!.map((v) => v.toJson()).toList();
-    }
-    if (dependecies != null) {
-      data['dependecies'] = dependecies!.map((v) => v.toJson()).toList();
-    }
-    data['unit'] = unit;
-    data['numberValue'] = numberValue;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['unit'] = this.unit;
+    data['numberValue'] = this.numberValue;
     return data;
   }
 }
 
 class ReferenceRange {
   String? appliesTo;
-  String? normalCategory;
+  String? stringValue;
   int? lowValue;
   int? highValue;
 
   ReferenceRange({
     this.appliesTo,
-    this.normalCategory,
+    this.stringValue,
     this.lowValue,
     this.highValue,
   });
 
   ReferenceRange.fromJson(Map<String, dynamic> json) {
     appliesTo = json['appliesTo'];
-    normalCategory = json['normalCategory'];
+    stringValue = json['stringValue'];
     lowValue = json['lowValue'];
     highValue = json['highValue'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['appliesTo'] = appliesTo;
-    data['normalCategory'] = normalCategory;
-    data['lowValue'] = lowValue;
-    data['highValue'] = highValue;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['appliesTo'] = this.appliesTo;
+    data['stringValue'] = this.stringValue;
+    data['lowValue'] = this.lowValue;
+    data['highValue'] = this.highValue;
     return data;
   }
 }
@@ -483,13 +518,51 @@ class Category {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['_id'] = sId;
-    data['categoryId'] = categoryId;
-    data['name'] = name;
-    data['description'] = description;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['categoryId'] = this.categoryId;
+    data['name'] = this.name;
+    data['description'] = this.description;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    return data;
+  }
+}
+
+class Pagination {
+  int? total;
+  int? page;
+  int? limit;
+  int? totalPages;
+  bool? hasNextPage;
+  bool? hasPrevPage;
+
+  Pagination({
+    this.total,
+    this.page,
+    this.limit,
+    this.totalPages,
+    this.hasNextPage,
+    this.hasPrevPage,
+  });
+
+  Pagination.fromJson(Map<String, dynamic> json) {
+    total = json['total'];
+    page = json['page'];
+    limit = json['limit'];
+    totalPages = json['totalPages'];
+    hasNextPage = json['hasNextPage'];
+    hasPrevPage = json['hasPrevPage'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['total'] = this.total;
+    data['page'] = this.page;
+    data['limit'] = this.limit;
+    data['totalPages'] = this.totalPages;
+    data['hasNextPage'] = this.hasNextPage;
+    data['hasPrevPage'] = this.hasPrevPage;
     return data;
   }
 }

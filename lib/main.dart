@@ -31,6 +31,9 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               scaffoldBackgroundColor: Colors.white,
               fontFamily: "Inter",
+              bottomSheetTheme: const BottomSheetThemeData(
+                backgroundColor: AppColor.whitecolor,
+              ),
               appBarTheme: AppBarTheme(
                 shadowColor: AppColor.transparentcolor,
                 backgroundColor: AppColor.transparentcolor,
@@ -40,7 +43,7 @@ class MyApp extends StatelessWidget {
                 titleTextStyle: TextStyle(
                   color: AppColor.primary,
 
-                  fontSize: 21.h,
+                  fontSize: 19.h,
                   fontWeight: FontWeight.w600,
                 ),
                 surfaceTintColor: AppColor.transparentcolor,
