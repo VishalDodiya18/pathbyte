@@ -27,7 +27,7 @@ class SelectedTestsTable extends StatelessWidget {
             DataColumn(label: Text("S.No")),
             DataColumn(label: Text("Test Code")),
             DataColumn(label: Text("Test Name")),
-            DataColumn(label: Text("Report Days")),
+            DataColumn(label: Text("R.D.")),
             DataColumn(label: Text("Rate")),
             DataColumn(label: Text("Action")),
           ],

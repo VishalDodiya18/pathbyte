@@ -112,128 +112,137 @@ class BookCaseScreen extends StatelessWidget {
                   ],
                 ),
                 heightBox(18),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Doctor Selection
-                    Expanded(
-                      child: Column(
-                        spacing: 10.h,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const TextConstant(
-                            title: 'Referring Doc*',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          TextFieldConstant(
-                            controller: TextEditingController(
-                              text: controller.selectedDoctor == null
-                                  ? ""
-                                  : "${controller.selectedDoctor!.firstName} ${controller.selectedDoctor!.lastName}",
-                            ),
-                            hintText: "Select Doctor",
-                            isReadOnly: true,
-                            maxLines: 5,
-                            minLines: 1,
-                            suffixIcon: const Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              size: 30.0,
-                            ),
-                            onTap: () async {
-                              final selected =
-                                  await showModalBottomSheet<Doctor>(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.white,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(20),
-                                      ),
-                                    ),
-                                    builder: (_) {
-                                      return PaginatedSelectionSheet<Doctor>(
-                                        title: "Doctor",
-                                        controller: homecontroller
-                                            .doctorPagingController,
-                                        itemLabel: (d) =>
-                                            "${d.firstName} ${d.lastName}",
-                                        selectedItem: controller.selectedDoctor,
-                                        onSelect: (d) {
-                                          Navigator.pop(context, d);
+                GetBuilder<HomeController>(
+                  builder: (controller) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Doctor Selection
+                        Expanded(
+                          child: Column(
+                            spacing: 10.h,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const TextConstant(
+                                title: 'Referring Doc*',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              TextFieldConstant(
+                                controller: TextEditingController(
+                                  text: controller.selectedDoctor == null
+                                      ? ""
+                                      : "${controller.selectedDoctor!.firstName} ${controller.selectedDoctor!.lastName}",
+                                ),
+                                hintText: "Select Doctor",
+                                isReadOnly: true,
+                                maxLines: 5,
+                                minLines: 1,
+                                suffixIcon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  size: 30.0,
+                                ),
+                                onTap: () async {
+                                  final selected =
+                                      await showModalBottomSheet<Doctor>(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.white,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20),
+                                          ),
+                                        ),
+                                        builder: (_) {
+                                          return PaginatedSelectionSheet<
+                                            Doctor
+                                          >(
+                                            title: "Doctor",
+                                            controller: homecontroller
+                                                .doctorPagingController,
+                                            itemLabel: (d) =>
+                                                "${d.firstName} ${d.lastName}",
+                                            selectedItem:
+                                                controller.selectedDoctor,
+                                            onSelect: (d) {
+                                              Navigator.pop(context, d);
+                                            },
+                                          );
                                         },
                                       );
-                                    },
-                                  );
 
-                              if (selected != null) {
-                                controller.selectedDoctor = selected;
-                                controller.update();
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    widthBox(20),
-                    // Center Selection
-                    Expanded(
-                      child: Column(
-                        spacing: 10.h,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const TextConstant(
-                            title: 'Center*',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          TextFieldConstant(
-                            controller: TextEditingController(
-                              text: controller.selectedCenter?.name ?? "",
-                            ),
-                            maxLines: 5,
-                            minLines: 1,
-                            hintText: "Select Center",
-                            isReadOnly: true,
-                            suffixIcon: const Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              size: 30.0,
-                            ),
-                            onTap: () async {
-                              final selected = await showModalBottomSheet<Lab>(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.white,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20),
-                                  ),
-                                ),
-                                builder: (_) {
-                                  return PaginatedSelectionSheet<Lab>(
-                                    title: "Center",
-                                    controller:
-                                        homecontroller.labPagingController,
-                                    itemLabel: (lab) => lab.name ?? "",
-                                    selectedItem: controller.selectedCenter,
-                                    onSelect: (lab) {
-                                      Navigator.pop(context, lab);
-                                    },
-                                  );
+                                  if (selected != null) {
+                                    controller.selectedDoctor = selected;
+                                    controller.update();
+                                  }
                                 },
-                              );
-
-                              if (selected != null) {
-                                controller.selectedCenter = selected;
-                                controller.update();
-                              }
-                            },
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
+                        ),
+                        widthBox(20),
+                        // Center Selection
+                        Expanded(
+                          child: Column(
+                            spacing: 10.h,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const TextConstant(
+                                title: 'Center*',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              TextFieldConstant(
+                                controller: TextEditingController(
+                                  text: controller.selectedCenter?.name ?? "",
+                                ),
+                                maxLines: 5,
+                                minLines: 1,
+                                hintText: "Select Center",
+                                isReadOnly: true,
+                                suffixIcon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  size: 30.0,
+                                ),
+                                onTap: () async {
+                                  final selected =
+                                      await showModalBottomSheet<Lab>(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.white,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20),
+                                          ),
+                                        ),
+                                        builder: (_) {
+                                          return PaginatedSelectionSheet<Lab>(
+                                            title: "Center",
+                                            controller: homecontroller
+                                                .labPagingController,
+                                            itemLabel: (lab) => lab.name ?? "",
+                                            selectedItem:
+                                                controller.selectedCenter,
+                                            onSelect: (lab) {
+                                              Navigator.pop(context, lab);
+                                            },
+                                          );
+                                        },
+                                      );
+
+                                  if (selected != null) {
+                                    controller.selectedCenter = selected;
+                                    controller.update();
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
                 heightBox(15),
                 const Divider(),
