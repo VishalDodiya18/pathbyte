@@ -12,7 +12,7 @@ GroupTestModel groupTestModelFromJson(String str) =>
 String groupTestModelToJson(GroupTestModel data) => json.encode(data.toJson());
 
 class GroupTestModel {
-  int? code;
+  var code;
   String? message;
   Data? data;
 
@@ -59,7 +59,7 @@ class Group {
   String? groupId;
   String? name;
   String? description;
-  int? price;
+  var price;
   DateTime? createdAt;
   DateTime? updatedAt;
   List<Test>? tests;
@@ -159,8 +159,8 @@ class Characteristic {
 class ReferenceRange {
   String? appliesTo;
   String? stringValue;
-  int? lowValue;
-  int? highValue;
+  var lowValue;
+  var highValue;
   String? normalCategory;
 
   ReferenceRange({
@@ -189,10 +189,10 @@ class ReferenceRange {
 }
 
 class Pagination {
-  int? total;
-  int? page;
-  int? limit;
-  int? totalPages;
+  var total;
+  var page;
+  var limit;
+  var totalPages;
   bool? hasNextPage;
   bool? hasPrevPage;
 

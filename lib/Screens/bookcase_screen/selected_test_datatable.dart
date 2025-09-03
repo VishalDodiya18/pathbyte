@@ -9,11 +9,11 @@ class SelectedTestsTable extends StatelessWidget {
     return GetBuilder<BookCaseController>(
       builder: (controller) {
         final List<Test> tests =
-            controller.selectedTests +
-            ((((controller.selectedGroupTests.map(
-              (element) => (element.tests ?? []).toList(),
-            )).toList()).expand((e) => e)).toList());
-
+            (controller.selectedTests +
+                    ((((controller.selectedGroupTests.map(
+                      (element) => (element.tests ?? []).toList(),
+                    )).toList()).expand((e) => e)).toList()))
+                .toList();
         if (tests.isEmpty) {
           return const Center(child: Text("No tests selected"));
         }
@@ -26,12 +26,13 @@ class SelectedTestsTable extends StatelessWidget {
             dataRowMaxHeight: 36,
             headingRowColor: MaterialStateProperty.all(Colors.grey.shade200),
             border: TableBorder.all(width: 0.5, color: Colors.grey.shade400),
+
             columns: const [
-              DataColumn(label: Text("S.No")),
+              DataColumn(label: SizedBox(width: 20, child: Text("S.No"))),
               DataColumn(label: Text("Test Code")),
               DataColumn(label: Text("Test Name")),
               DataColumn(label: Text("R.D.")),
-              DataColumn(label: Text("Rate")),
+              DataColumn(label: Text("Price")),
               // DataColumn(label: Text("Action")),
             ],
             rows: [
@@ -39,6 +40,7 @@ class SelectedTestsTable extends StatelessWidget {
                 final test = tests[index];
                 return DataRow(
                   cells: [
+                    // DataCell(Text("${index + 1}")),
                     DataCell(Text("${index + 1}")),
                     DataCell(Text(test.testId ?? "")),
                     DataCell(Text(test.name ?? "")),

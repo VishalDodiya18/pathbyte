@@ -14,7 +14,7 @@ String caseDetailsResponseToJson(CaseDetailsResponse data) =>
     json.encode(data.toJson());
 
 class CaseDetailsResponse {
-  int? code;
+  var code;
   String? message;
   Data? data;
 
@@ -53,10 +53,10 @@ class CaseDetails {
   String? status;
   String? referringDoctor;
   String? center;
-  int? totalAmount;
+  var totalAmount;
   String? discountType;
-  int? discountValue;
-  int? finalAmount;
+  var discountValue;
+  var finalAmount;
   String? amountStatus;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -154,7 +154,7 @@ class Casetest {
   String? testId;
   String? categoryId;
   String? unit;
-  int? price;
+  var price;
   String? footNote;
   List<dynamic>? characteristics;
   DateTime? createdAt;
@@ -281,7 +281,7 @@ class Doctor {
   String? firstName;
   String? lastName;
   String? description;
-  int? age;
+  var age;
   String? gender;
   String? notificationStatus;
   String? hospitalName;
@@ -448,7 +448,7 @@ class Patient {
   String? patientId;
   String? firstName;
   String? lastName;
-  int? age;
+  var age;
   String? gender;
   List<String>? phoneNumbers;
   String? email;
@@ -515,7 +515,7 @@ class Transaction {
   String? mode;
   DateTime? createdAt;
   DateTime? updatedAt;
-  int? v;
+  var v;
 
   Transaction({
     this.id,

@@ -13,7 +13,7 @@ String patientResponseModelToJson(PatientResponseModel data) =>
     json.encode(data.toJson());
 
 class PatientResponseModel {
-  int? code;
+  var code;
   String? message;
   Data? data;
 
@@ -57,10 +57,10 @@ class Data {
 }
 
 class Pagination {
-  int? total;
-  int? page;
-  int? limit;
-  int? totalPages;
+  var total;
+  var page;
+  var limit;
+  var totalPages;
   bool? hasNextPage;
   bool? hasPrevPage;
 

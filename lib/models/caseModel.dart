@@ -1,7 +1,7 @@
 import 'package:labapp/models/test_model.dart';
 
 class CaseModel {
-  int? code;
+  var code;
   String? message;
   Data? data;
 
@@ -60,10 +60,10 @@ class Cases {
   String? patientId;
   String? status;
   String? referringDoctor;
-  int? totalAmount;
+  var totalAmount;
   String? discountType;
-  int? discountValue;
-  int? finalAmount;
+  var discountValue;
+  var finalAmount;
   String? amountStatus;
   String? createdAt;
   String? updatedAt;
@@ -145,7 +145,7 @@ class Patient {
   String? patientId;
   String? firstName;
   String? lastName;
-  int? age;
+  var age;
   String? gender;
   List<String>? phoneNumbers;
   String? email;
@@ -245,7 +245,7 @@ class Casetests {
   String? caseId;
   String? testId;
   String? categoryId;
-  int? price;
+  var price;
   String? footNote;
   List<Characteristics>? characteristics;
   String? createdAt;
@@ -342,8 +342,8 @@ class Characteristics {
 class ReferenceRange {
   String? appliesTo;
   String? stringValue;
-  int? lowValue;
-  int? highValue;
+  var lowValue;
+  var highValue;
 
   ReferenceRange({
     this.appliesTo,
@@ -408,10 +408,10 @@ class Category {
 }
 
 class Pagination {
-  int? total;
-  int? page;
-  int? limit;
-  int? totalPages;
+  var total;
+  var page;
+  var limit;
+  var totalPages;
   bool? hasNextPage;
   bool? hasPrevPage;
 

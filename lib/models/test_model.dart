@@ -11,7 +11,7 @@ String getAllTestModelToJson(GetAllTestModel data) =>
     json.encode(data.toJson());
 
 class GetAllTestModel {
-  int? code;
+  var code;
   String? message;
   Data? data;
 
@@ -55,10 +55,10 @@ class Data {
 }
 
 class Pagination {
-  int? total;
-  int? page;
-  int? limit;
-  int? totalPages;
+  var total;
+  var page;
+  var limit;
+  var totalPages;
   bool? hasNextPage;
   bool? hasPrevPage;
 
@@ -96,14 +96,14 @@ class Test {
   String? testCode;
   String? name;
   String? footNote;
-  int? price;
+  var price;
   String? categoryId;
   List<String>? groupIds;
   List<dynamic>? packageIds;
   String? testType;
-  int? reportingDays;
+  var reportingDays;
   String? unit;
-  int? numberValue;
+  var numberValue;
   List<ReferenceRange>? referenceRange;
   List<dynamic>? possibleStringValues;
   List<dynamic>? dependecies;
@@ -341,8 +341,8 @@ class Characteristic {
 class ReferenceRange {
   String? appliesTo;
   String? stringValue;
-  int? lowValue;
-  int? highValue;
+  var lowValue;
+  var highValue;
   String? normalCategory;
 
   ReferenceRange({

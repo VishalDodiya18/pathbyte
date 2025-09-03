@@ -266,14 +266,21 @@ class CaseDetailsScreen extends StatelessWidget {
                                               .test
                                               ?.name ??
                                           "",
-                                      height: 0.1,
+                                      // height: 0.9,
                                       textAlign: TextAlign.start,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                   Expanded(
                                     child: TextConstant(
-                                      title: "3,000.00",
+                                      title: formatIndianCurrency(
+                                        controller
+                                                .caseDetails
+                                                ?.casetests?[i]
+                                                .test
+                                                ?.price ??
+                                            0,
+                                      ),
                                       height: 0.1,
                                       textAlign: TextAlign.end,
                                       fontWeight: FontWeight.w500,
