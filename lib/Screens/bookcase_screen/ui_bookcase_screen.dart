@@ -1,10 +1,14 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:labapp/Constants/custom_dropDown.dart';
 import 'package:labapp/Constants/elevated_button_constant.dart';
+import 'package:labapp/Constants/extensions.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/textfield_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
@@ -14,6 +18,7 @@ import 'package:labapp/Screens/bookcase_screen/selected_test_datatable.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
 import 'package:labapp/bottomsheets/common_bottom_sheet.dart';
 import 'package:labapp/bottomsheets/test_seelction_sheet.dart';
+import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/models/doctor_model.dart';
 import 'package:labapp/models/lab_center_model.dart';
 import 'package:labapp/utils/app_color.dart';
@@ -23,7 +28,6 @@ class BookCaseScreen extends StatelessWidget {
   BookCaseScreen({super.key});
 
   final BookCaseController controller = Get.find<BookCaseController>();
-  final HomeController homecontroller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +42,8 @@ class BookCaseScreen extends StatelessWidget {
           spacing: 18.w,
           children: [
             Expanded(
-              child: elevatedButton(title: 'Save Case', onPressed: () {}),
-            ),
-            Expanded(
               child: elevatedButton(
-                title: 'Save & Print',
+                title: 'Save Case',
                 onPressed: () {
                   if (controller.formkey.currentState!.validate()) {}
                 },
@@ -113,7 +114,7 @@ class BookCaseScreen extends StatelessWidget {
                 ),
                 heightBox(18),
                 GetBuilder<HomeController>(
-                  builder: (controller) {
+                  builder: (ccontroller) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +126,7 @@ class BookCaseScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const TextConstant(
-                                title: 'Referring Doc*',
+                                title: 'Referring Doc',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -137,6 +138,7 @@ class BookCaseScreen extends StatelessWidget {
                                 ),
                                 hintText: "Select Doctor",
                                 isReadOnly: true,
+
                                 maxLines: 5,
                                 minLines: 1,
                                 suffixIcon: const Icon(
@@ -159,7 +161,11 @@ class BookCaseScreen extends StatelessWidget {
                                             Doctor
                                           >(
                                             title: "Doctor",
-                                            controller: homecontroller
+                                            itemId: (item) =>
+                                                item.id.toString(),
+                                            searchController:
+                                                ccontroller.doctorsearch,
+                                            controller: ccontroller
                                                 .doctorPagingController,
                                             itemLabel: (d) =>
                                                 "${d.firstName} ${d.lastName}",
@@ -167,10 +173,15 @@ class BookCaseScreen extends StatelessWidget {
                                                 controller.selectedDoctor,
                                             onSelect: (d) {
                                               Navigator.pop(context, d);
+                                              ccontroller.update();
                                             },
                                           );
                                         },
-                                      );
+                                      ).whenComplete(() {
+                                        ccontroller.doctorsearch.clear();
+                                        ccontroller.doctorPagingController
+                                            .refresh();
+                                      });
 
                                   if (selected != null) {
                                     controller.selectedDoctor = selected;
@@ -201,6 +212,8 @@ class BookCaseScreen extends StatelessWidget {
                                 minLines: 1,
                                 hintText: "Select Center",
                                 isReadOnly: true,
+                                validator: (p0) =>
+                                    p0!.isEmpty ? "Please select center" : null,
                                 suffixIcon: const Icon(
                                   Icons.keyboard_arrow_down_rounded,
                                   size: 30.0,
@@ -216,20 +229,30 @@ class BookCaseScreen extends StatelessWidget {
                                             top: Radius.circular(20),
                                           ),
                                         ),
+
                                         builder: (_) {
                                           return PaginatedSelectionSheet<Lab>(
+                                            searchController:
+                                                ccontroller.labsearch,
+                                            itemId: (item) =>
+                                                item.id.toString(),
                                             title: "Center",
-                                            controller: homecontroller
-                                                .labPagingController,
+                                            controller:
+                                                ccontroller.labPagingController,
                                             itemLabel: (lab) => lab.name ?? "",
                                             selectedItem:
                                                 controller.selectedCenter,
                                             onSelect: (lab) {
                                               Navigator.pop(context, lab);
+                                              ccontroller.update();
                                             },
                                           );
                                         },
-                                      );
+                                      ).whenComplete(() {
+                                        ccontroller.labsearch.clear();
+                                        ccontroller.labPagingController
+                                            .refresh();
+                                      });
 
                                   if (selected != null) {
                                     controller.selectedCenter = selected;
@@ -247,11 +270,172 @@ class BookCaseScreen extends StatelessWidget {
                 heightBox(15),
                 const Divider(),
                 heightBox(10),
-                const TextConstant(
-                  title: 'Patient Details',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                Row(
+                  children: [
+                    Expanded(
+                      child: const TextConstant(
+                        title: 'Patient Details',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    GetBuilder<BookCaseController>(
+                      builder: (cc) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                            vertical: 2.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: cc.selectedpatient == null
+                                ? AppColor.greencolor
+                                : AppColor.primary,
+                            borderRadius: BorderRadius.circular(5.r),
+                          ),
+                          child: Text(
+                            cc.selectedpatient == null
+                                ? "New Patient"
+                                : "Existing Patient",
+                            style: TextStyle(
+                              color: AppColor.whitecolor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
+                heightBox(15),
+                const TextConstant(
+                  title: 'Phone Number*',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                heightBox(12),
+                GetBuilder<HomeController>(
+                  builder: (homecontroller) {
+                    return PhoneFormField(
+                      controller: controller.phoneNumber,
+                      validator: PhoneValidator.compose([
+                        PhoneValidator.required(
+                          context,
+                          errorText: "You must enter a value",
+                        ),
+                        PhoneValidator.validMobile(
+                          context,
+                          errorText: "Enter a valid phone number",
+                        ),
+                      ]),
+                      onChanged: (p0) {
+                        controller.selectedpatient = null;
+                        controller.update();
+                      },
+                      countrySelectorNavigator:
+                          CountrySelectorNavigator.draggableBottomSheet(
+                            flagSize: 30,
+                            searchBoxTextStyle: textStyle(fontSize: 16),
+                            titleStyle: textStyle(fontSize: 16),
+                            sortCountries: true,
+                            subtitleStyle: textStyle(fontSize: 16),
+                            showDialCode: false,
+                          ),
+
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+
+                      isCountrySelectionEnabled: true,
+                      isCountryButtonPersistent: true,
+                      countryButtonStyle: CountryButtonStyle(
+                        showDialCode: true,
+                        textStyle: textStyle(fontSize: 16),
+                        showIsoCode: false,
+
+                        showFlag: false,
+                        flagSize: 16,
+                      ),
+                      decoration: buildInputDecoration(
+                        context: context,
+                        hintText: "Phone Number",
+                        suffixIcon: IconButton(
+                          onPressed: () async {
+                            final selected =
+                                await showModalBottomSheet<Patient>(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  builder: (_) {
+                                    return PaginatedSelectionSheet<Patient>(
+                                      title: "Patient",
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      controller: homecontroller
+                                          .patientPagingController,
+                                      itemId: (item) => item.sId ?? "",
+                                      itemLabel: (item) =>
+                                          "${item.phoneNumbers?.first}\n${item.firstName} ${item.lastName} (${item.patientId})",
+                                      selectedItem: controller.selectedpatient,
+                                      searchController: homecontroller
+                                          .patientSearchController,
+
+                                      onSelect: (patient) {
+                                        Navigator.pop(context, patient);
+                                      },
+                                    );
+                                  },
+                                ).whenComplete(() {
+                                  homecontroller.patientSearchController
+                                      .clear();
+                                  homecontroller.patientPagingController
+                                      .refresh();
+                                });
+
+                            if (selected != null) {
+                              controller.selectedpatient = selected;
+                              controller.phoneNumber.value = PhoneNumber(
+                                isoCode: IsoCode.IN,
+                                nsn: (selected.phoneNumbers ?? []).first
+                                    .replaceAll("+", "")
+                                    .replaceAll(" ", ""),
+                              );
+                              controller.nameController.text =
+                                  "${selected.firstName ?? ""} ${selected.lastName ?? ""}";
+                              controller.emailController.text =
+                                  selected.email ?? "";
+                              controller.selectedSex.value =
+                                  (selected.gender ?? "").capitalize ?? "Male";
+                              controller.selectedSex.value =
+                                  (selected.gender ?? "").capitalize ?? "Male";
+                              if (selected.address != null) {
+                                controller.address.text =
+                                    selected.address?.line1 ?? "";
+                                controller.address2.text =
+                                    selected.address?.line2 ?? "";
+                                controller.city.text =
+                                    selected.address?.city ?? "";
+                                controller.state.text =
+                                    selected.address?.state ?? "";
+                                controller.pincode.text =
+                                    selected.address?.postalCode ?? "";
+                              }
+                              controller.yearsController.text =
+                                  (selected.age ?? 18).toString();
+                              controller.update();
+                            }
+                          },
+                          icon: Icon(Icons.keyboard_arrow_down_rounded),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
                 heightBox(15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -308,56 +492,6 @@ class BookCaseScreen extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-                heightBox(12),
-                const TextConstant(
-                  title: 'Phone Number*',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-                heightBox(12),
-                PhoneFormField(
-                  initialValue: controller.phoneNumber.value,
-
-                  validator: PhoneValidator.compose([
-                    PhoneValidator.required(
-                      context,
-                      errorText: "You must enter a value",
-                    ),
-                    PhoneValidator.validMobile(
-                      context,
-                      errorText: "Enter a valid phone number",
-                    ),
-                  ]),
-
-                  countrySelectorNavigator:
-                      CountrySelectorNavigator.draggableBottomSheet(
-                        flagSize: 30,
-                        searchBoxTextStyle: textStyle(fontSize: 16),
-                        titleStyle: textStyle(fontSize: 16),
-                        sortCountries: true,
-                        subtitleStyle: textStyle(fontSize: 16),
-                        showDialCode: false,
-                      ),
-
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  onChanged: (phoneNumber) =>
-                      controller.updatePhone(phoneNumber),
-                  enabled: true,
-
-                  isCountrySelectionEnabled: true,
-                  isCountryButtonPersistent: true,
-                  countryButtonStyle: CountryButtonStyle(
-                    showDialCode: true,
-                    textStyle: textStyle(fontSize: 16),
-                    showIsoCode: false,
-                    showFlag: false,
-                    flagSize: 16,
-                  ),
-                  decoration: buildInputDecoration(
-                    context: context,
-                    hintText: "Phone Number",
-                  ),
                 ),
                 heightBox(15),
                 const TextConstant(
@@ -436,14 +570,80 @@ class BookCaseScreen extends StatelessWidget {
                 ),
                 heightBox(15),
                 const TextConstant(
-                  title: 'Address',
+                  title: 'Address Line 1',
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
                 heightBox(8),
                 TextFieldConstant(
-                  controller: controller.addressController,
-                  hintText: 'Address',
+                  controller: controller.address,
+                  hintText: 'Address Line 1',
+                  validator: (p0) =>
+                      p0!.isEmpty ? "Please enter address" : null,
+                ),
+                heightBox(15),
+                const TextConstant(
+                  title: 'Address Line 2',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                heightBox(8),
+                TextFieldConstant(
+                  controller: controller.address2,
+                  hintText: 'Address Line 2',
+                ),
+                heightBox(15),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TextConstant(
+                            title: 'State',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          heightBox(8),
+                          TextFieldConstant(
+                            controller: controller.state,
+                            hintText: 'State',
+                          ),
+                        ],
+                      ),
+                    ),
+                    widthBox(15),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TextConstant(
+                            title: 'City',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          heightBox(8),
+                          TextFieldConstant(
+                            controller: controller.city,
+                            hintText: 'City',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                heightBox(15),
+                const TextConstant(
+                  title: 'Pincode',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                heightBox(8),
+                TextFieldConstant(
+                  controller: controller.pincode,
+                  hintText: 'Pincode',
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
                 ),
                 heightBox(20),
 
@@ -488,37 +688,123 @@ class BookCaseScreen extends StatelessWidget {
                     ),
                     Obx(() {
                       controller.selectedMode.value;
-                      return SizedBox(
-                        width: 120.w,
-                        child: CustomDropdown<String>(
-                          dropdownHeight: 300.h,
-                          items: controller.modeList,
-                          prefixIcon: TablerIcons.chevron_down,
-                          selectedValue: controller.selectedMode.value,
-                          itemLabel: (val) => val,
-                          hintText: "Select Mode",
-                          onChanged: (value) {
-                            controller.selectedMode.value = value!;
-                          },
-                        ),
+                      return Row(
+                        children: [
+                          Radio(
+                            value: "Cash",
+                            groupValue: controller.selectedMode.value,
+                            onChanged: (value) {
+                              controller.selectedMode.value = value!;
+                            },
+                          ),
+                          Text("Cash"),
+                          Radio(
+                            value: "UPI",
+                            groupValue: controller.selectedMode.value,
+                            onChanged: (value) {
+                              controller.selectedMode.value = value!;
+                            },
+                          ),
+                          Text("UPI"),
+                        ],
                       );
                     }),
                   ],
                 ),
-                heightBox(80),
-                elevatedButton(
-                  title: 'Cancel',
-                  backgroundColor: Colors.black.withValues(alpha: 0.7),
-                  onPressed: () {},
+                heightBox(15),
+                const TextConstant(
+                  title: 'Discount',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                heightBox(8),
+                GetBuilder<BookCaseController>(
+                  builder: (contrller) {
+                    return TextFieldConstant(
+                      controller: controller.discount,
+                      hintText: 'Discount',
+
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(10),
+                        MaxValueInputFormatter(controller.gettotalamount()),
+                      ],
+                      keyboardType: TextInputType.number,
+                      onChanged: (p0) {
+                        controller.recivedamount.clear();
+                        controller.update();
+                      },
+                    );
+                  },
                 ),
                 heightBox(15),
-                Column(
-                  children: [
-                    buildRow('Total', '1700', false),
-                    buildRow('Discount', '0', false),
-                    buildRow('Amount Received', '1000', false),
-                    buildRow('Balance', '700', true),
-                  ],
+                const TextConstant(
+                  title: 'Amount Received',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                heightBox(8),
+                GetBuilder<BookCaseController>(
+                  builder: (contrller) {
+                    return TextFieldConstant(
+                      controller: controller.recivedamount,
+                      hintText: 'Amount Received',
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(10),
+                        MaxValueInputFormatter(
+                          controller.gettotalwitdiscountamount(),
+                        ),
+                      ],
+                      keyboardType: TextInputType.number,
+                      onChanged: (p0) {
+                        controller.update();
+                      },
+                    );
+                  },
+                ),
+
+                heightBox(25),
+                GetBuilder<BookCaseController>(
+                  builder: (bcontroller) {
+                    return Column(
+                      children: [
+                        buildRow(
+                          'Sub Total',
+                          formatIndianCurrency(controller.gettotalamount()),
+                          false,
+                        ),
+
+                        buildRow(
+                          'Discount',
+                          bcontroller.discount.text.isEmpty
+                              ? "0"
+                              : bcontroller.discount.text,
+                          false,
+                        ),
+                        buildRow(
+                          'Total',
+                          formatIndianCurrency(
+                            controller.gettotalwitdiscountamount(),
+                          ),
+                          false,
+                        ),
+                        buildRow(
+                          'Amount Received',
+                          formatIndianCurrency(
+                            controller.gettotalwitdiscountwithrecivedamount(),
+                          ),
+                          false,
+                        ),
+                        buildRow(
+                          'Balance',
+
+                          formatIndianCurrency(controller.getfinalamount()),
+                          true,
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ],
             ),

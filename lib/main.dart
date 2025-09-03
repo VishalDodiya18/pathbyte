@@ -30,6 +30,8 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               scaffoldBackgroundColor: Colors.white,
+              primaryColor: AppColor.primary,
+
               fontFamily: "Inter",
               bottomSheetTheme: const BottomSheetThemeData(
                 backgroundColor: AppColor.whitecolor,

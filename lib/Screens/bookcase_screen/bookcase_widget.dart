@@ -189,10 +189,12 @@ Widget buildRow(String label, String value, bool isHighlighted) {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextConstant(
-                  title: value,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                Flexible(
+                  child: TextConstant(
+                    title: value,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 if (isHighlighted) ...[
                   const SizedBox(width: 8),

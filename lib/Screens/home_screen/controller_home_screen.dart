@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/models/doctor_model.dart';
 import 'package:labapp/models/lab_center_model.dart';
+import 'package:labapp/models/patient_response_model.dart';
 import 'package:labapp/utils/app_config.dart';
 
 class HomeController extends GetxController
@@ -38,6 +39,9 @@ class HomeController extends GetxController
   final PagingController<int, Doctor> doctorPagingController = PagingController(
     firstPageKey: 1,
   );
+  final PagingController<int, Patient> patientPagingController =
+      PagingController(firstPageKey: 1);
+  TextEditingController patientSearchController = TextEditingController();
 
   /// Cases controllers
   final PagingController<int, Cases> allPagingController = PagingController(
@@ -53,6 +57,8 @@ class HomeController extends GetxController
     firstPageKey: 1,
   );
 
+  final TextEditingController doctorsearch = TextEditingController();
+  final TextEditingController labsearch = TextEditingController();
   OnRefresh() {
     allPagingController.refresh();
     newPagingController.refresh();
@@ -67,15 +73,26 @@ class HomeController extends GetxController
   void onInit() {
     super.onInit();
     tabController = TabController(length: 4, vsync: this);
+    patientPagingController.addPageRequestListener((pageKey) {
+      fetchPatients(pageKey, controller: patientPagingController);
+    });
 
     /// Doctors pagination
     doctorPagingController.addPageRequestListener((pageKey) {
-      fetchDoctors(pageKey, controller: doctorPagingController);
+      fetchDoctors(
+        pageKey,
+        controller: doctorPagingController,
+        search: doctorsearch,
+      );
     });
 
     /// Labs pagination
     labPagingController.addPageRequestListener((pageKey) {
-      fetchLabCenters(pageKey, controller: labPagingController);
+      fetchLabCenters(
+        pageKey,
+        controller: labPagingController,
+        search: labsearch,
+      );
     });
 
     /// Cases pagination
@@ -100,15 +117,47 @@ class HomeController extends GetxController
     });
   }
 
+  Future<void> fetchPatients(
+    int pageKey, {
+    required PagingController<int, Patient> controller,
+  }) async {
+    try {
+      final query = patientSearchController.text.trim();
+
+      final response = await http.get(
+        Uri.parse(
+          "${AppConfig.baseUrl}/patients?page=$pageKey&limit=$_pageSize${query.isEmpty ? "" : "&search=$query"}",
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        final data = PatientResponseModel.fromJson(jsonDecode(response.body));
+        final patients = data.data?.patients ?? [];
+
+        final isLastPage = !(data.data?.pagination?.hasNextPage ?? false);
+        if (isLastPage) {
+          controller.appendLastPage(patients);
+        } else {
+          controller.appendPage(patients, pageKey + 1);
+        }
+      } else {
+        controller.error = "Failed: ${response.statusCode}";
+      }
+    } catch (e) {
+      controller.error = e.toString();
+    }
+  }
+
   /// Doctors with pagination
   Future<void> fetchDoctors(
     int pageKey, {
     required PagingController<int, Doctor> controller,
+    TextEditingController? search,
   }) async {
     try {
       final response = await http.get(
         Uri.parse(
-          "${AppConfig.baseUrl}/doctors?page=$pageKey&limit=$_pageSize",
+          "${AppConfig.baseUrl}/doctors?page=$pageKey&limit=$_pageSize${search != null && search.text.trim().isNotEmpty ? "&search=${search.text}" : ""}",
         ),
       );
 
@@ -136,11 +185,12 @@ class HomeController extends GetxController
   Future<void> fetchLabCenters(
     int pageKey, {
     required PagingController<int, Lab> controller,
+    TextEditingController? search,
   }) async {
     try {
       final response = await http.get(
         Uri.parse(
-          "${AppConfig.baseUrl}/lab-centers?page=$pageKey&limit=$_pageSize",
+          "${AppConfig.baseUrl}/lab-centers?page=$pageKey&limit=$_pageSize${search != null && search.text.trim().isNotEmpty ? "&search=${search.text}" : ""}",
         ),
       );
 
@@ -215,6 +265,8 @@ class HomeController extends GetxController
   void setTabIndex(int index) {
     selectedIndex.value = index;
   }
+
+ 
 
   @override
   void onClose() {

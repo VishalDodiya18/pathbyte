@@ -4,55 +4,61 @@ import 'package:labapp/Screens/bookcase_screen/controller_bookcase_screen.dart';
 import 'package:labapp/models/test_model.dart';
 
 class SelectedTestsTable extends StatelessWidget {
-  final BookCaseController controller = Get.find();
-
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      final List<Test> tests = controller.selectedTests;
+    return GetBuilder<BookCaseController>(
+      builder: (controller) {
+        final List<Test> tests =
+            controller.selectedTests +
+            ((((controller.selectedGroupTests.map(
+              (element) => (element.tests ?? []).toList(),
+            )).toList()).expand((e) => e)).toList());
 
-      if (tests.isEmpty) {
-        return const Center(child: Text("No tests selected"));
-      }
+        if (tests.isEmpty) {
+          return const Center(child: Text("No tests selected"));
+        }
 
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          headingRowHeight: 40,
-          dataRowMinHeight: 4,
-          dataRowMaxHeight: 36,
-          headingRowColor: MaterialStateProperty.all(Colors.grey.shade200),
-          border: TableBorder.all(width: 0.5, color: Colors.grey.shade400),
-          columns: const [
-            DataColumn(label: Text("S.No")),
-            DataColumn(label: Text("Test Code")),
-            DataColumn(label: Text("Test Name")),
-            DataColumn(label: Text("R.D.")),
-            DataColumn(label: Text("Rate")),
-            DataColumn(label: Text("Action")),
-          ],
-          rows: List.generate(tests.length, (index) {
-            final test = tests[index];
-            return DataRow(
-              cells: [
-                DataCell(Text("${index + 1}")),
-                DataCell(Text(test.testId ?? "")),
-                DataCell(Text(test.name ?? "")),
-                DataCell(Text((test.reportingDays ?? 1).toString())),
-                DataCell(Text("₹${test.price}/-")),
-                DataCell(
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      controller.toggleSelection(test);
-                    },
-                  ),
-                ),
-              ],
-            );
-          }),
-        ),
-      );
-    });
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            headingRowHeight: 40,
+            dataRowMinHeight: 4,
+            dataRowMaxHeight: 36,
+            headingRowColor: MaterialStateProperty.all(Colors.grey.shade200),
+            border: TableBorder.all(width: 0.5, color: Colors.grey.shade400),
+            columns: const [
+              DataColumn(label: Text("S.No")),
+              DataColumn(label: Text("Test Code")),
+              DataColumn(label: Text("Test Name")),
+              DataColumn(label: Text("R.D.")),
+              DataColumn(label: Text("Rate")),
+              // DataColumn(label: Text("Action")),
+            ],
+            rows: [
+              ...List.generate(tests.length, (index) {
+                final test = tests[index];
+                return DataRow(
+                  cells: [
+                    DataCell(Text("${index + 1}")),
+                    DataCell(Text(test.testId ?? "")),
+                    DataCell(Text(test.name ?? "")),
+                    DataCell(Text((test.reportingDays ?? 1).toString())),
+                    DataCell(Text("₹${test.price}/-")),
+                    // DataCell(
+                    //   IconButton(
+                    //     icon: const Icon(Icons.delete, color: Colors.red),
+                    //     onPressed: () {
+                    //       controller.toggleSelection(test);
+                    //     },
+                    //   ),
+                    // ),
+                  ],
+                );
+              }),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

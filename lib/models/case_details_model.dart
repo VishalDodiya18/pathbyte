@@ -4,6 +4,9 @@
 
 import 'dart:convert';
 
+import 'package:labapp/models/caseModel.dart';
+import 'package:labapp/models/test_model.dart';
+
 CaseDetailsResponse caseDetailsResponseFromJson(String str) =>
     CaseDetailsResponse.fromJson(json.decode(str));
 
@@ -250,132 +253,6 @@ class Category {
     "categoryId": categoryId,
     "name": name,
     "description": description,
-    "createdAt": createdAt?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
-  };
-}
-
-class Test {
-  String? id;
-  String? testId;
-  String? testCode;
-  String? name;
-  String? footNote;
-  int? price;
-  String? categoryId;
-  List<String>? groupIds;
-  List<dynamic>? packageIds;
-  String? testType;
-  int? reportingDays;
-  String? unit;
-  int? numberValue;
-  List<ReferenceRange>? referenceRange;
-  List<dynamic>? possibleStringValues;
-  List<dynamic>? dependecies;
-  bool? deleted;
-  dynamic deletedAt;
-  List<dynamic>? characteristics;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
-  Test({
-    this.id,
-    this.testId,
-    this.testCode,
-    this.name,
-    this.footNote,
-    this.price,
-    this.categoryId,
-    this.groupIds,
-    this.packageIds,
-    this.testType,
-    this.reportingDays,
-    this.unit,
-    this.numberValue,
-    this.referenceRange,
-    this.possibleStringValues,
-    this.dependecies,
-    this.deleted,
-    this.deletedAt,
-    this.characteristics,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  factory Test.fromJson(Map<String, dynamic> json) => Test(
-    id: json["_id"],
-    testId: json["testId"],
-    testCode: json["testCode"],
-    name: json["name"],
-    footNote: json["footNote"],
-    price: json["price"],
-    categoryId: json["categoryId"],
-    groupIds: json["groupIds"] == null
-        ? []
-        : List<String>.from(json["groupIds"]!.map((x) => x)),
-    packageIds: json["packageIds"] == null
-        ? []
-        : List<dynamic>.from(json["packageIds"]!.map((x) => x)),
-    testType: json["testType"],
-    reportingDays: json["reportingDays"],
-    unit: json["unit"],
-    numberValue: json["numberValue"],
-    referenceRange: json["referenceRange"] == null
-        ? []
-        : List<ReferenceRange>.from(
-            json["referenceRange"]!.map((x) => ReferenceRange.fromJson(x)),
-          ),
-    possibleStringValues: json["possibleStringValues"] == null
-        ? []
-        : List<dynamic>.from(json["possibleStringValues"]!.map((x) => x)),
-    dependecies: json["dependecies"] == null
-        ? []
-        : List<dynamic>.from(json["dependecies"]!.map((x) => x)),
-    deleted: json["deleted"],
-    deletedAt: json["deletedAt"],
-    characteristics: json["characteristics"] == null
-        ? []
-        : List<dynamic>.from(json["characteristics"]!.map((x) => x)),
-    createdAt: json["createdAt"] == null
-        ? null
-        : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null
-        ? null
-        : DateTime.parse(json["updatedAt"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "testId": testId,
-    "testCode": testCode,
-    "name": name,
-    "footNote": footNote,
-    "price": price,
-    "categoryId": categoryId,
-    "groupIds": groupIds == null
-        ? []
-        : List<dynamic>.from(groupIds!.map((x) => x)),
-    "packageIds": packageIds == null
-        ? []
-        : List<dynamic>.from(packageIds!.map((x) => x)),
-    "testType": testType,
-    "reportingDays": reportingDays,
-    "unit": unit,
-    "numberValue": numberValue,
-    "referenceRange": referenceRange == null
-        ? []
-        : List<dynamic>.from(referenceRange!.map((x) => x.toJson())),
-    "possibleStringValues": possibleStringValues == null
-        ? []
-        : List<dynamic>.from(possibleStringValues!.map((x) => x)),
-    "dependecies": dependecies == null
-        ? []
-        : List<dynamic>.from(dependecies!.map((x) => x)),
-    "deleted": deleted,
-    "deletedAt": deletedAt,
-    "characteristics": characteristics == null
-        ? []
-        : List<dynamic>.from(characteristics!.map((x) => x)),
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
   };

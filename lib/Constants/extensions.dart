@@ -8,3 +8,19 @@ String formatIndianCurrency(num amount) {
   );
   return format.format(amount);
 }
+
+String getFullAddress(dynamic address) {
+  if (address == null) return "";
+
+  // Sirf non-empty fields select karenge
+  final parts = [
+    address.line1,
+    address.line2,
+    address.city,
+    address.state,
+    address.postalCode,
+    address.country,
+  ].where((e) => e != null && e.trim().isNotEmpty).toList();
+
+  return parts.join(", ");
+}

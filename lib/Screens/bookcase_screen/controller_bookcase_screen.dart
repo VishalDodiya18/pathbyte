@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:labapp/models/caseModel.dart' hide Test;
 import 'package:labapp/models/doctor_model.dart';
+import 'package:labapp/models/group_test_model.dart';
 import 'package:labapp/models/lab_center_model.dart';
 import 'package:labapp/models/test_model.dart';
 import 'package:labapp/utils/app_config.dart';
@@ -20,7 +22,13 @@ class BookCaseController extends GetxController {
     text: DateTime.now().toIso8601String(),
   );
   TextEditingController nameController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
+  TextEditingController address = TextEditingController();
+  TextEditingController address2 = TextEditingController();
+  TextEditingController city = TextEditingController();
+  TextEditingController state = TextEditingController();
+  TextEditingController pincode = TextEditingController();
+  TextEditingController discount = TextEditingController();
+  TextEditingController recivedamount = TextEditingController();
   final TextEditingController yearsController = TextEditingController(
     text: '24',
   );
@@ -29,14 +37,12 @@ class BookCaseController extends GetxController {
   );
   final TextEditingController daysController = TextEditingController(text: '0');
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
-  var phoneNumber = PhoneNumber.parse('+91').obs;
+  PhoneController phoneNumber = PhoneController(
+    initialValue: PhoneNumber(isoCode: IsoCode.IN, nsn: ""),
+  );
   Doctor? selectedDoctor;
   Lab? selectedCenter;
-
-  void updatePhone(PhoneNumber number) {
-    phoneNumber.value = number;
-    print("Updated phone number: $number");
-  }
+  Patient? selectedpatient;
 
   List<String> referreingDocList = [
     'Dr. Parul Singhal',
@@ -58,11 +64,19 @@ class BookCaseController extends GetxController {
   final PagingController<int, Test> pagingController = PagingController(
     firstPageKey: 1,
   );
-  RxList<Test> selectedTests = <Test>[].obs;
+  final PagingController<int, Group> grouptestController = PagingController(
+    firstPageKey: 1,
+  );
+  TextEditingController searchcontrller = TextEditingController();
+  List<Test> selectedTests = [];
+  List<Group> selectedGroupTests = [];
   @override
   void onInit() {
     pagingController.addPageRequestListener((pageKey) {
       fetchTests(pageKey);
+    });
+    grouptestController.addPageRequestListener((pageKey) {
+      fetchGroupTests(pageKey);
     });
     super.onInit();
   }
@@ -76,10 +90,44 @@ class BookCaseController extends GetxController {
     update();
   }
 
+  void toggleGroupSelection(Group test) {
+    if (selectedGroupTests.any((element) => element.id == test.id)) {
+      selectedGroupTests.removeWhere((element) => element.id == test.id);
+    } else {
+      selectedGroupTests.add(test);
+    }
+    update();
+  }
+
+  gettotalamount() {
+    final List<Test> tests =
+        selectedTests +
+        ((((selectedGroupTests.map(
+          (element) => (element.tests ?? []).toList(),
+        )).toList()).expand((e) => e)).toList());
+    return tests.map((e) => e.price ?? 0).reduce((a, b) => a + b);
+  }
+
+  gettotalwitdiscountamount() {
+    return (gettotalamount() -
+        (int.parse(discount.text.isEmpty ? "0" : discount.text)));
+  }
+
+  gettotalwitdiscountwithrecivedamount() {
+    return int.parse(recivedamount.text.isEmpty ? "0" : recivedamount.text);
+  }
+
+  getfinalamount() {
+    return (gettotalwitdiscountamount() -
+        (int.parse(recivedamount.text.isEmpty ? "0" : recivedamount.text)));
+  }
+
   Future<void> fetchTests(int pageKey) async {
     try {
       final response = await http.get(
-        Uri.parse("${AppConfig.baseUrl}/tests?page=$pageKey&limit=$_pageSize"),
+        Uri.parse(
+          "${AppConfig.baseUrl}/tests?page=$pageKey&limit=$_pageSize${searchcontrller.text.trim().isNotEmpty ? "&search=${searchcontrller.text}" : ""}",
+        ),
       );
 
       final data = jsonDecode(response.body);
@@ -101,6 +149,36 @@ class BookCaseController extends GetxController {
     } catch (error) {
       log(error.toString());
       pagingController.error = error;
+    }
+  }
+
+  Future<void> fetchGroupTests(int pageKey) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          "${AppConfig.baseUrl}/tests/groups?page=$pageKey&limit=$_pageSize${searchcontrller.text.trim().isNotEmpty ? "&search=${searchcontrller.text}" : ""}",
+        ),
+      );
+
+      final data = jsonDecode(response.body);
+      log(data.toString());
+      GroupTestModel getAllTestModel = GroupTestModel.fromJson(data);
+      final List<Group> newItems = getAllTestModel.data?.groups ?? [];
+
+      final pagination = data['data']['pagination'];
+
+      final isLastPage =
+          pageKey >= (getAllTestModel.data?.pagination?.totalPages ?? 0);
+
+      if (isLastPage) {
+        grouptestController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + 1;
+        grouptestController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      log(error.toString());
+      grouptestController.error = error;
     }
   }
 }

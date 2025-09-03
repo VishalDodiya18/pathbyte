@@ -1,192 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:get/get.dart';
-// import 'package:inventory/utils/commons/text_constant.dart';
-// import 'package:inventory/utils/theme_controller.dart';
-// //
-// // class TextFieldConstant extends StatelessWidget {
-// //   TextFieldConstant({
-// //     super.key,
-// //     required this.controller,
-// //     this.contentPadding,
-// //     this.keyboardType,
-// //     this.prefixIcon,
-// //     this.suffixIcon,
-// //     this.suffixOnTap,
-// //     this.prefixOnTap,
-// //     this.onTap,
-// //     this.obscureText = false,
-// //     this.isReadOnly = false,
-// //     this.maxLines = 1, // Default is 1 line
-// //     this.minLines, // Optional min lines
-// //     required this.hintText,
-// //     this.onChanged,
-// //     this.validator,
-// //     this.textAlign = TextAlign.start,
-// //     this.inputFormatters,
-// //   });
-// //
-// //   final TextEditingController controller;
-// //   final EdgeInsets? contentPadding;
-// //   final TextInputType? keyboardType;
-// //   final dynamic suffixIcon;
-// //   final dynamic? prefixIcon;
-// //   final VoidCallback? suffixOnTap;
-// //   final VoidCallback? prefixOnTap;
-// //   final bool obscureText;
-// //   final String hintText;
-// //   final Function(String)? onChanged;
-// //   final String? Function(String?)? validator;
-// //   final void Function()? onTap;
-// //   final bool isReadOnly;
-// //   final int? maxLines; // Added maxLines
-// //   final int? minLines; // Added minLines
-// //   final List<TextInputFormatter>? inputFormatters;
-// //   final ThemeController themeController = Get.find();
-// //   final TextAlign textAlign;
-// //
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     // Access the current theme's colors using Theme.of(context)
-// //     final theme = Theme.of(context);
-// //
-// //     final Color fillColor = themeController.whiteColor; // Use secondary color for the fill
-// //
-// //     return TextFormField(
-// //       controller: controller,
-// //       // cursorColor: themeController.blackColor,
-// //       onTap: onTap,
-// //       keyboardType: keyboardType,
-// //       obscureText: obscureText,
-// //       style: textStyle(fontSize: 14),
-// //       // Set the text color based on the theme
-// //       onChanged: onChanged,
-// //       validator: validator,
-// //       readOnly: isReadOnly,
-// //       maxLines: maxLines,
-// //       // Set max lines
-// //       minLines: minLines,
-// //       // Set min lines
-// //       textAlign: textAlign,
-// //       inputFormatters: inputFormatters,
-// //       decoration: InputDecoration(
-// //         hintText: hintText,
-// //         hintStyle: textStyle(fontSize: 14, color: theme.hintColor),
-// //         prefixIcon:
-// //             prefixIcon != null
-// //                 ? prefixIcon is IconData
-// //                     ? GestureDetector(onTap: prefixOnTap, child: Icon(prefixIcon, color: themeController.greyColor))
-// //                     : prefixIcon
-// //                 : null,
-// //         suffixIcon:
-// //             suffixIcon != null
-// //                 ? suffixIcon is IconData
-// //                     ? GestureDetector(onTap: suffixOnTap, child: Icon(suffixIcon, color: themeController.greyColor))
-// //                     : suffixIcon
-// //                 : null,
-// //         fillColor: fillColor,
-// //         filled: true,
-// //         contentPadding: contentPadding ?? EdgeInsets.symmetric(vertical: 15.h, horizontal: 12.w),
-// //         disabledBorder: OutlineInputBorder(
-// //           borderSide: BorderSide(color: themeController.transparentColor),
-// //           borderRadius: BorderRadius.circular(20.r),
-// //         ),
-// //         enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: themeController.transparentColor), borderRadius: BorderRadius.circular(20.r)),
-// //         focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: themeController.transparentColor), borderRadius: BorderRadius.circular(20.r)),
-// //         errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(20.r), borderSide: const BorderSide(color: Colors.red, width: 1.0)),
-// //         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.r), borderSide: const BorderSide(width: 1.0)),
-// //       ),
-// //     );
-// //   }
-// // }
-//
-// class TextFieldConstant extends StatelessWidget {
-//   TextFieldConstant({
-//     super.key,
-//     required this.controller,
-//     this.contentPadding,
-//     this.keyboardType,
-//     this.prefixIcon,
-//     this.suffixIcon,
-//     this.suffixOnTap,
-//     this.prefixOnTap,
-//     this.onTap,
-//     this.obscureText = false,
-//     this.isReadOnly = false,
-//     this.maxLines = 1,
-//     this.minLines,
-//     required this.hintText,
-//     this.onChanged,
-//     this.validator,
-//     this.textAlign = TextAlign.start,
-//     this.inputFormatters,
-//   });
-//
-//   final TextEditingController controller;
-//   final EdgeInsets? contentPadding;
-//   final TextInputType? keyboardType;
-//   final dynamic suffixIcon;
-//   final dynamic? prefixIcon;
-//   final VoidCallback? suffixOnTap;
-//   final VoidCallback? prefixOnTap;
-//   final bool obscureText;
-//   final String hintText;
-//   final Function(String)? onChanged;
-//   final String? Function(String?)? validator;
-//   final void Function()? onTap;
-//   final bool isReadOnly;
-//   final int? maxLines;
-//   final int? minLines;
-//   final List<TextInputFormatter>? inputFormatters;
-//   final TextAlign textAlign;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final theme = Theme.of(context);
-//
-//     return TextFormField(
-//       controller: controller,
-//       onTap: onTap,
-//       keyboardType: keyboardType,
-//       obscureText: obscureText,
-//       readOnly: isReadOnly,
-//       maxLines: maxLines,
-//       minLines: minLines,
-//       textAlign: textAlign,
-//       inputFormatters: inputFormatters,
-//       onChanged: onChanged,
-//       validator: validator,
-//       style: textStyle(fontSize: 14, color: theme.textTheme.bodyMedium?.color),
-//       decoration: InputDecoration(
-//         hintText: hintText,
-//         hintStyle: textStyle(fontSize: 14, color: theme.hintColor),
-//         prefixIcon:
-//             prefixIcon != null
-//                 ? (prefixIcon is IconData ? GestureDetector(onTap: prefixOnTap, child: Icon(prefixIcon, color: theme.iconTheme.color)) : prefixIcon)
-//                 : null,
-//         suffixIcon:
-//             suffixIcon != null
-//                 ? (suffixIcon is IconData
-//                     ? GestureDetector(
-//                       onTap: suffixOnTap,
-//                       child: Padding(padding: EdgeInsets.only(right: 20.0.w), child: Icon(suffixIcon, color: theme.iconTheme.color)),
-//                     )
-//                     : suffixIcon)
-//                 : null,
-//         fillColor: theme.inputDecorationTheme.fillColor ?? theme.colorScheme.secondary.withOpacity(0.2),
-//         filled: true,
-//         contentPadding: contentPadding ?? EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
-//         disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent), borderRadius: BorderRadius.circular(20.r)),
-//         enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent), borderRadius: BorderRadius.circular(20.r)),
-//         focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: theme.colorScheme.primary), borderRadius: BorderRadius.circular(20.r)),
-//         errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(20.r), borderSide: const BorderSide(color: Colors.red, width: 1.0)),
-//         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.r), borderSide: const BorderSide(width: 1.0)),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -529,5 +340,33 @@ class UpperCaseTextFormatter extends TextInputFormatter {
       text: newValue.text.toUpperCase(),
       selection: newValue.selection,
     );
+  }
+}
+
+class MaxValueInputFormatter extends TextInputFormatter {
+  final int maxValue;
+
+  MaxValueInputFormatter(this.maxValue);
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.isEmpty) return newValue;
+
+    final int? value = int.tryParse(newValue.text);
+    if (value == null) return oldValue;
+
+    if (value > maxValue) {
+      // Agar max cross kare to max value hi set ho jaye
+      final maxText = maxValue.toString();
+      return TextEditingValue(
+        text: maxText,
+        selection: TextSelection.collapsed(offset: maxText.length),
+      );
+    }
+
+    return newValue;
   }
 }
