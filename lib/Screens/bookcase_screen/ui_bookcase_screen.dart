@@ -36,13 +36,7 @@ class BookCaseScreen extends StatelessWidget {
           child: Stack(
             children: [
               Scaffold(
-                appBar: AppBar(
-                  title: Text("Add A New Case"),
-                  actions: [
-                    const Icon(TablerIcons.dots_vertical),
-                    widthBox(10),
-                  ],
-                ),
+                appBar: AppBar(title: Text("Add A New Case")),
                 bottomNavigationBar: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 20.w,

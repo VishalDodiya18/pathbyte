@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:labapp/Screens/bottombar.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
 import 'package:labapp/Screens/home_screen/ui_home_screen.dart';
 import 'package:labapp/utils/app_color.dart';
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
                 surfaceTintColor: AppColor.transparentcolor,
               ),
             ),
-            home: HomeScreen(),
+            home: Bottombar(),
           );
         },
       ),
