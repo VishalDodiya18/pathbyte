@@ -49,7 +49,11 @@ class BookCaseController extends GetxController {
   Lab? selectedCenter;
   Patient? selectedpatient;
 
-  List<String> mrmissList = ['Mr.', 'Mrs.', 'Ms.', 'Dr.'];
+  List<String> mrmissList = [
+    'Mr.', 'Mrs.', 'Ms.',
+
+    //  'Dr.'
+  ];
   RxString selectedTitle = 'Mr.'.obs;
   List<String> sexList = ['Male', 'Female', 'Other'];
   RxString selectedSex = 'Male'.obs;
@@ -95,15 +99,15 @@ class BookCaseController extends GetxController {
   }
 
   gettotalamount() {
-    final List<Test> tests =
-        (selectedTests +
-                ((((selectedGroupTests.map(
-                  (element) => (element.tests ?? []).toList(),
-                )).toList()).expand((e) => e)).toList()))
-            .toList();
-    return tests.isEmpty
+    final List<Test> tests = (selectedTests).toList();
+    final List<Group> groptests = (selectedGroupTests);
+
+    return tests.isEmpty && groptests.isEmpty
         ? 0
-        : tests.map((e) => e.price ?? 0).reduce((a, b) => a + b);
+        : tests.map((e) => e.price ?? 0).reduce((a, b) => a + b) +
+              (groptests.isEmpty
+                  ? 0
+                  : groptests.map((e) => e.price ?? 0).reduce((a, b) => a + b));
   }
 
   gettotalwitdiscountamount() {
@@ -184,18 +188,26 @@ class BookCaseController extends GetxController {
 
       final body = {
         if (selectedpatient != null) "patientId": selectedpatient?.sId,
-        if (selectedpatient == null)
-          "patientData": {
-            "firstName": nameController.text,
-            "lastName": "",
-            "age": int.parse(yearsController.text),
-            "months": int.parse(monthsController.text),
-            "days": int.parse(daysController.text),
-            "gender": selectedSex.value,
-            "phoneNumbers": [
-              "+${phoneNumber.value.countryCode} ${phoneNumber.value.nsn}",
-            ],
-            "email": emailController.text,
+        // if (selectedpatient == null)
+        "patientData": {
+          "firstName": nameController.text,
+          "lastName": "",
+          "title": selectedTitle.value,
+          "age": int.parse(yearsController.text),
+          "months": int.parse(monthsController.text),
+          "days": int.parse(daysController.text),
+          "dob": getDobFromAge(
+            int.parse(yearsController.text),
+            int.parse(monthsController.text),
+            int.parse(daysController.text),
+            format: "yyyy-MM-dd",
+          ),
+          "gender": selectedSex.value,
+          "phoneNumbers": [
+            "+${phoneNumber.value.countryCode} ${phoneNumber.value.nsn}",
+          ],
+          if (emailController.text.isNotEmpty) "email": emailController.text,
+          if (address.text.isNotEmpty)
             "address": {
               "line1": address.text,
               //  getFullAddress(
@@ -212,20 +224,15 @@ class BookCaseController extends GetxController {
               "city": "",
               "state": "",
               "postalCode": "",
-              "country": "INDIA",
+              "country": "",
             },
-          },
+        },
         "tests": [
           selectedTests.map((e) => {"testId": e.id}).toList(),
           for (int i = 0; i < selectedGroupTests.length; i++)
             (selectedGroupTests[i].tests ?? [])
                 .map(
-                  (e) => {
-                    "testId": e.id,
-                    "groupId": (e.groupIds ?? []).isEmpty
-                        ? ""
-                        : (e.groupIds ?? []).first,
-                  },
+                  (e) => {"testId": e.id, "groupId": selectedGroupTests[i].id},
                 )
                 .toList(),
         ].expand((e) => e).toList(),
@@ -260,7 +267,7 @@ class BookCaseController extends GetxController {
         log(model["message"]);
         Get.snackbar(
           "Error",
-          model["message"] ?? "Case Creation failed please try again",
+          model["message"] ?? "Case creation failed please try again",
           colorText: AppColor.whitecolor,
 
           backgroundColor: AppColor.redcolor,

@@ -42,7 +42,7 @@ class Lab {
   final String? deletedAt;
   final String createdAt;
   final String updatedAt;
-  final int v;
+  var v;
 
   Lab({
     required this.id,
@@ -70,6 +70,21 @@ class Lab {
       updatedAt: json['updatedAt'],
       v: json['__v'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'labCenterId': labCenterId,
+      'name': name,
+      'location': location,
+      'contactNumbers': contactNumbers,
+      'deleted': deleted,
+      'deletedAt': deletedAt,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      '__v': v,
+    };
   }
 }
 

@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 String formatIndianCurrency(num amount) {
@@ -23,4 +27,33 @@ String getFullAddress(dynamic address) {
   ].where((e) => e != null && e.trim().isNotEmpty).toList();
 
   return parts.join(", ");
+}
+
+String getDobFromAge(int years, int months, int days, {format}) {
+  DateTime today = DateTime.now();
+
+  // Pehle years minus karte hain
+  DateTime dob = DateTime(today.year - years, today.month, today.day);
+
+  // Months minus
+  dob = DateTime(dob.year, dob.month - months, dob.day);
+
+  // Days minus
+  dob = dob.subtract(Duration(days: days));
+
+  // Format date (dd-MM-yyyy)
+  return DateFormat(format ?? 'dd-MM-yyyy').format(dob);
+}
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
+  }
 }

@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:labapp/models/case_details_model.dart';
+import 'package:labapp/models/group_test_model.dart';
+import 'package:labapp/models/test_model.dart';
 import 'package:labapp/utils/app_config.dart';
 
 class CaseDetailsContoller extends GetxController {
@@ -34,9 +36,13 @@ class CaseDetailsContoller extends GetxController {
       "mode": "Cash",
     },
   ];
+
+  List<Test> selectedTests = [];
+  List<Group> selectedGroupTests = [];
   @override
   void onInit() {
     fetchCaseById(caseId);
+
     super.onInit();
   }
 
@@ -54,15 +60,57 @@ class CaseDetailsContoller extends GetxController {
         final caseResponse = CaseDetails.fromJson(jsonData["data"]["case"]);
 
         caseDetails = caseResponse;
+        selectedTests = (caseDetails?.casetests ?? [])
+            .where((element) => element.groupId == null)
+            .map((e) => e.test!)
+            .toList();
+
+        selectedGroupTests = (caseDetails?.casetests ?? [])
+            .where((e) => e.groupId != null && e.group != null)
+            .map((e) => e.group!)
+            .fold<Map<String, Group>>({}, (map, group) {
+              map[group.groupId!] = group;
+              return map;
+            })
+            .values
+            .toList()
+            .cast<Group>();
         update();
       } else {
-        Get.snackbar("Error", "Failed with status: ${response.statusCode}");
+        // Get.snackbar(
+        //   "Error", "Failed with status: ${response.statusCode}");
       }
     } catch (e) {
-      Get.snackbar("Exception", e.toString());
+      // Get.snackbar("Exception", e.toString());
     } finally {
       isLoading(false);
     }
+  }
+
+  gettotalamount() {
+    final List<Test> tests = (selectedTests).toList();
+    final List<Group> groptests = (selectedGroupTests);
+
+    return tests.isEmpty && groptests.isEmpty
+        ? 0
+        : tests.map((e) => e.price ?? 0).reduce((a, b) => a + b) +
+              (groptests.isEmpty
+                  ? 0
+                  : groptests.map((e) => e.price ?? 0).reduce((a, b) => a + b));
+  }
+
+  gettotalwitdiscountamount() {
+    return (gettotalamount() -
+        (int.parse((caseDetails?.discountValue ?? 0).toString())));
+  }
+
+  gettotalwitdiscountwithrecivedamount() {
+    return gettotalwitdiscountamount() -
+        (((caseDetails?.transactions ?? []).isEmpty)
+            ? 0
+            : (caseDetails?.transactions ?? [])
+                  .map((e) => e.amountGiven)
+                  .reduce((a, b) => a + b));
   }
 
   String getFullAddress(Address? address) {

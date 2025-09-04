@@ -10,7 +10,8 @@ import 'package:labapp/Constants/custom_dropDown.dart';
 import 'package:labapp/Constants/elevated_button_constant.dart';
 import 'package:labapp/Constants/extensions.dart';
 import 'package:labapp/Constants/text_constant.dart';
-import 'package:labapp/Constants/textfield_constant.dart';
+import 'package:labapp/Constants/textfield_constant.dart'
+    hide UpperCaseTextFormatter;
 import 'package:labapp/Constants/widget_constant.dart';
 import 'package:labapp/Screens/bookcase_screen/bookcase_widget.dart';
 import 'package:labapp/Screens/bookcase_screen/controller_bookcase_screen.dart';
@@ -147,7 +148,7 @@ class BookCaseScreen extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         const TextConstant(
-                                          title: 'Referring Doc',
+                                          title: 'Referring Doc *',
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -236,7 +237,7 @@ class BookCaseScreen extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         const TextConstant(
-                                          title: 'Center*',
+                                          title: 'Center *',
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -566,6 +567,11 @@ class BookCaseScreen extends StatelessWidget {
                                       validator: (p0) => p0!.isEmpty
                                           ? "Please enter name"
                                           : null,
+                                      inputFormatters: [
+                                        UpperCaseTextFormatter(),
+                                      ],
+                                      textCapitalization:
+                                          TextCapitalization.words,
                                     ),
                                   ],
                                 ),
@@ -574,7 +580,7 @@ class BookCaseScreen extends StatelessWidget {
                           ),
                           heightBox(15),
                           const TextConstant(
-                            title: 'Email*',
+                            title: 'Email',
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -792,61 +798,59 @@ class BookCaseScreen extends StatelessWidget {
                               }),
                             ],
                           ),
-                          heightBox(15),
-                          const TextConstant(
-                            title: 'Discount',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          heightBox(8),
-                          GetBuilder<BookCaseController>(
-                            builder: (contrller) {
-                              return TextFieldConstant(
-                                controller: controller.discount,
-                                hintText: 'Discount',
-
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(10),
-                                  MaxValueInputFormatter(
-                                    controller.gettotalamount(),
-                                  ),
-                                ],
-                                keyboardType: TextInputType.number,
-                                onChanged: (p0) {
-                                  controller.recivedamount.clear();
-                                  controller.update();
-                                },
-                              );
-                            },
-                          ),
-                          heightBox(15),
-                          const TextConstant(
-                            title: 'Amount Received',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          heightBox(8),
-                          GetBuilder<BookCaseController>(
-                            builder: (contrller) {
-                              return TextFieldConstant(
-                                controller: controller.recivedamount,
-                                hintText: 'Amount Received',
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(10),
-                                  MaxValueInputFormatter(
-                                    controller.gettotalwitdiscountamount(),
-                                  ),
-                                ],
-                                keyboardType: TextInputType.number,
-                                onChanged: (p0) {
-                                  controller.update();
-                                },
-                              );
-                            },
-                          ),
-
+                          // heightBox(15),
+                          // const TextConstant(
+                          //   title: 'Discount',
+                          //   fontSize: 16,
+                          //   fontWeight: FontWeight.w500,
+                          // ),
+                          // heightBox(8),
+                          // GetBuilder<BookCaseController>(
+                          //   builder: (contrller) {
+                          //     return TextFieldConstant(
+                          //       controller: controller.discount,
+                          //       hintText: 'Discount',
+                          //       inputFormatters: [
+                          //         FilteringTextInputFormatter.digitsOnly,
+                          //         LengthLimitingTextInputFormatter(10),
+                          //         MaxValueInputFormatter(
+                          //           controller.gettotalamount(),
+                          //         ),
+                          //       ],
+                          //       keyboardType: TextInputType.number,
+                          //       onChanged: (p0) {
+                          //         controller.recivedamount.clear();
+                          //         controller.update();
+                          //       },
+                          //     );
+                          //   },
+                          // ),
+                          // heightBox(15),
+                          // const TextConstant(
+                          //   title: 'Amount Received',
+                          //   fontSize: 16,
+                          //   fontWeight: FontWeight.w500,
+                          // ),
+                          // heightBox(8),
+                          // GetBuilder<BookCaseController>(
+                          //   builder: (contrller) {
+                          //     return TextFieldConstant(
+                          //       controller: controller.recivedamount,
+                          //       hintText: 'Amount Received',
+                          //       inputFormatters: [
+                          //         FilteringTextInputFormatter.digitsOnly,
+                          //         LengthLimitingTextInputFormatter(10),
+                          //         MaxValueInputFormatter(
+                          //           controller.gettotalwitdiscountamount(),
+                          //         ),
+                          //       ],
+                          //       keyboardType: TextInputType.number,
+                          //       onChanged: (p0) {
+                          //         controller.update();
+                          //       },
+                          //     );
+                          //   },
+                          // ),
                           heightBox(25),
                           GetBuilder<BookCaseController>(
                             builder: (bcontroller) {
@@ -854,41 +858,103 @@ class BookCaseScreen extends StatelessWidget {
                                 children: [
                                   buildRow(
                                     'Sub Total',
-                                    formatIndianCurrency(
+                                    false,
+                                    value: formatIndianCurrency(
                                       controller.gettotalamount(),
                                     ),
-                                    false,
                                   ),
 
                                   buildRow(
                                     'Discount',
-                                    bcontroller.discount.text.isEmpty
-                                        ? "0"
-                                        : bcontroller.discount.text,
+                                    // bcontroller.discount.text.isEmpty
+                                    //     ? "0"
+                                    //     : bcontroller.discount.text,
                                     false,
+                                    iswidget: true,
+                                    customwidget: GetBuilder<BookCaseController>(
+                                      builder: (contrller) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 15.0,
+                                          ),
+                                          child: TextFieldConstant(
+                                            controller: controller.discount,
+                                            hintText: 'Discount',
+                                            textAlign: TextAlign.center,
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly,
+                                              LengthLimitingTextInputFormatter(
+                                                10,
+                                              ),
+                                              MaxValueInputFormatter(
+                                                controller.gettotalamount(),
+                                              ),
+                                            ],
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (p0) {
+                                              controller.recivedamount.clear();
+                                              controller.update();
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                   buildRow(
                                     'Total',
-                                    formatIndianCurrency(
+
+                                    false,
+                                    value: formatIndianCurrency(
                                       controller.gettotalwitdiscountamount(),
                                     ),
-                                    false,
                                   ),
                                   buildRow(
                                     'Amount Received',
-                                    formatIndianCurrency(
-                                      controller
-                                          .gettotalwitdiscountwithrecivedamount(),
-                                    ),
+                                    // formatIndianCurrency(
+                                    //   controller
+                                    //       .gettotalwitdiscountwithrecivedamount(),
+                                    // ),
                                     false,
+                                    iswidget: true,
+                                    customwidget: GetBuilder<BookCaseController>(
+                                      builder: (contrller) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 15.0,
+                                          ),
+                                          child: TextFieldConstant(
+                                            textAlign: TextAlign.center,
+                                            controller:
+                                                controller.recivedamount,
+                                            hintText: 'Amount Received',
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly,
+                                              LengthLimitingTextInputFormatter(
+                                                10,
+                                              ),
+                                              MaxValueInputFormatter(
+                                                controller
+                                                    .gettotalwitdiscountamount(),
+                                              ),
+                                            ],
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (p0) {
+                                              controller.update();
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                   buildRow(
                                     'Balance',
 
-                                    formatIndianCurrency(
+                                    true,
+                                    value: formatIndianCurrency(
                                       controller.getfinalamount(),
                                     ),
-                                    true,
                                   ),
                                 ],
                               );

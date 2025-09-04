@@ -134,7 +134,7 @@ class YMDInput extends StatelessWidget {
             height: double.infinity,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Color(0xffF5F6F8),
+              color: const Color(0xffF5F6F8),
               borderRadius: BorderRadius.only(
                 topRight: unit == 'D' ? Radius.circular(12.r) : Radius.zero,
                 bottomRight: unit == 'D' ? Radius.circular(12.r) : Radius.zero,
@@ -153,7 +153,13 @@ class YMDInput extends StatelessWidget {
   }
 }
 
-Widget buildRow(String label, String value, bool isHighlighted) {
+Widget buildRow(
+  String label,
+  bool isHighlighted, {
+  bool iswidget = false,
+  String? value,
+  Widget? customwidget,
+}) {
   return Container(
     decoration: BoxDecoration(
       color: isHighlighted ? const Color(0xFFF5E6A3) : Colors.transparent,
@@ -190,11 +196,13 @@ Widget buildRow(String label, String value, bool isHighlighted) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Flexible(
-                  child: TextConstant(
-                    title: value,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  child: iswidget
+                      ? customwidget ?? const SizedBox()
+                      : TextConstant(
+                          title: value ?? "",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                 ),
                 if (isHighlighted) ...[
                   const SizedBox(width: 8),
@@ -210,5 +218,5 @@ Widget buildRow(String label, String value, bool isHighlighted) {
 }
 
 Widget buildDivider() {
-  return Divider(height: 1, thickness: 1, color: AppColor.secondarycolor);
+  return const Divider(height: 1, thickness: 1, color: AppColor.secondarycolor);
 }

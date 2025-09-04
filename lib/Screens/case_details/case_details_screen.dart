@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
@@ -8,6 +9,11 @@ import 'package:intl/intl.dart';
 import 'package:labapp/Constants/elevated_button_constant.dart';
 import 'package:labapp/Constants/extensions.dart';
 import 'package:labapp/Constants/text_constant.dart';
+import 'package:labapp/Constants/textfield_constant.dart';
+import 'package:labapp/Constants/widget_constant.dart';
+import 'package:labapp/Screens/bookcase_screen/controller_bookcase_screen_edit.dart';
+import 'package:labapp/Screens/bookcase_screen/ui_bookcase_screen_edit.dart';
+import 'package:labapp/Screens/case_details/add_payment_dailoge.dart';
 import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
 import 'package:labapp/models/case_details_model.dart';
 import 'package:labapp/utils/app_color.dart';
@@ -20,7 +26,33 @@ class CaseDetailsScreen extends StatelessWidget {
     final CaseDetailsContoller controller = Get.find<CaseDetailsContoller>();
 
     return Scaffold(
-      appBar: AppBar(title: Text('Case Details')),
+      appBar: AppBar(
+        title: Text('Case Details'),
+        actions: [
+          PopupMenuButton(
+            offset: Offset(-15, 25),
+            onSelected: (value) {
+              if (value == "edit") {
+                Get.lazyPut(
+                  () => EditBookCaseController(
+                    caseDetails: controller.caseDetails ?? CaseDetails(),
+                  ),
+                );
+                Get.to(() => EditBookCaseScreen());
+              }
+            },
+
+            child: Icon(Icons.more_vert),
+            color: AppColor.whitecolor,
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(value: "edit", height: 30.0, child: Text("Edit")),
+              ];
+            },
+          ),
+          SizedBox(width: 10.0),
+        ],
+      ),
       body: Obx(() {
         return controller.isLoading.value
             ? Center(child: CircularProgressIndicator())
@@ -134,7 +166,6 @@ class CaseDetailsScreen extends StatelessWidget {
                   ],
                   SizedBox(height: 25.0.h),
                   Container(
-                    padding: EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(color: AppColor.bordercolor),
@@ -142,159 +173,392 @@ class CaseDetailsScreen extends StatelessWidget {
                     child: Column(
                       spacing: 20.0.w,
                       children: [
-                        IntrinsicHeight(
-                          child: Row(
-                            spacing: 10.0,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  spacing: 4.0,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextConstant(
-                                      title: "Patient Details",
-                                      fontSize: 14.0,
-                                      color: AppColor.greycolor,
-                                    ),
-                                    TextConstant(
-                                      title:
-                                          "${controller.caseDetails?.patient?.firstName ?? ""} ${controller.caseDetails?.patient?.lastName ?? ""}"
-                                              .capitalize ??
-                                          "",
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    Spacer(),
-                                    TextConstant(
-                                      title:
-                                          "${controller.caseDetails?.patient?.age ?? "0"}/ ${(controller.caseDetails?.patient?.gender ?? "").toUpperCase()}",
-                                      fontSize: 14.0,
-                                      color: AppColor.greycolor,
-                                    ),
-                                    TextConstant(
-                                      title: controller.getFullAddress(
-                                        controller
-                                            .caseDetails
-                                            ?.patient
-                                            ?.address,
-                                      ),
-                                      fontSize: 13.0,
-                                      color: AppColor.greycolor,
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              Expanded(
-                                child: Column(
-                                  spacing: 4.0,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    TextConstant(
-                                      title: "Case ID",
-                                      fontSize: 14.0,
-                                      color: AppColor.greycolor,
-                                    ),
-                                    TextConstant(
-                                      title:
-                                          "#${controller.caseDetails?.caseId}",
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    Spacer(),
-                                    TextConstant(
-                                      title: "Referred By",
-                                      fontSize: 14.0,
-                                      color: AppColor.greycolor,
-                                    ),
-                                    TextConstant(
-                                      title:
-                                          "Dr. ${controller.caseDetails?.doctor?.firstName ?? ""} ${controller.caseDetails?.doctor?.lastName ?? ""}",
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(height: 1),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextConstant(
-                                title: "TEST NAME",
-                                height: 0.1,
-                                color: AppColor.greycolor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              TextConstant(
-                                title: "RATE",
-                                height: 0.1,
-                                color: AppColor.greycolor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ],
+                          padding: const EdgeInsets.only(
+                            left: 15.0,
+                            right: 15.0,
+                            top: 15.0,
                           ),
-                        ),
-                        Divider(height: 0),
-                        ListView.separated(
-                          padding: EdgeInsets.zero,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 20),
-                          itemCount:
-                              (controller.caseDetails?.casetests ?? []).length,
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: T,
-                          itemBuilder: (context, i) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 5.0,
-                                vertical: 0.0,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                spacing: 5,
-                                children: [
-                                  Expanded(
-                                    child: TextConstant(
-                                      title:
+                          child: IntrinsicHeight(
+                            child: Row(
+                              spacing: 10.0,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    spacing: 4.0,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextConstant(
+                                        title: "Patient Details",
+                                        fontSize: 14.0,
+                                        color: AppColor.greycolor,
+                                      ),
+                                      TextConstant(
+                                        title:
+                                            "${controller.caseDetails?.patient?.firstName ?? ""} ${controller.caseDetails?.patient?.lastName ?? ""}"
+                                                .capitalize ??
+                                            "",
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      Spacer(),
+                                      TextConstant(
+                                        title:
+                                            "${controller.caseDetails?.patient?.age ?? "0"}/ ${(controller.caseDetails?.patient?.gender ?? "").toUpperCase()}",
+                                        fontSize: 14.0,
+                                        color: AppColor.greycolor,
+                                      ),
+                                      TextConstant(
+                                        title: controller.getFullAddress(
                                           controller
                                               .caseDetails
-                                              ?.casetests?[i]
-                                              .test
-                                              ?.name ??
-                                          "",
-                                      // height: 0.9,
-                                      textAlign: TextAlign.start,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextConstant(
-                                      title: formatIndianCurrency(
-                                        controller
-                                                .caseDetails
-                                                ?.casetests?[i]
-                                                .test
-                                                ?.price ??
-                                            0,
+                                              ?.patient
+                                              ?.address,
+                                        ),
+                                        fontSize: 13.0,
+                                        color: AppColor.greycolor,
                                       ),
-                                      height: 0.1,
-                                      textAlign: TextAlign.end,
+                                    ],
+                                  ),
+                                ),
+
+                                Expanded(
+                                  child: Column(
+                                    spacing: 4.0,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      TextConstant(
+                                        title: "Case ID",
+                                        fontSize: 14.0,
+                                        color: AppColor.greycolor,
+                                      ),
+                                      TextConstant(
+                                        title:
+                                            "#${controller.caseDetails?.caseId}",
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      Spacer(),
+                                      TextConstant(
+                                        title: "Referred By",
+                                        fontSize: 14.0,
+                                        color: AppColor.greycolor,
+                                      ),
+                                      TextConstant(
+                                        title:
+                                            "Dr. ${controller.caseDetails?.doctor?.firstName ?? ""} ${controller.caseDetails?.doctor?.lastName ?? ""}",
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth:
+                                  MediaQuery.of(context).size.width *
+                                  0.9, // minimum full screen width
+                            ),
+                            child: DataTable(
+                              headingRowHeight: 30,
+                              dataRowMinHeight: 36,
+                              dividerThickness: 0,
+                              columnSpacing: 20,
+
+                              columns: [
+                                DataColumn(
+                                  label: Text(
+                                    "Group Code",
+                                    style: TextStyle(
+                                      fontSize: 13.h,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                ],
-                              ),
-                            );
-                          },
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    "Test Code",
+                                    style: TextStyle(
+                                      fontSize: 13.h,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    "Test name",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13.h,
+                                    ),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    "R.D.",
+                                    style: TextStyle(
+                                      fontSize: 13.h,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+
+                                DataColumn(
+                                  label: Text(
+                                    "Price",
+                                    style: TextStyle(
+                                      fontSize: 13.h,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  numeric: true,
+                                ),
+                              ],
+                              rows: [
+                                ...List.generate(controller.selectedTests.length, (
+                                  index,
+                                ) {
+                                  final test = controller.selectedTests[index];
+                                  return DataRow(
+                                    cells: [
+                                      // DataCell(Text("${index + 1}")),
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            " - ",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 13.h,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black45,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          test.testId ?? "",
+                                          style: TextStyle(
+                                            fontSize: 13.h,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          test.name ?? "",
+                                          style: TextStyle(
+                                            fontSize: 13.h,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          (test.reportingDays ?? 1).toString(),
+                                          style: TextStyle(
+                                            fontSize: 13.h,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          "₹${test.price}/-",
+                                          style: TextStyle(
+                                            fontSize: 13.h,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ),
+                                      // DataCell(
+                                      //   IconButton(
+                                      //     icon: const Icon(Icons.delete, color: Colors.red),
+                                      //     onPressed: () {
+                                      //       controller.toggleSelection(test);
+                                      //     },
+                                      //   ),
+                                      // ),
+                                    ],
+                                  );
+                                }),
+
+                                for (
+                                  int i = 0;
+                                  i <
+                                      (controller.selectedGroupTests ?? [])
+                                          .length;
+                                  i++
+                                )
+                                  DataRow(
+                                    cells: [
+                                      // DataCell(Text("${index + 1}")),
+                                      DataCell(
+                                        Text(
+                                          controller
+                                                  .selectedGroupTests[i]
+                                                  .name ??
+                                              "",
+                                          style: TextStyle(
+                                            fontSize: 13.h,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          controller
+                                                  .selectedGroupTests[i]
+                                                  .groupId ??
+                                              "",
+                                          style: TextStyle(
+                                            fontSize: 13.h,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        SizedBox(
+                                          child: Text(
+                                            (controller
+                                                        .selectedGroupTests[i]
+                                                        .tests ??
+                                                    [])
+                                                .map((e) => e.name ?? "")
+                                                .join(" , "),
+                                            style: TextStyle(
+                                              fontSize: 13.h,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black45,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          (controller
+                                                          .selectedGroupTests[i]
+                                                          .tests ??
+                                                      [])
+                                                  .isEmpty
+                                              ? "1"
+                                              : (controller
+                                                            .selectedGroupTests[i]
+                                                            .tests ??
+                                                        [])
+                                                    .map(
+                                                      (e) =>
+                                                          e.reportingDays ?? 0,
+                                                    )
+                                                    .reduce(
+                                                      (a, b) => a > b ? a : b,
+                                                    )
+                                                    .toString(),
+                                          style: TextStyle(
+                                            fontSize: 13.h,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          "${formatIndianCurrency(controller.selectedGroupTests[i].price ?? 0)}/-",
+                                          style: TextStyle(
+                                            fontSize: 13.h,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ),
+                                      // DataCell(
+                                      //   IconButton(
+                                      //     icon: const Icon(Icons.delete, color: Colors.red),
+                                      //     onPressed: () {
+                                      //       controller.toggleSelection(test);
+                                      //     },
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
+                              ],
+
+                              // rows: (controller.caseDetails?.casetests ?? [])
+                              //     .map((testItem) {
+                              //       return DataRow(
+                              //         cells: [
+                              //           DataCell(
+                              //             Text(
+                              //               testItem.test?.testId ?? "",
+                              //               style: TextStyle(
+                              //                 fontSize: 13.h,
+
+                              //                 fontWeight: FontWeight.w500,
+                              //                 color: Colors.black45,
+                              //               ),
+                              //             ),
+                              //           ),
+                              //           DataCell(
+                              //             Text(
+                              //               testItem.test?.testId ?? "",
+                              //               style: TextStyle(
+                              //                 fontSize: 13.h,
+
+                              //                 fontWeight: FontWeight.w500,
+                              //                 color: Colors.black45,
+                              //               ),
+                              //             ),
+                              //           ),
+                              //           DataCell(
+                              //             Text(
+                              //               testItem.test?.name ?? "",
+                              //               style: TextStyle(
+                              //                 fontSize: 13.h,
+
+                              //                 fontWeight: FontWeight.w500,
+                              //                 color: Colors.black45,
+                              //               ),
+                              //             ),
+                              //           ),
+                              //           DataCell(
+                              //             Text(
+                              //               formatIndianCurrency(
+                              //                 testItem.test?.price ?? 0,
+                              //               ),
+                              //               style: TextStyle(
+                              //                 fontSize: 13.h,
+
+                              //                 fontWeight: FontWeight.w500,
+                              //                 color: Colors.black45,
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         ],
+                              //       );
+                              //     })
+                              //     .toList(),
+                            ),
+                          ),
                         ),
-                        SizedBox(height: 30.h),
+
                         Divider(height: 1),
                         Padding(
-                          padding: EdgeInsets.only(right: 5.0),
+                          padding: const EdgeInsets.only(
+                            left: 15.0,
+                            right: 15.0,
+                            bottom: 15.0,
+                          ),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             spacing: 10.0,
@@ -328,13 +592,7 @@ class CaseDetailsScreen extends StatelessWidget {
                                         Expanded(
                                           child: TextConstant(
                                             title: formatIndianCurrency(
-                                              num.parse(
-                                                (controller
-                                                            .caseDetails
-                                                            ?.totalAmount ??
-                                                        0)
-                                                    .toString(),
-                                              ),
+                                              controller.gettotalamount(),
                                             ),
                                             textAlign: TextAlign.end,
                                             fontWeight: FontWeight.bold,
@@ -358,7 +616,7 @@ class CaseDetailsScreen extends StatelessWidget {
                                         Expanded(
                                           child: TextConstant(
                                             title:
-                                                "${formatIndianCurrency(num.parse((controller.caseDetails?.discountValue ?? 0).toString()))}",
+                                                "${formatIndianCurrency(controller.caseDetails?.discountValue)}",
                                             textAlign: TextAlign.end,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -382,13 +640,8 @@ class CaseDetailsScreen extends StatelessWidget {
                                         Expanded(
                                           child: TextConstant(
                                             title: formatIndianCurrency(
-                                              num.parse(
-                                                (controller
-                                                            .caseDetails
-                                                            ?.finalAmount ??
-                                                        0)
-                                                    .toString(),
-                                              ),
+                                              controller
+                                                  .gettotalwitdiscountamount(),
                                             ),
                                             textAlign: TextAlign.end,
                                             fontWeight: FontWeight.bold,
@@ -443,9 +696,7 @@ class CaseDetailsScreen extends StatelessWidget {
                                           child: TextConstant(
                                             title: formatIndianCurrency(
                                               controller
-                                                      .caseDetails
-                                                      ?.remainingAmount ??
-                                                  0,
+                                                  .gettotalwitdiscountwithrecivedamount(),
                                             ),
                                             textAlign: TextAlign.end,
                                             fontWeight: FontWeight.bold,
@@ -483,97 +734,125 @@ class CaseDetailsScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 25.0.h),
-                  if ((controller.caseDetails?.transactions ?? [])
-                      .isNotEmpty) ...[
-                    TextConstant(
-                      title: "Payment History",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                    SizedBox(height: 15.0.h),
 
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        headingRowColor: MaterialStateProperty.all(
-                          Colors.grey[200],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextConstant(
+                        title: "Payment History",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      if ((controller.caseDetails?.finalAmount !=
+                          (controller.caseDetails?.totalTransactionAmount)))
+                        Flexible(
+                          child: elevatedButton(
+                            width: 100.0,
+                            fontSize: 14,
+                            height: 30.0,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AddPaymentDialog(
+                                  caseid: controller.caseDetails?.id,
+                                  maxvalue: controller
+                                      .gettotalwitdiscountwithrecivedamount(),
+                                ),
+                              ).then((result) {
+                                if (result != null) {
+                                  print(
+                                    "Amount: ${result['amount']}, Method: ${result['method']}",
+                                  );
+                                }
+                              });
+                            },
+                            title: "Add Payment",
+                          ),
+                        ),
+                    ],
+                  ),
+                  SizedBox(height: 15.0.h),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      headingRowHeight: 40,
+                      dataRowMinHeight: 4,
+
+                      dataRowMaxHeight: 36,
+                      headingRowColor: MaterialStateProperty.all(
+                        Colors.grey[200],
+                      ),
+
+                      border: TableBorder.all(
+                        color: Colors.grey.shade300,
+                        width: 1,
+                      ),
+                      columns: [
+                        DataColumn(
+                          label: Text(
+                            "ID",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
 
-                        border: TableBorder.all(
-                          color: Colors.grey.shade300,
-                          width: 1,
+                        // DataColumn(
+                        //   label: Text(
+                        //     "Received By",
+                        //     style: TextStyle(fontWeight: FontWeight.bold),
+                        //   ),
+                        // ),
+                        DataColumn(
+                          label: Text(
+                            "Amount",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
-                        columns: [
-                          DataColumn(
-                            label: Text(
-                              "ID",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                        DataColumn(
+                          label: Text(
+                            "Mode",
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          DataColumn(
-                            label: Text(
-                              "Date - Time",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            "Date - Time",
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          // DataColumn(
-                          //   label: Text(
-                          //     "Received By",
-                          //     style: TextStyle(fontWeight: FontWeight.bold),
-                          //   ),
-                          // ),
-                          DataColumn(
-                            label: Text(
-                              "Amount",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Mode",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                        rows: (controller.caseDetails?.transactions ?? []).map((
-                          tx,
-                        ) {
-                          return DataRow(
-                            cells: [
-                              DataCell(Text(tx.transactionId ?? "")),
-                              DataCell(
-                                Text(
-                                  DateFormat("dd, MMM yyyy hh:mm a").format(
-                                    tx.createdAt ??
-                                        DateTime.parse(
-                                          "2000-01-01T10:28:22.492Z",
-                                        ),
+                        ),
+                      ],
+                      rows: (controller.caseDetails?.transactions ?? []).map((
+                        tx,
+                      ) {
+                        return DataRow(
+                          cells: [
+                            DataCell(Text(tx.transactionId ?? "")),
+
+                            // DataCell(Text(tx["receiver"]!)),
+                            DataCell(
+                              Row(
+                                children: [
+                                  Text(
+                                    formatIndianCurrency(tx.amountGiven ?? 0),
                                   ),
-                                ),
+                                  SizedBox(width: 5),
+                                  Icon(
+                                    Icons.check_circle,
+                                    color: Colors.green,
+                                    size: 18,
+                                  ),
+                                ],
                               ),
-                              // DataCell(Text(tx["receiver"]!)),
-                              DataCell(
-                                Row(
-                                  children: [
-                                    Text(
-                                      formatIndianCurrency(tx.amountGiven ?? 0),
-                                    ),
-                                    SizedBox(width: 5),
-                                    Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                      size: 18,
-                                    ),
-                                  ],
+                            ),
+                            DataCell(
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 5.0,
                                 ),
-                              ),
-                              DataCell(
-                                OutlinedButton(
+                                child: OutlinedButton(
                                   onPressed: () {},
                                   style: OutlinedButton.styleFrom(
                                     padding: EdgeInsets.symmetric(
                                       horizontal: 12,
-                                      vertical: 6,
                                     ),
                                     side: BorderSide(
                                       color: Colors.blue.shade400,
@@ -588,12 +867,23 @@ class CaseDetailsScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
+                            ),
+                            DataCell(
+                              Text(
+                                DateFormat("dd, MMM yyyy hh:mm a").format(
+                                  tx.createdAt ??
+                                      DateTime.parse(
+                                        "2000-01-01T10:28:22.492Z",
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
                     ),
-                  ],
+                  ),
+                  SizedBox(height: 20.0.h),
                 ],
               );
       }),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:labapp/Constants/extensions.dart';
 import 'package:labapp/Screens/bookcase_screen/controller_bookcase_screen.dart';
+import 'package:labapp/models/group_test_model.dart';
 import 'package:labapp/models/test_model.dart';
 
 class SelectedTestsTable extends StatelessWidget {
@@ -8,12 +10,8 @@ class SelectedTestsTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<BookCaseController>(
       builder: (controller) {
-        final List<Test> tests =
-            (controller.selectedTests +
-                    ((((controller.selectedGroupTests.map(
-                      (element) => (element.tests ?? []).toList(),
-                    )).toList()).expand((e) => e)).toList()))
-                .toList();
+        final List<Test> tests = (controller.selectedTests);
+        final List<Group> groptests = (controller.selectedGroupTests);
         if (tests.isEmpty) {
           return const Center(child: Text("No tests selected"));
         }
@@ -23,12 +21,15 @@ class SelectedTestsTable extends StatelessWidget {
           child: DataTable(
             headingRowHeight: 40,
             dataRowMinHeight: 4,
+
             dataRowMaxHeight: 36,
+
             headingRowColor: MaterialStateProperty.all(Colors.grey.shade200),
             border: TableBorder.all(width: 0.5, color: Colors.grey.shade400),
 
             columns: const [
-              DataColumn(label: SizedBox(width: 20, child: Text("S.No"))),
+              DataColumn(label: Text("S.No")),
+              DataColumn(label: Text("Group Name")),
               DataColumn(label: Text("Test Code")),
               DataColumn(label: Text("Test Name")),
               DataColumn(label: Text("R.D.")),
@@ -42,6 +43,9 @@ class SelectedTestsTable extends StatelessWidget {
                   cells: [
                     // DataCell(Text("${index + 1}")),
                     DataCell(Text("${index + 1}")),
+                    const DataCell(
+                      Center(child: Text(" - ", textAlign: TextAlign.center)),
+                    ),
                     DataCell(Text(test.testId ?? "")),
                     DataCell(Text(test.name ?? "")),
                     DataCell(Text((test.reportingDays ?? 1).toString())),
@@ -57,6 +61,46 @@ class SelectedTestsTable extends StatelessWidget {
                   ],
                 );
               }),
+
+              for (int i = 0; i < (groptests ?? []).length; i++)
+                DataRow(
+                  cells: [
+                    // DataCell(Text("${index + 1}")),
+                    DataCell(Text("${tests.length + i + 1}")),
+                    DataCell(Text(groptests[i].name ?? "")),
+                    DataCell(Text(groptests[i].groupId ?? "")),
+                    DataCell(
+                      SizedBox(
+                        child: Text(
+                          (groptests[i].tests ?? [])
+                              .map((e) => e.name ?? "")
+                              .join(" , "),
+                        ),
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        (groptests[i].tests ?? [])
+                            .map((e) => e.reportingDays ?? 0)
+                            .reduce((a, b) => a > b ? a : b)
+                            .toString(),
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        "${formatIndianCurrency(groptests[i].price ?? 0)}/-",
+                      ),
+                    ),
+                    // DataCell(
+                    //   IconButton(
+                    //     icon: const Icon(Icons.delete, color: Colors.red),
+                    //     onPressed: () {
+                    //       controller.toggleSelection(test);
+                    //     },
+                    //   ),
+                    // ),
+                  ],
+                ),
             ],
           ),
         );

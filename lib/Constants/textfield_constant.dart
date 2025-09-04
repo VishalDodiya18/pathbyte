@@ -27,6 +27,7 @@ class TextFieldConstant extends StatelessWidget {
     this.validator,
     this.textAlign = TextAlign.start,
     this.inputFormatters,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   final TextEditingController controller;
@@ -45,6 +46,7 @@ class TextFieldConstant extends StatelessWidget {
   final void Function()? onTap;
   final bool isReadOnly;
   final int? maxLines;
+  final TextCapitalization? textCapitalization;
   final int? minLines;
   final List<TextInputFormatter>? inputFormatters;
   final TextAlign textAlign;
@@ -65,8 +67,9 @@ class TextFieldConstant extends StatelessWidget {
       inputFormatters: inputFormatters,
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmit,
-      validator: validator,
 
+      validator: validator,
+      textCapitalization: textCapitalization ?? TextCapitalization.none,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       textAlignVertical: TextAlignVertical.center,
 
@@ -137,6 +140,7 @@ InputDecoration buildInputDecoration({
   required String hintText,
   String? label,
   Color? fillColor,
+  dynamic BorderColor,
   EdgeInsets? contentPadding,
   dynamic prefixIcon,
   dynamic suffixIcon,

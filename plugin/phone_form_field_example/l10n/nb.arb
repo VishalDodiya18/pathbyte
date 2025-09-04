@@ -1,0 +1,30 @@
+{
+  "@@locale": "nb",
+  "invalidPhoneNumber": "Ugyldig telefonnummer",
+  "invalidCountry": "Ugyldig land",
+  "invalidMobilePhoneNumber": "Ugyldig mobilnummer",
+  "invalidFixedLinePhoneNumber": "Ugyldig fasttelefonnummer",
+  "requiredPhoneNumber": "Telefonnummer er påkrevd",
+  "selectACountrySemanticLabel": "Velg et land, gjeldende valg: {countryName} {dialCode}",
+  "@selectACountrySemanticLabel": {
+    "description": "semantic description of the country button",
+    "placeholders": {
+      "countryName": {
+        "type": "String"
+      },
+      "dialCode": {
+        "type": "String"
+      }
+    }
+  },
+  "phoneNumber": "Telefonnummer",
+  "currentValueSemanticLabel": "Gjeldende verdi: {currentValue}",
+  "@currentValueSemanticLabel": {
+    "description": "semantic description of the phone input. The label or hint will be dynamically added",
+    "placeholders": {
+      "currentValue": {
+        "type": "String"
+      }
+    }
+  }
+}

@@ -5,6 +5,9 @@
 import 'dart:convert';
 
 import 'package:labapp/models/caseModel.dart';
+import 'package:labapp/models/doctor_model.dart';
+import 'package:labapp/models/group_test_model.dart';
+import 'package:labapp/models/lab_center_model.dart';
 import 'package:labapp/models/test_model.dart';
 
 CaseDetailsResponse caseDetailsResponseFromJson(String str) =>
@@ -64,7 +67,7 @@ class CaseDetails {
   Doctor? doctor;
   List<Casetest>? casetests;
   List<Transaction>? transactions;
-  Labcenter? labcenter;
+  Lab? labcenter;
 
   CaseDetails({
     this.id,
@@ -119,7 +122,7 @@ class CaseDetails {
           ),
     labcenter: json["labcenter"] == null
         ? null
-        : Labcenter.fromJson(json["labcenter"]),
+        : Lab.fromJson(json["labcenter"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -153,6 +156,7 @@ class Casetest {
   String? caseId;
   String? testId;
   String? categoryId;
+  String? groupId;
   String? unit;
   var price;
   String? footNote;
@@ -161,12 +165,14 @@ class Casetest {
   DateTime? updatedAt;
   Test? test;
   Category? category;
+  Group? group;
 
   Casetest({
     this.id,
     this.caseId,
     this.testId,
     this.categoryId,
+    this.groupId,
     this.unit,
     this.price,
     this.footNote,
@@ -175,6 +181,7 @@ class Casetest {
     this.updatedAt,
     this.test,
     this.category,
+    this.group,
   });
 
   factory Casetest.fromJson(Map<String, dynamic> json) => Casetest(
@@ -182,6 +189,7 @@ class Casetest {
     caseId: json["caseId"],
     testId: json["testId"],
     categoryId: json["categoryId"],
+    groupId: json["groupId"],
     unit: json["unit"],
     price: json["price"],
     footNote: json["footNote"],
@@ -198,6 +206,7 @@ class Casetest {
     category: json["category"] == null
         ? null
         : Category.fromJson(json["category"]),
+    group: json["group"] == null ? null : Group.fromJson(json["group"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -205,6 +214,7 @@ class Casetest {
     "caseId": caseId,
     "testId": testId,
     "categoryId": categoryId,
+    "groupId": groupId,
     "unit": unit,
     "price": price,
     "footNote": footNote,
@@ -215,6 +225,7 @@ class Casetest {
     "updatedAt": updatedAt?.toIso8601String(),
     "test": test?.toJson(),
     "category": category?.toJson(),
+    "group": group?.toJson(),
   };
 }
 
@@ -272,82 +283,6 @@ class ReferenceRange {
   Map<String, dynamic> toJson() => {
     "appliesTo": appliesTo,
     "stringValue": stringValue,
-  };
-}
-
-class Doctor {
-  String? id;
-  String? doctorId;
-  String? firstName;
-  String? lastName;
-  String? description;
-  var age;
-  String? gender;
-  String? notificationStatus;
-  String? hospitalName;
-  List<String>? phoneNumbers;
-  String? email;
-  Address? address;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
-  Doctor({
-    this.id,
-    this.doctorId,
-    this.firstName,
-    this.lastName,
-    this.description,
-    this.age,
-    this.gender,
-    this.notificationStatus,
-    this.hospitalName,
-    this.phoneNumbers,
-    this.email,
-    this.address,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  factory Doctor.fromJson(Map<String, dynamic> json) => Doctor(
-    id: json["_id"],
-    doctorId: json["doctorId"],
-    firstName: json["firstName"],
-    lastName: json["lastName"],
-    description: json["description"],
-    age: json["age"],
-    gender: json["gender"],
-    notificationStatus: json["notificationStatus"],
-    hospitalName: json["hospitalName"],
-    phoneNumbers: json["phoneNumbers"] == null
-        ? []
-        : List<String>.from(json["phoneNumbers"]!.map((x) => x)),
-    email: json["email"],
-    address: json["address"] == null ? null : Address.fromJson(json["address"]),
-    createdAt: json["createdAt"] == null
-        ? null
-        : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null
-        ? null
-        : DateTime.parse(json["updatedAt"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "doctorId": doctorId,
-    "firstName": firstName,
-    "lastName": lastName,
-    "description": description,
-    "age": age,
-    "gender": gender,
-    "notificationStatus": notificationStatus,
-    "hospitalName": hospitalName,
-    "phoneNumbers": phoneNumbers == null
-        ? []
-        : List<dynamic>.from(phoneNumbers!.map((x) => x)),
-    "email": email,
-    "address": address?.toJson(),
-    "createdAt": createdAt?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
   };
 }
 
@@ -438,70 +373,6 @@ class Labcenter {
         : List<dynamic>.from(contactNumbers!.map((x) => x)),
     "deleted": deleted,
     "deletedAt": deletedAt,
-    "createdAt": createdAt?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
-  };
-}
-
-class Patient {
-  String? id;
-  String? patientId;
-  String? firstName;
-  String? lastName;
-  var age;
-  String? gender;
-  List<String>? phoneNumbers;
-  String? email;
-  Address? address;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
-  Patient({
-    this.id,
-    this.patientId,
-    this.firstName,
-    this.lastName,
-    this.age,
-    this.gender,
-    this.phoneNumbers,
-    this.email,
-    this.address,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  factory Patient.fromJson(Map<String, dynamic> json) => Patient(
-    id: json["_id"],
-    patientId: json["patientId"],
-    firstName: json["firstName"],
-    lastName: json["lastName"],
-    age: json["age"],
-    gender: json["gender"],
-    phoneNumbers: json["phoneNumbers"] == null
-        ? []
-        : List<String>.from(json["phoneNumbers"]!.map((x) => x)),
-    email: json["email"],
-    address: json["address"] == null ? null : Address.fromJson(json["address"]),
-    createdAt: json["createdAt"] == null
-        ? null
-        : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null
-        ? null
-        : DateTime.parse(json["updatedAt"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "patientId": patientId,
-    "firstName": firstName,
-    "lastName": lastName,
-    "age": age,
-    "gender": gender,
-    "phoneNumbers": phoneNumbers == null
-        ? []
-        : List<dynamic>.from(phoneNumbers!.map((x) => x)),
-    "email": email,
-    "address": address?.toJson(),
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
   };

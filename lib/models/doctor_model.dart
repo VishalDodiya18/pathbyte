@@ -85,6 +85,25 @@ class Doctor {
       address: Address.fromJson(json['address']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'doctorId': doctorId,
+      'firstName': firstName,
+      'lastName': lastName,
+      'description': description,
+      'age': age,
+      'gender': gender,
+      'notificationStatus': notificationStatus,
+      'hospitalName': hospitalName,
+      'phoneNumbers': phoneNumbers,
+      'email': email,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      'address': address.toJson(),
+    };
+  }
 }
 
 class Address {
@@ -113,6 +132,17 @@ class Address {
       postalCode: json['postalCode'],
       country: json['country'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'line1': line1,
+      'line2': line2,
+      'city': city,
+      'state': state,
+      'postalCode': postalCode,
+      'country': country,
+    };
   }
 }
 

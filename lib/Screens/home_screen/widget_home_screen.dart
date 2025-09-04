@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:labapp/Constants/extensions.dart';
 import 'package:labapp/Constants/text_constant.dart';
+import 'package:labapp/Constants/widget_constant.dart';
 import 'package:labapp/Screens/case_details/case_details_screen.dart';
 import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
 import 'package:labapp/Screens/report_details/controller_report_details_screen.dart';
@@ -44,7 +45,7 @@ class HomeScreenWidget {
       },
       child: PagedListView<int, Cases>(
         pagingController: pagingController,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
         builderDelegate: PagedChildBuilderDelegate<Cases>(
           noItemsFoundIndicatorBuilder: (context) => Center(
@@ -63,7 +64,7 @@ class HomeScreenWidget {
                 if (!isOdd) {
                 } else {
                   Get.lazyPut(() => ReportDetailsContoller());
-                  Get.to(() => ReportDetailsScreen());
+                  Get.to(() => const ReportDetailsScreen());
                 }
               },
               child: Padding(
@@ -101,7 +102,8 @@ class HomeScreenWidget {
                                       child: TextConstant(
                                         title: (item.patient == null)
                                             ? "N/A"
-                                            : "${item.patient?.firstName ?? ''} (#${item.patient?.patientId ?? ''})",
+                                            : "${item.patient?.firstName ?? ''}",
+                                        // : "${item.patient?.firstName ?? ''} (#${item.patient?.patientId ?? ''})",
                                         fontWeight: FontWeight.bold,
                                         fontSize: 13.0,
                                       ),
@@ -138,14 +140,52 @@ class HomeScreenWidget {
                         width: 83.w,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: isOdd ? Colors.orange : Colors.green,
+                          color: (item.transactions ?? []).isEmpty
+                              ? Colors.red
+                              : (item.transactions ?? [])
+                                        .map((e) => e.amountGiven)
+                                        .reduce(
+                                          (a, b) =>
+                                              num.parse((a ?? 0).toString()) +
+                                              num.parse((b ?? 0).toString()),
+                                        ) ==
+                                    item.finalAmount
+                              ? Colors.green
+                              : Colors.orange,
                           borderRadius: BorderRadius.circular(10.r),
                         ),
-                        child: TextConstant(
-                          title:
-                              "${formatIndianCurrency((item.finalAmount ?? 0))}",
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextConstant(
+                              title: formatIndianCurrency(
+                                (item.finalAmount ?? 0),
+                              ),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            heightBox(5),
+                            TextConstant(
+                              title: (item.transactions ?? []).isEmpty
+                                  ? "Unpaid"
+                                  : (item.transactions ?? [])
+                                            .map((e) => e.amountGiven)
+                                            .reduce(
+                                              (a, b) =>
+                                                  num.parse(
+                                                    (a ?? 0).toString(),
+                                                  ) +
+                                                  num.parse(
+                                                    (b ?? 0).toString(),
+                                                  ),
+                                            ) ==
+                                        item.finalAmount
+                                  ? "Paid"
+                                  : "Unpaid",
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ],
                         ),
                       ),
                     ],

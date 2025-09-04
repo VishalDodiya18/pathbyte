@@ -48,7 +48,7 @@ Widget elevatedButton({
           TextConstant(
             title: title,
             color: textColor ?? Colors.white,
-            fontSize: fontSize ?? 16,
+            fontSize: (fontSize ?? 16).h,
             fontWeight: fontWeight,
           ),
           if (isrightIcon) Icon!,

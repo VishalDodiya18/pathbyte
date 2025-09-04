@@ -4,6 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:labapp/Constants/text_constant.dart';
+import 'package:labapp/Constants/textfield_constant.dart';
+import 'package:labapp/Constants/widget_constant.dart';
+import 'package:labapp/Screens/patients/edit_patient.dart';
 import 'package:labapp/Screens/patients/patient_controller.dart';
 import 'package:labapp/bottomsheets/common_bottom_sheet.dart';
 import 'package:labapp/models/caseModel.dart';
@@ -17,64 +21,87 @@ class Patientes extends StatelessWidget {
     return GetBuilder<PatientController>(
       builder: (contorller) {
         return Scaffold(
-          appBar: AppBar(title: Text("Patients")),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: TextField(
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                heightBox(14),
+                TextConstant(
+                  title: 'Patients',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                heightBox(10),
+                TextFieldConstant(
                   controller: contorller.patientSearchController,
-                  decoration: InputDecoration(
-                    hintText: "Search",
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  onChanged: (value) {
+                  hintText: 'Search By Patient ID/Name/ No',
+                  suffixIcon:
+                      contorller.patientSearchController.text.trim().isNotEmpty
+                      ? GestureDetector(
+                          onTap: () {
+                            contorller.patientSearchController.clear();
+                            contorller.update();
+                            FocusScope.of(context).unfocus();
+                            Future.delayed(Duration(milliseconds: 100), () {
+                              contorller.patientPagingController.refresh();
+                            });
+                          },
+                          child: Icon(Icons.clear_rounded, size: 25.h),
+                        )
+                      : null,
+                  onChanged: (p0) {
+                    contorller.update();
+
                     EasyDebounce.debounce(
-                      "patient_seach",
+                      'case-search-debouncer',
                       Duration(milliseconds: 500),
                       () {
-                        contorller.patientPagingController.refresh();
+                        FocusScope.of(context).unfocus();
+                        Future.delayed(Duration(milliseconds: 100), () {
+                          contorller.patientPagingController.refresh();
+                        });
                       },
                     );
                   },
                 ),
-              ),
-              const SizedBox(height: 8),
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () {
-                    contorller.patientPagingController.refresh();
-                    return Future.value();
-                  },
-                  child: PagedListView<int, Patient>(
-                    pagingController: contorller.patientPagingController,
-                    builderDelegate: PagedChildBuilderDelegate<Patient>(
-                      itemBuilder: (context, patient, index) => Card(
-                        color: AppColor.whitecolor,
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 2,
-                        child: Column(
-                          children: [
-                            _buildHeaderCard(patient),
-                            _buildInfoCard(patient),
-                            const SizedBox(height: 16),
-                          ],
-                        ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () {
+                      contorller.patientPagingController.refresh();
+                      return Future.value();
+                    },
+                    child: PagedListView<int, Patient>(
+                      pagingController: contorller.patientPagingController,
+                      builderDelegate: PagedChildBuilderDelegate<Patient>(
+                        itemBuilder: (context, patient, index) =>
+                            GestureDetector(
+                              onTap: () {
+                                showPatientDialog(context, patient);
+                              },
+                              child: Card(
+                                color: AppColor.whitecolor,
+
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 2,
+                                child: Column(
+                                  children: [
+                                    _buildHeaderCard(patient),
+                                    _buildInfoCard(patient),
+                                    const SizedBox(height: 16),
+                                  ],
+                                ),
+                              ),
+                            ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
 
           //  PaginatedSelectionSheet<Patient>(
@@ -119,7 +146,7 @@ class Patientes extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${patient.firstName ?? ''} ${patient.lastName ?? ''}",
+                  "${patient.title ?? ''} ${patient.firstName ?? ''} ${patient.lastName ?? ''}",
                   style: TextStyle(fontSize: 16.h, fontWeight: FontWeight.bold),
                 ),
                 Text("Gender: ${patient.gender ?? 'N/A'}"),
@@ -127,6 +154,11 @@ class Patientes extends StatelessWidget {
               ],
             ),
           ),
+
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Icon(Icons.edit, color: AppColor.primary),
+          // ),
         ],
       ),
     );

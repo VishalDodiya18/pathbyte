@@ -21,52 +21,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          spacing: 10.w,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Image.asset('assets/logos/logo.png', height: 40.h, width: 40.h),
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextConstant(title: 'Pathology Lab'),
-                TextConstant(
-                  title: 'Goel Diagnostic Center',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ],
-            ),
-          ],
-        ),
-        actions: [
-          Container(
-            height: 40.h,
-            width: 40.h,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.yellow,
-              shape: BoxShape.circle,
-            ),
-            child: TextConstant(title: 'AK'),
-          ),
-          widthBox(10),
-        ],
-      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            heightBox(15),
-            elevatedButton(
-              title: '+ Book A New Case',
-              onPressed: () {
-                Get.lazyPut(() => BookCaseController());
-                Get.to(() => BookCaseScreen());
-              },
-            ),
             heightBox(14),
             TextConstant(
               title: 'Cases',

@@ -283,10 +283,9 @@ packages:
   phone_form_field:
     dependency: "direct main"
     description:
-      name: phone_form_field
-      sha256: "4848bf7cb714614f8a2355929a7aeec1a6cfe1828246e486abfc964d2ea56c5b"
-      url: "https://pub.dev"
-    source: hosted
+      path: "plugin/phone_form_field_example"
+      relative: true
+    source: path
     version: "10.0.8"
   phone_numbers_parser:
     dependency: transitive
