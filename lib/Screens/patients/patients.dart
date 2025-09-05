@@ -1,15 +1,18 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/textfield_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
 import 'package:labapp/Screens/patients/edit_patient.dart';
 import 'package:labapp/Screens/patients/patient_controller.dart';
-import 'package:labapp/bottomsheets/common_bottom_sheet.dart';
+import 'package:labapp/Screens/patients/patient_details.dart';
+import 'package:labapp/Screens/patients/patient_details_controller.dart';
 import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/utils/app_color.dart';
 
@@ -78,7 +81,12 @@ class Patientes extends StatelessWidget {
                         itemBuilder: (context, patient, index) =>
                             GestureDetector(
                               onTap: () {
-                                showPatientDialog(context, patient);
+                                Get.lazyPut(
+                                  () => PatientDetailsController(
+                                    patient: patient,
+                                  ),
+                                );
+                                Get.to(PatientDetails());
                               },
                               child: Card(
                                 color: AppColor.whitecolor,
@@ -89,8 +97,8 @@ class Patientes extends StatelessWidget {
                                 elevation: 2,
                                 child: Column(
                                   children: [
-                                    _buildHeaderCard(patient),
-                                    _buildInfoCard(patient),
+                                    buildHeaderCard(context, patient),
+                                    buildInfoCard(patient),
                                     const SizedBox(height: 16),
                                   ],
                                 ),
@@ -122,111 +130,113 @@ class Patientes extends StatelessWidget {
       },
     );
   }
+}
 
-  Widget _buildHeaderCard(patient) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 25.r,
-            backgroundColor: AppColor.primary,
-            child: Text(
-              (patient.firstName?.substring(0, 1) ?? "").toUpperCase(),
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+Widget buildHeaderCard(context, patient, {isedit = false}) {
+  return Padding(
+    padding: const EdgeInsets.all(20),
+    child: Row(
+      children: [
+        CircleAvatar(
+          radius: 25.r,
+          backgroundColor: AppColor.primary,
+          child: Text(
+            (patient.firstName?.substring(0, 1) ?? "").toUpperCase(),
+            style: const TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        const SizedBox(width: 20),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${patient.title ?? ''} ${patient.firstName ?? ''} ${patient.lastName ?? ''}",
+                style: TextStyle(fontSize: 16.h, fontWeight: FontWeight.bold),
               ),
-            ),
+              Text("Gender: ${patient.gender ?? 'N/A'}"),
+              Text("Age: ${patient.age ?? 'N/A'}"),
+            ],
           ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${patient.title ?? ''} ${patient.firstName ?? ''} ${patient.lastName ?? ''}",
-                  style: TextStyle(fontSize: 16.h, fontWeight: FontWeight.bold),
-                ),
-                Text("Gender: ${patient.gender ?? 'N/A'}"),
-                Text("Age: ${patient.age ?? 'N/A'}"),
-              ],
-            ),
+        ),
+        if (isedit)
+          IconButton(
+            onPressed: () {
+              showPatientDialog(context, patient);
+            },
+            icon: Icon(Icons.edit, color: AppColor.primary),
           ),
+      ],
+    ),
+  );
+}
 
-          // IconButton(
-          //   onPressed: () {},
-          //   icon: Icon(Icons.edit, color: AppColor.primary),
-          // ),
-        ],
-      ),
-    );
-  }
+Widget buildInfoCard(patient) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        infoRow(Icons.badge, "Patient ID", patient.patientId ?? "N/A"),
+        infoRow(
+          Icons.phone,
+          "Phone",
+          (patient.phoneNumbers?.join(", ") ?? "N/A"),
+        ),
+        infoRow(Icons.email, "Email", patient.email ?? "N/A"),
+        infoRow(Icons.language, "Address", patient.address.line1 ?? "N/A"),
+        // infoRow(Icons.access_time, "Created At", patient.createdAt ?? "N/A"),
+        // infoRow(Icons.update, "Updated At", patient.updatedAt ?? "N/A"),
+      ],
+    ),
+  );
+}
 
-  Widget _buildInfoCard(patient) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+Widget buildAddressCard(patient) {
+  final address = patient.address!;
+  return Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    elevation: 2,
+    child: Padding(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _infoRow(Icons.badge, "Patient ID", patient.patientId ?? "N/A"),
-          _infoRow(
-            Icons.phone,
-            "Phone",
-            (patient.phoneNumbers?.join(", ") ?? "N/A"),
-          ),
-          _infoRow(Icons.email, "Email", patient.email ?? "N/A"),
-          _infoRow(Icons.language, "Address", patient.address.line1 ?? "N/A"),
-          // _infoRow(Icons.access_time, "Created At", patient.createdAt ?? "N/A"),
-          // _infoRow(Icons.update, "Updated At", patient.updatedAt ?? "N/A"),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAddressCard(patient) {
-    final address = patient.address!;
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Address",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColor.primary,
-              ),
+          const Text(
+            "Address",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColor.primary,
             ),
-            const Divider(),
-            Text("Street: ${address.street ?? 'N/A'}"),
-            Text("City: ${address.city ?? 'N/A'}"),
-            Text("State: ${address.state ?? 'N/A'}"),
-            Text("Zip Code: ${address.zipCode ?? 'N/A'}"),
-            Text("Country: ${address.country ?? 'N/A'}"),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _infoRow(IconData icon, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          Icon(icon, color: AppColor.primary, size: 22),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text("$label: $value", style: const TextStyle(fontSize: 15)),
           ),
+          const Divider(),
+          Text("Street: ${address.street ?? 'N/A'}"),
+          Text("City: ${address.city ?? 'N/A'}"),
+          Text("State: ${address.state ?? 'N/A'}"),
+          Text("Zip Code: ${address.zipCode ?? 'N/A'}"),
+          Text("Country: ${address.country ?? 'N/A'}"),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+Widget infoRow(IconData icon, String label, String value) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 6),
+    child: Row(
+      children: [
+        Icon(icon, color: AppColor.primary, size: 22),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text("$label: $value", style: const TextStyle(fontSize: 15)),
+        ),
+      ],
+    ),
+  );
 }

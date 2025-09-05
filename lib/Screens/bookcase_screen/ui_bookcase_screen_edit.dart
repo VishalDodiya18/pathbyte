@@ -86,27 +86,33 @@ class EditBookCaseScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                             children: [
-                              // Expanded(
-                              //   child: Column(
-                              //     spacing: 10.h,
-                              //     crossAxisAlignment: CrossAxisAlignment.start,
-                              //     children: [
-                              //       const TextConstant(
-                              //         title: 'Case ID',
-                              //         fontSize: 16,
-                              //         fontWeight: FontWeight.w500,
-                              //       ),
-                              //       TextFieldConstant(
-                              //         controller: controller.caseIdController,
-                              //         fillColor: Colors.grey.withValues(alpha: 0.1),
-                              //         isReadOnly: true,
-                              //         hintText: 'Case ID',
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
+                              Expanded(
+                                child: Column(
+                                  spacing: 10.h,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const TextConstant(
+                                      title: 'Case ID',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    TextFieldConstant(
+                                      controller: TextEditingController(
+                                        text:
+                                            "#${controller.caseDetails.caseId}",
+                                      ),
+                                      fillColor: Colors.grey.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                      isReadOnly: true,
 
-                              // widthBox(20),
+                                      hintText: 'Case ID',
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              widthBox(20),
                               Expanded(
                                 child: Column(
                                   spacing: 10.h,

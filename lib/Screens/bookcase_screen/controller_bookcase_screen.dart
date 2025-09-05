@@ -190,33 +190,34 @@ class BookCaseController extends GetxController {
         if (selectedpatient != null) "patientId": selectedpatient?.sId,
         // if (selectedpatient == null)
         "patientData": {
-          "firstName": nameController.text,
+          "firstName": nameController.text.trim(),
           "lastName": "",
           "title": selectedTitle.value,
-          "age": int.parse(yearsController.text),
-          "months": int.parse(monthsController.text),
-          "days": int.parse(daysController.text),
+          "age": int.parse(yearsController.text.trim()),
+          "months": int.parse(monthsController.text.trim()),
+          "days": int.parse(daysController.text.trim()),
           "dob": getDobFromAge(
-            int.parse(yearsController.text),
-            int.parse(monthsController.text),
-            int.parse(daysController.text),
+            int.parse(yearsController.text.trim()),
+            int.parse(monthsController.text.trim()),
+            int.parse(daysController.text.trim()),
             format: "yyyy-MM-dd",
           ),
           "gender": selectedSex.value,
           "phoneNumbers": [
             "+${phoneNumber.value.countryCode} ${phoneNumber.value.nsn}",
           ],
-          if (emailController.text.isNotEmpty) "email": emailController.text,
-          if (address.text.isNotEmpty)
+          if (emailController.text.trim().isNotEmpty)
+            "email": emailController.text.trim(),
+          if (address.text.trim().isNotEmpty)
             "address": {
-              "line1": address.text,
+              "line1": address.text.trim(),
               //  getFullAddress(
               //   Address.fromJson({
-              //     "line1": address.text,
-              //     "line2": address2.text,
-              //     "city": city.text,
-              //     "state": state.text,
-              //     "postalCode": pincode.text,
+              //     "line1": address.text.trim(),
+              //     "line2": address2.text.trim(),
+              //     "city": city.text.trim(),
+              //     "state": state.text.trim(),
+              //     "postalCode": pincode.text.trim(),
               //     "country": "India",
               //   }),
               // ),
@@ -241,7 +242,8 @@ class BookCaseController extends GetxController {
         "totalAmount": gettotalamount(),
         "discountType": "Flat",
         "discountValue": int.parse(
-          ((discount.text.isEmpty) ? "0" : discount.text.isEmpty).toString(),
+          ((discount.text.trim().isEmpty) ? "0" : discount.text.trim().isEmpty)
+              .toString(),
         ),
         "finalAmount": gettotalwitdiscountamount(),
       };
@@ -257,7 +259,8 @@ class BookCaseController extends GetxController {
       log(response.statusCode.toString());
       log(model.toString());
       if (response.statusCode == 201 && model["code"] == 201) {
-        if (recivedamount.text.isEmpty || recivedamount.text == "0") {
+        if (recivedamount.text.trim().isEmpty ||
+            recivedamount.text.trim() == "0") {
           Get.back();
           Get.find<HomeController>().OnRefresh();
         } else {
@@ -293,7 +296,7 @@ class BookCaseController extends GetxController {
       final body = {
         "caseId": caseid,
         "amountGiven": int.parse(
-          recivedamount.text.isEmpty ? "0" : recivedamount.text,
+          recivedamount.text.trim().isEmpty ? "0" : recivedamount.text,
         ),
         "mode": selectedMode.value.toLowerCase(),
       };

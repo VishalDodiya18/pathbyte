@@ -209,6 +209,12 @@ class CaseDetailsScreen extends StatelessWidget {
                                         color: AppColor.greycolor,
                                       ),
                                       TextConstant(
+                                        title:
+                                            "${controller.caseDetails?.patient?.phoneNumbers?.first ?? "N/A"}",
+                                        fontSize: 14.0,
+                                        color: AppColor.greycolor,
+                                      ),
+                                      TextConstant(
                                         title: controller.getFullAddress(
                                           controller
                                               .caseDetails
@@ -273,7 +279,7 @@ class CaseDetailsScreen extends StatelessWidget {
                               columns: [
                                 DataColumn(
                                   label: Text(
-                                    "Group Code",
+                                    "Group Name",
                                     style: TextStyle(
                                       fontSize: 13.h,
                                       fontWeight: FontWeight.w500,

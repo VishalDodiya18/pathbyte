@@ -7,8 +7,7 @@ import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
 import 'package:labapp/Screens/case_details/case_details_screen.dart';
 import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
-import 'package:labapp/Screens/report_details/controller_report_details_screen.dart';
-import 'package:labapp/Screens/report_details/report_details_screen.dart';
+import 'package:labapp/Screens/patients/patient_details_controller.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
 import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/utils/app_color.dart';
@@ -16,6 +15,9 @@ import 'package:labapp/utils/app_color.dart';
 class HomeScreenWidget {
   Widget tabbarWidget(int tabIndex) {
     final HomeController controller = Get.find<HomeController>();
+
+    PatientDetailsController? Pcontroller;
+    if (tabIndex == 4) Pcontroller = Get.find<PatientDetailsController>();
 
     PagingController<int, Cases> pagingController;
     switch (tabIndex) {
@@ -33,6 +35,9 @@ class HomeScreenWidget {
         break;
       case 3:
         pagingController = controller.signOffPagingController;
+        break;
+      case 4:
+        pagingController = Pcontroller!.allPagingController;
         break;
       default:
         pagingController = controller.allPagingController;
@@ -55,17 +60,16 @@ class HomeScreenWidget {
             ),
           ),
           itemBuilder: (context, item, index) {
-            final isOdd = index.isOdd;
             return InkWell(
               onTap: () {
                 Get.lazyPut(() => CaseDetailsContoller(caseId: item.sId));
                 Get.to(() => CaseDetailsScreen());
                 return;
-                if (!isOdd) {
-                } else {
-                  Get.lazyPut(() => ReportDetailsContoller());
-                  Get.to(() => const ReportDetailsScreen());
-                }
+                // if (!isOdd) {
+                // } else {
+                //   Get.lazyPut(() => ReportDetailsContoller());
+                //   Get.to(() => const ReportDetailsScreen());
+                // }
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),

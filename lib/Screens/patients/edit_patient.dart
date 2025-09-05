@@ -16,6 +16,7 @@ import 'package:labapp/Constants/textfield_constant.dart'
 import 'package:labapp/Constants/widget_constant.dart';
 import 'package:labapp/Screens/bookcase_screen/bookcase_widget.dart';
 import 'package:labapp/Screens/patients/patient_controller.dart';
+import 'package:labapp/Screens/patients/patient_details_controller.dart';
 import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/utils/app_color.dart';
 import 'package:labapp/utils/app_config.dart';
@@ -160,6 +161,8 @@ class _PatientDialogState extends State<PatientDialog> {
       log(response.statusCode.toString());
       if (response.statusCode == 200 && model["code"] == 200) {
         Get.back();
+
+        Get.find<PatientDetailsController>().fetchpatient();
         Get.find<PatientController>().patientPagingController.refresh();
       } else {
         log(model["message"]);

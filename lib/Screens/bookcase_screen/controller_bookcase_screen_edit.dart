@@ -9,6 +9,7 @@ import 'package:labapp/Constants/extensions.dart';
 import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
 import 'package:labapp/Screens/patients/patient_controller.dart';
+import 'package:labapp/Screens/patients/patient_details_controller.dart';
 import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/models/case_details_model.dart' hide Doctor, Patient;
 import 'package:labapp/models/doctor_model.dart' hide Address;
@@ -119,6 +120,7 @@ class EditBookCaseController extends GetxController {
           .values
           .toList()
           .cast<Group>();
+      selectedpatient = caseDetails.patient;
 
       // selectedGroupTests.forEach((element) {
       //   element.tests = (caseDetails.casetests ?? [])
@@ -238,45 +240,45 @@ class EditBookCaseController extends GetxController {
 
       final body = {
         if (selectedpatient != null) "patientId": selectedpatient?.sId,
-        if (selectedpatient == null)
-          "patientData": {
-            "firstName": nameController.text,
-            "lastName": "",
-            "title": selectedTitle.value,
-            "age": int.parse(yearsController.text),
-            "months": int.parse(monthsController.text),
-            "days": int.parse(daysController.text),
-            "dob": getDobFromAge(
-              int.parse(yearsController.text),
-              int.parse(monthsController.text),
-              int.parse(daysController.text),
-              format: "yyyy-MM-dd",
-            ),
-            "gender": selectedSex.value,
-            "phoneNumbers": [
-              "+${phoneNumber.value.countryCode} ${phoneNumber.value.nsn}",
-            ],
-            if (emailController.text.isNotEmpty) "email": emailController.text,
-            if (address.text.isNotEmpty)
-              "address": {
-                "line1": address.text,
-                //  getFullAddress(
-                //   Address.fromJson({
-                //     "line1": address.text,
-                //     "line2": address2.text,
-                //     "city": city.text,
-                //     "state": state.text,
-                //     "postalCode": pincode.text,
-                //     "country": "India",
-                //   }),
-                // ),
-                "line2": "",
-                "city": "",
-                "state": "",
-                "postalCode": "",
-                "country": "",
-              },
-          },
+        // if (selectedpatient == null)
+        "patientData": {
+          "firstName": nameController.text,
+          "lastName": "",
+          "title": selectedTitle.value,
+          "age": int.parse(yearsController.text),
+          "months": int.parse(monthsController.text),
+          "days": int.parse(daysController.text),
+          "dob": getDobFromAge(
+            int.parse(yearsController.text),
+            int.parse(monthsController.text),
+            int.parse(daysController.text),
+            format: "yyyy-MM-dd",
+          ),
+          "gender": selectedSex.value,
+          "phoneNumbers": [
+            "+${phoneNumber.value.countryCode} ${phoneNumber.value.nsn}",
+          ],
+          if (emailController.text.isNotEmpty) "email": emailController.text,
+          if (address.text.isNotEmpty)
+            "address": {
+              "line1": address.text,
+              //  getFullAddress(
+              //   Address.fromJson({
+              //     "line1": address.text,
+              //     "line2": address2.text,
+              //     "city": city.text,
+              //     "state": state.text,
+              //     "postalCode": pincode.text,
+              //     "country": "India",
+              //   }),
+              // ),
+              "line2": "",
+              "city": "",
+              "state": "",
+              "postalCode": "",
+              "country": "",
+            },
+        },
         "tests": [
           selectedTests.map((e) => {"testId": e.id}).toList(),
           for (int i = 0; i < selectedGroupTests.length; i++)
@@ -311,11 +313,15 @@ class EditBookCaseController extends GetxController {
         Get.find<CaseDetailsContoller>().fetchCaseById(caseDetails.id!);
         Get.find<HomeController>().OnRefresh();
         Get.find<PatientController>().patientPagingController.refresh();
+        if (Get.isRegistered<PatientDetailsController>()) {
+          Get.find<PatientDetailsController>().fetchpatient();
+          Get.find<PatientDetailsController>().allPagingController.refresh();
+        }
       } else {
         log(model["message"]);
         Get.snackbar(
           "Error",
-          model["message"] ?? "Case creation failed please try again",
+          model["message"] ?? "Case updation failed please try again",
           colorText: AppColor.whitecolor,
 
           backgroundColor: AppColor.redcolor,
