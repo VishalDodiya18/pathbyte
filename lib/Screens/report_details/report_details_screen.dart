@@ -10,35 +10,6 @@ import 'package:labapp/utils/app_color.dart';
 class ReportDetailsScreen extends StatelessWidget {
   const ReportDetailsScreen({super.key});
 
-  Widget _buildRow({
-    required String title,
-    required String value,
-    double fontSize = 15,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: TextConstant(
-            title: title,
-            height: 0.1,
-            textAlign: TextAlign.start,
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Expanded(
-          child: TextConstant(
-            title: value,
-            height: 0.1,
-            textAlign: TextAlign.end,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final ReportDetailsContoller controller =
@@ -92,16 +63,16 @@ class ReportDetailsScreen extends StatelessWidget {
             child: Column(
               spacing: 22.0,
               children: [
-                _buildRow(title: "Case ID :", value: "#0025"),
-                _buildRow(
+                buildReportRow(title: "Case ID :", value: "#0025"),
+                buildReportRow(
                   title: "Patient Name :",
                   value: "Sanjay Thakur  (#12345)",
                 ),
-                _buildRow(title: "Age/ Sex :", value: "32/ M"),
-                _buildRow(title: "Referred By :", value: "Dr. Parul Singhal"),
-                _buildRow(title: "Registration Time :", value: "#PT0025"),
-                _buildRow(title: "Collection Time :", value: "Sanjay Thakur"),
-                _buildRow(title: "Reported Time :", value: "Dr. Parul Singhal"),
+                buildReportRow(title: "Age/ Sex :", value: "32/ M"),
+                buildReportRow(title: "Referred By :", value: "Dr. Parul Singhal"),
+                buildReportRow(title: "Registration Time :", value: "#PT0025"),
+                buildReportRow(title: "Collection Time :", value: "Sanjay Thakur"),
+                buildReportRow(title: "Reported Time :", value: "Dr. Parul Singhal"),
               ],
             ),
           ),

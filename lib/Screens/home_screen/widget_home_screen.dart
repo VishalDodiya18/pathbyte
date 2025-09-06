@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:labapp/Constants/extensions.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
-import 'package:labapp/Screens/case_details/case_details_screen.dart';
+import 'package:labapp/Screens/case_details/main_details_screen.dart';
 import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
 import 'package:labapp/Screens/patients/patient_details_controller.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
+import 'package:labapp/Screens/report_details/controller_report_details_screen.dart';
+import 'package:labapp/Screens/report_details/report_details_screen.dart';
 import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/utils/app_color.dart';
 
@@ -63,12 +66,12 @@ class HomeScreenWidget {
             return InkWell(
               onTap: () {
                 Get.lazyPut(() => CaseDetailsContoller(caseId: item.sId));
-                Get.to(() => CaseDetailsScreen());
-                return;
+                Get.to(() => MainDetailsScreen(isreport: T));
+                //     return;
                 // if (!isOdd) {
                 // } else {
-                //   Get.lazyPut(() => ReportDetailsContoller());
-                //   Get.to(() => const ReportDetailsScreen());
+                // Get.lazyPut(() => ReportDetailsContoller());
+                // Get.to(() => const ReportDetailsScreen());
                 // }
               },
               child: Padding(
