@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:labapp/models/case_details_model.dart';
 import 'package:labapp/models/group_test_model.dart';
+import 'package:labapp/models/report_details_model.dart' as report;
 import 'package:labapp/models/test_model.dart';
 import 'package:labapp/utils/app_config.dart';
 
@@ -13,41 +14,21 @@ class CaseDetailsContoller extends GetxController {
   CaseDetailsContoller({required this.caseId});
 
   RxBool isLoading = true.obs;
-  final List<Map<String, String>> transactions = [
-    {
-      "id": "#T123454",
-      "date": "30 Apr 2025 03:42 PM",
-      "receiver": "Rahul Kumar",
-      "amount": "1,700",
-      "mode": "Cash",
-    },
-    {
-      "id": "#T123454",
-      "date": "30 Apr 2025 03:42 PM",
-      "receiver": "Rahul Kumar",
-      "amount": "1,700",
-      "mode": "Cash",
-    },
-    {
-      "id": "#T123454",
-      "date": "30 Apr 2025 03:42 PM",
-      "receiver": "Rahul Kumar",
-      "amount": "1,700",
-      "mode": "Cash",
-    },
-  ];
+  RxBool reporting = true.obs;
 
   List<Test> selectedTests = [];
   List<Group> selectedGroupTests = [];
   @override
   void onInit() {
-    fetchCaseById(caseId);
+    fetchCaseById();
+    fetchreportCaseById();
 
     super.onInit();
   }
 
   CaseDetails? caseDetails;
-  Future<void> fetchCaseById(String caseId) async {
+  report.ReportDetailsModel? reportDetailsModel;
+  Future<void> fetchCaseById() async {
     try {
       isLoading(true);
 
@@ -84,6 +65,34 @@ class CaseDetailsContoller extends GetxController {
       // Get.snackbar("Exception", e.toString());
     } finally {
       isLoading(false);
+      update();
+    }
+  }
+
+  Future<void> fetchreportCaseById() async {
+    try {
+      reporting(true);
+
+      final response = await http.get(
+        Uri.parse("${AppConfig.baseUrl}/case-tests/$caseId"),
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        final caseResponse = report.ReportDetailsModel.fromJson(jsonData);
+
+        reportDetailsModel = caseResponse;
+
+        update();
+      } else {
+        // Get.snackbar(
+        //   "Error", "Failed with status: ${response.statusCode}");
+      }
+    } catch (e) {
+      // Get.snackbar("Exception", e.toString());
+    } finally {
+      reporting(false);
+      update();
     }
   }
 

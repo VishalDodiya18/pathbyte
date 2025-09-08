@@ -56,13 +56,6 @@ class MainDetailsScreen extends StatelessWidget {
       body: Obx(() {
         return controller.isLoading.value
             ? Center(child: CircularProgressIndicator())
-            : controller.isLoading.isFalse && controller.caseDetails == null
-            ? Center(
-                child: Text(
-                  "Case Detail Not Found",
-                  style: TextStyle(fontSize: 20.h, fontWeight: FontWeight.bold),
-                ),
-              )
             : isreport
             ? ReportDetails()
             : CaseDetailsPage();

@@ -53,7 +53,7 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
 
       if (response.statusCode == 201 && model["code"] == 201) {
         Get.back();
-        Get.find<CaseDetailsContoller>().fetchCaseById(widget.caseid);
+        Get.find<CaseDetailsContoller>().fetchCaseById();
         Get.find<HomeController>().OnRefresh();
       } else {
         Get.snackbar(

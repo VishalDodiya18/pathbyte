@@ -242,16 +242,16 @@ class EditBookCaseController extends GetxController {
         if (selectedpatient != null) "patientId": selectedpatient?.sId,
         // if (selectedpatient == null)
         "patientData": {
-          "firstName": nameController.text,
+          "firstName": nameController.text.trim(),
           "lastName": "",
           "title": selectedTitle.value,
-          "age": int.parse(yearsController.text),
-          "months": int.parse(monthsController.text),
-          "days": int.parse(daysController.text),
+          "age": int.parse(yearsController.text.trim()),
+          "months": int.parse(monthsController.text.trim()),
+          "days": int.parse(daysController.text.trim()),
           "dob": getDobFromAge(
-            int.parse(yearsController.text),
-            int.parse(monthsController.text),
-            int.parse(daysController.text),
+            int.parse(yearsController.text.trim()),
+            int.parse(monthsController.text.trim()),
+            int.parse(daysController.text.trim()),
             format: "yyyy-MM-dd",
           ),
           "gender": selectedSex.value,
@@ -259,9 +259,9 @@ class EditBookCaseController extends GetxController {
             "+${phoneNumber.value.countryCode} ${phoneNumber.value.nsn}",
           ],
           if (emailController.text.isNotEmpty) "email": emailController.text,
-          if (address.text.isNotEmpty)
+          if (address.text.trim().isNotEmpty)
             "address": {
-              "line1": address.text,
+              "line1": address.text.trim(),
               //  getFullAddress(
               //   Address.fromJson({
               //     "line1": address.text,
@@ -293,7 +293,8 @@ class EditBookCaseController extends GetxController {
         "totalAmount": gettotalamount(),
         "discountType": "Flat",
         "discountValue": int.parse(
-          ((discount.text.isEmpty) ? "0" : discount.text.isEmpty).toString(),
+          ((discount.text.trim().isEmpty) ? "0" : discount.text.trim())
+              .toString(),
         ),
         "finalAmount": gettotalwitdiscountamount(),
       };
@@ -310,7 +311,7 @@ class EditBookCaseController extends GetxController {
       log(model.toString());
       if (response.statusCode == 200 && model["code"] == 200) {
         Get.back();
-        Get.find<CaseDetailsContoller>().fetchCaseById(caseDetails.id!);
+        Get.find<CaseDetailsContoller>().fetchCaseById();
         Get.find<HomeController>().OnRefresh();
         Get.find<PatientController>().patientPagingController.refresh();
         if (Get.isRegistered<PatientDetailsController>()) {

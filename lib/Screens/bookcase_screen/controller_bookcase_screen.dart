@@ -242,7 +242,7 @@ class BookCaseController extends GetxController {
         "totalAmount": gettotalamount(),
         "discountType": "Flat",
         "discountValue": int.parse(
-          ((discount.text.trim().isEmpty) ? "0" : discount.text.trim().isEmpty)
+          ((discount.text.trim().isEmpty) ? "0" : discount.text.trim())
               .toString(),
         ),
         "finalAmount": gettotalwitdiscountamount(),
