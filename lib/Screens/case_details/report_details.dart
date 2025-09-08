@@ -9,8 +9,7 @@ import 'package:labapp/Constants/elevated_button_constant.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
 import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
-import 'package:labapp/Screens/report_details/report_details_screen.dart';
-import 'package:labapp/Screens/report_details/report_table.dart';
+import 'package:labapp/Screens/case_details/report_table.dart';
 import 'package:labapp/utils/app_color.dart';
 
 class ReportDetails extends StatelessWidget {
@@ -19,126 +18,128 @@ class ReportDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: F,
-      onPopInvokedWithResult: (didPop, result) {
-        Discard(context);
-      },
-      child: Obx(
-        () => controller.reporting.value
-            ? Center(child: CircularProgressIndicator())
-            : controller.reporting.isFalse &&
-                  controller.reportDetailsModel == null
-            ? Center(
-                child: Text(
-                  "Report Detail Not Found",
-                  style: TextStyle(fontSize: 20.h, fontWeight: FontWeight.bold),
-                ),
-              )
-            : Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0,
-                              vertical: 20.0,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColor.bordercolor),
-                            ),
-                            child: Column(
-                              spacing: 5.0,
-                              children: [
-                                buildReportRow(
-                                  title: "Case ID :",
-                                  value:
-                                      "#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.caseId ?? ""}",
-                                ),
-                                buildReportRow(
-                                  title: "Patient ID :",
-                                  value:
-                                      "(#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.patientId})",
-                                ),
-                                buildReportRow(
-                                  title: "Patient Name :",
-                                  value:
-                                      controller
-                                          .reportDetailsModel
-                                          ?.data
-                                          ?.reportdetail
-                                          ?.caseDetails
-                                          ?.patient
-                                          ?.firstName ??
-                                      "",
-                                ),
-                                buildReportRow(
-                                  title: "Age/ Sex :",
-                                  value:
-                                      "${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.age ?? 0}/ ${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.gender}",
-                                ),
-                                buildReportRow(
-                                  title: "Referred By :",
-                                  value:
-                                      controller
-                                          .reportDetailsModel
-                                          ?.data
-                                          ?.reportdetail
-                                          ?.caseDetails
-                                          ?.doctor
-                                          ?.firstName ??
-                                      "",
-                                ),
-                                // buildReportRow(
-                                //   title: "Registration Time :",
-                                //   value: DateFormat("dd MMMM ,yyyy").format(
-                                //     controller
-                                //             .reportDetailsModel
-                                //             ?.data
-                                //             ?.reportdetail
-                                //             ?.caseDetails
-                                //             ?.createdAt ??
-                                //         DateTime.now(),
-                                //   ),
-                                // ),
-                              ],
-                            ),
+    return Obx(
+      () => controller.reporting.value
+          ? Center(child: CircularProgressIndicator())
+          : controller.reporting.isFalse &&
+                controller.reportDetailsModel == null
+          ? Center(
+              child: Text(
+                "Report Detail Not Found",
+                style: TextStyle(fontSize: 20.h, fontWeight: FontWeight.bold),
+              ),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                            vertical: 20.0,
                           ),
-
-                          heightBox(10),
-                          ListView.separated(
-                            shrinkWrap: T,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount:
-                                (controller
-                                            .reportDetailsModel
-                                            ?.data
-                                            ?.reportdetail
-                                            ?.categories ??
-                                        [])
-                                    .length,
-                            separatorBuilder: (context, index) => heightBox(15),
-                            itemBuilder: (context, i) {
-                              return ReportTable(
-                                category:
-                                    (controller
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            border: Border.all(color: AppColor.bordercolor),
+                          ),
+                          child: Column(
+                            spacing: 5.0,
+                            children: [
+                              buildReportRow(
+                                title: "Case ID :",
+                                value:
+                                    "#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.caseId ?? ""}",
+                              ),
+                              buildReportRow(
+                                title: "Patient ID :",
+                                value:
+                                    "(#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.patientId})",
+                              ),
+                              buildReportRow(
+                                title: "Patient Name :",
+                                value:
+                                    controller
                                         .reportDetailsModel
                                         ?.data
                                         ?.reportdetail
-                                        ?.categories ??
-                                    [])[i],
-                              );
-                            },
+                                        ?.caseDetails
+                                        ?.patient
+                                        ?.firstName ??
+                                    "",
+                              ),
+                              buildReportRow(
+                                title: "Age/ Sex :",
+                                value:
+                                    "${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.age ?? 0}/ ${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.gender}",
+                              ),
+                              buildReportRow(
+                                title: "Referred By :",
+                                value:
+                                    controller
+                                        .reportDetailsModel
+                                        ?.data
+                                        ?.reportdetail
+                                        ?.caseDetails
+                                        ?.doctor
+                                        ?.firstName ??
+                                    "",
+                              ),
+                              // buildReportRow(
+                              //   title: "Registration Time :",
+                              //   value: DateFormat("dd MMMM ,yyyy").format(
+                              //     controller
+                              //             .reportDetailsModel
+                              //             ?.data
+                              //             ?.reportdetail
+                              //             ?.caseDetails
+                              //             ?.createdAt ??
+                              //         DateTime.now(),
+                              //   ),
+                              // ),
+                            ],
                           ),
-                          heightBox(100),
-                        ],
-                      ),
+                        ),
+
+                        heightBox(10),
+                        ListView.separated(
+                          shrinkWrap: T,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              (controller
+                                          .reportDetailsModel
+                                          ?.data
+                                          ?.reportdetail
+                                          ?.categories ??
+                                      [])
+                                  .length,
+                          separatorBuilder: (context, index) => heightBox(15),
+                          itemBuilder: (context, i) {
+                            return ReportTable(
+                              category:
+                                  (controller
+                                      .reportDetailsModel
+                                      ?.data
+                                      ?.reportdetail
+                                      ?.categories ??
+                                  [])[i],
+                            );
+                          },
+                        ),
+                        heightBox(100),
+                      ],
                     ),
                   ),
+                ),
+                if (controller
+                        .reportDetailsModel
+                        ?.data
+                        ?.reportdetail
+                        ?.caseDetails
+                        ?.status !=
+                    "Final")
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -155,20 +156,28 @@ class ReportDetails extends StatelessWidget {
                                 },
                               ),
                             ),
-                            Expanded(
-                              child: elevatedButton(
-                                title: "Save As Final",
-                                onPressed: () {},
+                            if (controller
+                                    .reportDetailsModel
+                                    ?.data
+                                    ?.reportdetail
+                                    ?.caseDetails
+                                    ?.status ==
+                                "InProgress")
+                              Expanded(
+                                child: elevatedButton(
+                                  title: "Save As Final",
+                                  onPressed: () {
+                                    controller.CreateReportResult(isdraft: F);
+                                  },
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-      ),
+              ],
+            ),
     );
   }
 }
@@ -253,7 +262,9 @@ Discard(context) {
                       elevatedButton(
                         onPressed: () {
                           Get.back();
-                          Get.back();
+                          Future.delayed(Duration(milliseconds: 100), () {
+                            Get.back();
+                          });
                         },
                         title: "Yes",
                       ),

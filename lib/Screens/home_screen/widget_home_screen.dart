@@ -10,8 +10,6 @@ import 'package:labapp/Screens/case_details/main_details_screen.dart';
 import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
 import 'package:labapp/Screens/patients/patient_details_controller.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
-import 'package:labapp/Screens/report_details/controller_report_details_screen.dart';
-import 'package:labapp/Screens/report_details/report_details_screen.dart';
 import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/utils/app_color.dart';
 

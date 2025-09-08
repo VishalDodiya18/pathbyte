@@ -374,3 +374,43 @@ class MaxValueInputFormatter extends TextInputFormatter {
     return newValue;
   }
 }
+
+class DecimalTextInputFormatter extends TextInputFormatter {
+  final int decimalRange;
+
+  DecimalTextInputFormatter({this.decimalRange = 2})
+    : assert(decimalRange >= 0);
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text;
+
+    // Allow empty value
+    if (text.isEmpty) {
+      return newValue;
+    }
+
+    // Allow only digits and one dot
+    if (!RegExp(r'^\d*\.?\d*$').hasMatch(text)) {
+      return oldValue;
+    }
+
+    // Only one dot allowed
+    if ('.'.allMatches(text).length > 1) {
+      return oldValue;
+    }
+
+    // Restrict digits after decimal point
+    if (text.contains('.')) {
+      final parts = text.split('.');
+      if (parts.length > 1 && parts[1].length > decimalRange) {
+        return oldValue;
+      }
+    }
+
+    return newValue;
+  }
+}

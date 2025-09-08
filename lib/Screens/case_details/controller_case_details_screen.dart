@@ -106,173 +106,195 @@ class CaseDetailsContoller extends GetxController {
   }
 
   CreateReportResult({isdraft = true}) async {
-    reporting.value = false;
+    reporting.value = true;
     List<report.Category> category =
         reportDetailsModel?.data?.reportdetail?.categories ?? [];
-    // try {
-    final url = Uri.parse("${AppConfig.baseUrl}/case-tests/$caseId");
+    try {
+      final url = Uri.parse("${AppConfig.baseUrl}/case-tests/$caseId");
 
-    final body = {
-      "status": isdraft ? "InProgress" : "Final",
-      "updates": [
-        for (int i = 0; i < category.length; i++) ...[
-          for (int j = 0; j < (category[i].groupedTests ?? []).length; j++) ...[
+      final body = {
+        "status": isdraft ? "InProgress" : "Final",
+        "updates": [
+          for (int i = 0; i < category.length; i++) ...[
             for (
-              int k = 0;
-              k < (category[i].groupedTests?[j].caseTests ?? []).length;
-              k++
-            )
-              {
-                "testId": category[i].groupedTests?[j].caseTests?[k].test?.id,
-                "groupId": category[i].groupedTests?[j].id,
-                if ((category[i]
-                            .groupedTests?[j]
-                            .caseTests?[k]
-                            .characteristics ??
-                        [])
-                    .isEmpty)
+              int j = 0;
+              j < (category[i].groupedTests ?? []).length;
+              j++
+            ) ...[
+              for (
+                int k = 0;
+                k < (category[i].groupedTests?[j].caseTests ?? []).length;
+                k++
+              )
+                {
+                  "testId": category[i].groupedTests?[j].caseTests?[k].test?.id,
+                  "groupId": category[i].groupedTests?[j].id,
                   if ((category[i]
-                                  .groupedTests?[j]
-                                  .caseTests?[k]
-                                  .test
-                                  ?.testType ??
-                              "")
-                          .toLowerCase() ==
-                      "numeric")
-                    "numberValue":
-                        (category[i]
+                              .groupedTests?[j]
+                              .caseTests?[k]
+                              .characteristics ??
+                          [])
+                      .isEmpty)
+                    if ((category[i]
                                     .groupedTests?[j]
                                     .caseTests?[k]
-                                    .lowvalue
-                                    .text ??
+                                    .test
+                                    ?.testType ??
                                 "")
-                            .isEmpty
-                        ? ""
-                        : num.parse(
-                            // category[i]
-                            //         .groupedTests?[j]
-                            //         .caseTests?[k]
-                            //         .lowvalue
-                            //         .text ??
-                            "0",
-                          )
-                  else
-                    "stringValue": category[i]
-                        .groupedTests![j]
-                        .caseTests![k]
-                        .lowvalue
-                        .text,
+                            .toLowerCase() ==
+                        "numeric")
+                      "numberValue":
+                          (category[i]
+                                      .groupedTests?[j]
+                                      .caseTests?[k]
+                                      .lowvalue
+                                      .text ??
+                                  "")
+                              .isEmpty
+                          ? null
+                          : num.parse(
+                              category[i]
+                                      .groupedTests?[j]
+                                      .caseTests?[k]
+                                      .lowvalue
+                                      .text ??
+                                  "",
+                            )
+                    else
+                      "stringValue":
+                          category[i]
+                              .groupedTests![j]
+                              .caseTests![k]
+                              .lowvalue
+                              .text
+                              .isEmpty
+                          ? null
+                          : category[i]
+                                .groupedTests![j]
+                                .caseTests![k]
+                                .lowvalue
+                                .text,
 
-                if ((category[i]
-                            .groupedTests?[j]
-                            .caseTests?[k]
-                            .characteristics ??
-                        [])
-                    .isNotEmpty)
-                  "characteristics":
-                      (category[i]
-                                  .groupedTests?[j]
-                                  .caseTests?[k]
-                                  .characteristics ??
-                              [])
-                          .isEmpty
-                      ? []
-                      : (category[i]
+                  if ((category[i]
+                              .groupedTests?[j]
+                              .caseTests?[k]
+                              .characteristics ??
+                          [])
+                      .isNotEmpty)
+                    "characteristics":
+                        (category[i]
                                     .groupedTests?[j]
                                     .caseTests?[k]
                                     .characteristics ??
                                 [])
+                            .isEmpty
+                        ? []
+                        : (category[i]
+                                      .groupedTests?[j]
+                                      .caseTests?[k]
+                                      .characteristics ??
+                                  [])
+                              .map(
+                                (e) => {
+                                  "name": e.name ?? "",
+                                  // "id": e.sId,
+                                  if ((e.charType ?? "").toLowerCase() ==
+                                      "numeric")
+                                    "numberValue": e.lowvalue.text.isEmpty
+                                        ? null
+                                        : num.parse(e.lowvalue.text)
+                                  else
+                                    "stringValue": e.lowvalue.text.isEmpty
+                                        ? null
+                                        : e.lowvalue.text,
+                                },
+                              )
+                              .toList(),
+                },
+            ],
+            for (int j = 0; j < (category[i].ungroupedTests ?? []).length; j++)
+              {
+                "testId": category[i].ungroupedTests?[j].test?.id,
+                if ((category[i].ungroupedTests?[j].characteristics ?? [])
+                    .isEmpty)
+                  if ((category[i].ungroupedTests?[j].test?.testType ?? "")
+                          .toLowerCase() ==
+                      "numeric")
+                    "numberValue":
+                        (category[i].ungroupedTests?[j].lowvalue.text ?? "")
+                            .isEmpty
+                        ? null
+                        : num.parse(
+                            category[i].ungroupedTests?[j].lowvalue.text ?? "0",
+                            // "0",
+                          )
+                  else
+                    "stringValue":
+                        (category[i].ungroupedTests?[j].lowvalue.text ?? "")
+                            .isEmpty
+                        ? null
+                        : category[i].ungroupedTests?[j].lowvalue.text,
+
+                // "value": category[i].ungroupedTests?[j].lowvalue.text,
+                if ((category[i].ungroupedTests?[j].characteristics ?? [])
+                    .isNotEmpty)
+                  "characteristics":
+                      (category[i].ungroupedTests?[j].characteristics ?? [])
+                          .isEmpty
+                      ? []
+                      : (category[i].ungroupedTests?[j].characteristics ?? [])
                             .map(
                               (e) => {
                                 "name": e.name ?? "",
+                                //  "id": e.sId,
                                 if ((e.charType ?? "").toLowerCase() ==
                                     "numeric")
                                   "numberValue": e.lowvalue.text.isEmpty
                                       ? ""
                                       : num.parse(e.lowvalue.text)
                                 else
-                                  "stringValue": e.lowvalue.text,
+                                  "stringValue": e.lowvalue.text.isEmpty
+                                      ? null
+                                      : e.lowvalue.text,
                               },
                             )
                             .toList(),
               },
           ],
-          for (int j = 0; j < (category[i].ungroupedTests ?? []).length; j++)
-            {
-              "testId": category[i].ungroupedTests?[j].id,
-              if ((category[i].ungroupedTests?[j].characteristics ?? [])
-                  .isEmpty)
-                if ((category[i].ungroupedTests?[j].test?.testType ?? "")
-                        .toLowerCase() ==
-                    "numeric")
-                  "numberValue":
-                      (category[i].ungroupedTests?[j].lowvalue.text ?? "")
-                          .isEmpty
-                      ? ""
-                      : num.parse(
-                          category[i].ungroupedTests?[j].lowvalue.text ?? "0",
-                          // "0",
-                        )
-                else
-                  "stringValue": category[i].ungroupedTests?[j].lowvalue.text,
-
-              // "value": category[i].ungroupedTests?[j].lowvalue.text,
-              if ((category[i].ungroupedTests?[j].characteristics ?? [])
-                  .isNotEmpty)
-                "characteristics":
-                    (category[i].ungroupedTests?[j].characteristics ?? [])
-                        .isEmpty
-                    ? []
-                    : (category[i].ungroupedTests?[j].characteristics ?? [])
-                          .map(
-                            (e) => {
-                              "name": e.name ?? "",
-                              if ((e.charType ?? "").toLowerCase() == "numeric")
-                                "numberValue": e.lowvalue.text.isEmpty
-                                    ? ""
-                                    : num.parse(e.lowvalue.text)
-                              else
-                                "stringValue": e.lowvalue.text,
-                            },
-                          )
-                          .toList(),
-            },
         ],
-      ],
-    };
-    log(body.toString());
-    final response = await http.patch(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(body),
-    );
-
-    var model = jsonDecode(response.body);
-
-    if (response.statusCode == 200 && model["code"] == 200) {
-      Get.back();
-    } else {
-      //log(model["message"]);
-      Get.snackbar(
-        "Error",
-        model["message"] ?? "Case updation failed please try again",
-        colorText: AppColor.whitecolor,
-
-        backgroundColor: AppColor.redcolor,
+      };
+      log(body.toString());
+      final response = await http.patch(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
       );
+
+      var model = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && model["code"] == 200) {
+        Get.back();
+      } else {
+        //log(model["message"]);
+        Get.snackbar(
+          "Error",
+          model["message"] ?? "Case updation failed please try again",
+          colorText: AppColor.whitecolor,
+
+          backgroundColor: AppColor.redcolor,
+        );
+        reporting.value = false;
+
+        return null;
+      }
+    } catch (e) {
       reporting.value = false;
 
+      print("Exception: $e");
       return null;
+    } finally {
+      reporting.value = false;
     }
-    // }
-    // catch (e) {
-    //   reporting.value = false;
-
-    //   print("Exception: $e");
-    //   return null;
-    // } finally {
-    //   reporting.value = false;
-    // }
   }
 
   gettotalamount() {

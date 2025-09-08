@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:labapp/Screens/bookcase_screen/controller_bookcase_screen_edit.dart';
 import 'package:labapp/Screens/bookcase_screen/ui_bookcase_screen_edit.dart';
 import 'package:labapp/Screens/case_details/case_details.dart';
@@ -19,41 +20,48 @@ class MainDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final CaseDetailsContoller controller = Get.find<CaseDetailsContoller>();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(isreport ? "Report Details" : 'Case Details'),
-        actions: isreport
-            ? []
-            : [
-                PopupMenuButton(
-                  offset: Offset(-15, 25),
-                  onSelected: (value) {
-                    if (value == "edit") {
-                      Get.lazyPut(
-                        () => EditBookCaseController(
-                          caseDetails: controller.caseDetails ?? CaseDetails(),
-                        ),
-                      );
-                      Get.to(() => EditBookCaseScreen());
-                    }
-                  },
+    return PopScope(
+      // canPop: F,
+      onPopInvokedWithResult: (didPop, result) {
+        // Discard(context);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(isreport ? "Report Details" : 'Case Details'),
+          actions: isreport
+              ? []
+              : [
+                  PopupMenuButton(
+                    offset: Offset(-15, 25),
+                    onSelected: (value) {
+                      if (value == "edit") {
+                        Get.lazyPut(
+                          () => EditBookCaseController(
+                            caseDetails:
+                                controller.caseDetails ?? CaseDetails(),
+                          ),
+                        );
+                        Get.to(() => EditBookCaseScreen());
+                      }
+                    },
 
-                  child: Icon(Icons.more_vert),
-                  color: AppColor.whitecolor,
-                  itemBuilder: (context) {
-                    return [
-                      PopupMenuItem(
-                        value: "edit",
-                        height: 30.0,
-                        child: Text("Edit"),
-                      ),
-                    ];
-                  },
-                ),
-                SizedBox(width: 10.0),
-              ],
+                    child: Icon(Icons.more_vert),
+                    color: AppColor.whitecolor,
+                    itemBuilder: (context) {
+                      return [
+                        PopupMenuItem(
+                          value: "edit",
+                          height: 30.0,
+                          child: Text("Edit"),
+                        ),
+                      ];
+                    },
+                  ),
+                  SizedBox(width: 10.0),
+                ],
+        ),
+        body: isreport ? ReportDetails() : CaseDetailsPage(),
       ),
-      body: isreport ? ReportDetails() : CaseDetailsPage(),
     );
   }
 }

@@ -421,6 +421,8 @@ class Test {
   String? groupId;
   String? unit;
   var price;
+  var numberValue;
+  var stringValue;
   String? footNote;
   List<Characteristic>? characteristics;
   DateTime? createdAt;
@@ -440,6 +442,8 @@ class Test {
     this.price,
     this.footNote,
     this.characteristics,
+    this.numberValue,
+    this.stringValue,
     this.createdAt,
     this.updatedAt,
     this.test,
@@ -452,6 +456,14 @@ class Test {
 
   factory Test.fromJson(Map<String, dynamic> json) => Test(
     id: json["_id"],
+    numberValue: json['numberValue'],
+    stringValue: json["stringValue"],
+
+    lowvalue: TextEditingController(
+      text: json['numberValue'] != null && json['numberValue'] != 0
+          ? json['numberValue'].toString()
+          : json["stringValue"],
+    ),
     caseId: json["caseId"],
     testId: json["testId"],
     categoryId: json["categoryId"],
@@ -483,6 +495,9 @@ class Test {
     "categoryId": categoryId,
     "groupId": groupId,
     "unit": unit,
+    "numberValue": numberValue,
+    "stringValue": stringValue,
+
     "price": price,
     "footNote": footNote,
     "characteristics": characteristics == null
@@ -497,13 +512,15 @@ class Test {
 
 class AppliedReferenceRange {
   String? appliesTo;
-  String? stringValue;
+  var stringValue;
+  var numberValue;
   var highValue;
   var lowValue;
 
   AppliedReferenceRange({
     this.appliesTo,
     this.stringValue,
+    this.numberValue,
     this.highValue,
     this.lowValue,
   });
@@ -512,6 +529,7 @@ class AppliedReferenceRange {
       AppliedReferenceRange(
         appliesTo: json["appliesTo"],
         stringValue: json["stringValue"],
+        numberValue: json["numberValue"],
         highValue: json["highValue"],
         lowValue: json["lowValue"],
       );
@@ -519,6 +537,7 @@ class AppliedReferenceRange {
   Map<String, dynamic> toJson() => {
     "appliesTo": appliesTo,
     "stringValue": stringValue,
+    "numberValue": numberValue,
     "highValue": highValue,
     "lowValue": lowValue,
   };
@@ -528,13 +547,11 @@ class AppliedReferenceRange {
 //   String? name;
 //   String? unit;
 //   ReferenceRange? appliedReferenceRange;
-
 //   Characteristic({
 //     this.name,
 //     this.unit,
 //     this.appliedReferenceRange,
 //   });
-
 //   factory Characteristic.fromJson(Map<String, dynamic> json) =>
 //       Characteristic(
 //         name: json["name"],
@@ -543,7 +560,6 @@ class AppliedReferenceRange {
 //             ? null
 //             : ReferenceRange.fromJson(json["appliedReferenceRange"]),
 //       );
-
 //   Map<String, dynamic> toJson() => {
 //     "name": name,
 //     "unit": unit,
@@ -708,11 +724,14 @@ class TestClass {
 }
 
 class Characteristic {
+  String? sId;
   String? name;
   String? unit;
   List<dynamic>? dependecies;
   List<String>? possibleStringValues;
   String? charType;
+  var numberValue;
+  var stringValue;
   List<ReferenceRange>? referenceRange;
   ReferenceRange? appliedReferenceRange;
   TextEditingController highvalue = TextEditingController();
@@ -720,11 +739,15 @@ class Characteristic {
 
   Characteristic({
     this.name,
+    this.sId,
+
     this.unit,
     this.dependecies,
     this.possibleStringValues,
     this.charType,
     this.referenceRange,
+    this.numberValue,
+    this.stringValue,
     this.appliedReferenceRange,
     TextEditingController? highvalue,
     TextEditingController? lowvalue,
@@ -732,6 +755,15 @@ class Characteristic {
        lowvalue = lowvalue ?? TextEditingController();
 
   factory Characteristic.fromJson(Map<String, dynamic> json) => Characteristic(
+    sId: json['_id'],
+    numberValue: json['numberValue'],
+    stringValue: json["stringValue"],
+
+    lowvalue: TextEditingController(
+      text: json['numberValue'] != null && json['numberValue'] != 0
+          ? json['numberValue'].toString()
+          : json["stringValue"],
+    ),
     name: json["name"],
     unit: json["unit"],
     dependecies: json["dependecies"] == null
@@ -753,6 +785,7 @@ class Characteristic {
 
   Map<String, dynamic> toJson() => {
     "name": name,
+    "_id": sId,
     "unit": unit,
     "dependecies": dependecies == null
         ? []
