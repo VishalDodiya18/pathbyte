@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:intl/intl.dart';
+import 'package:labapp/Constants/elevated_button_constant.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/widget_constant.dart';
 import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
@@ -15,87 +17,137 @@ class ReportDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return controller.reporting.isFalse && controller.reportDetailsModel == null
-        ? Center(
-            child: Text(
-              "Report Detail Not Found",
-              style: TextStyle(fontSize: 20.h, fontWeight: FontWeight.bold),
-            ),
-          )
-        : ListView(
-            shrinkWrap: T,
-            physics: AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(15.0),
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                  vertical: 20.0,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: AppColor.bordercolor),
-                ),
-                child: Column(
-                  spacing: 22.0,
-                  children: [
-                    buildReportRow(
-                      title: "Case ID :",
-                      value:
-                          "#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.caseId ?? ""}",
-                    ),
-                    buildReportRow(
-                      title: "Patient Name :",
-                      value: "Sanjay Thakur  (#12345)",
-                    ),
-                    buildReportRow(title: "Age/ Sex :", value: "32/ M"),
-                    buildReportRow(
-                      title: "Referred By :",
-                      value: "Dr. Parul Singhal",
-                    ),
-                    buildReportRow(
-                      title: "Registration Time :",
-                      value: "#PT0025",
-                    ),
-                    buildReportRow(
-                      title: "Collection Time :",
-                      value: "Sanjay Thakur",
-                    ),
-                    buildReportRow(
-                      title: "Reported Time :",
-                      value: "Dr. Parul Singhal",
-                    ),
-                  ],
-                ),
+    return Obx(
+      () => controller.reporting.value
+          ? Center(child: CircularProgressIndicator())
+          : controller.reporting.isFalse &&
+                controller.reportDetailsModel == null
+          ? Center(
+              child: Text(
+                "Report Detail Not Found",
+                style: TextStyle(fontSize: 20.h, fontWeight: FontWeight.bold),
               ),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                            vertical: 20.0,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            border: Border.all(color: AppColor.bordercolor),
+                          ),
+                          child: Column(
+                            spacing: 5.0,
+                            children: [
+                              buildReportRow(
+                                title: "Case ID :",
+                                value:
+                                    "#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.caseId ?? ""}",
+                              ),
+                              buildReportRow(
+                                title: "Patient Name :",
+                                value:
+                                    "${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.firstName ?? ""}  (#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.patientId})",
+                              ),
+                              buildReportRow(
+                                title: "Age/ Sex :",
+                                value:
+                                    "${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.age ?? 0}/ ${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.gender}",
+                              ),
+                              buildReportRow(
+                                title: "Referred By :",
+                                value:
+                                    controller
+                                        .reportDetailsModel
+                                        ?.data
+                                        ?.reportdetail
+                                        ?.caseDetails
+                                        ?.doctor
+                                        ?.firstName ??
+                                    "",
+                              ),
+                              // buildReportRow(
+                              //   title: "Registration Time :",
+                              //   value: DateFormat("dd MMMM ,yyyy").format(
+                              //     controller
+                              //             .reportDetailsModel
+                              //             ?.data
+                              //             ?.reportdetail
+                              //             ?.caseDetails
+                              //             ?.createdAt ??
+                              //         DateTime.now(),
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                        ),
 
-              heightBox(10),
-              ListView.separated(
-                shrinkWrap: T,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount:
-                    (controller
-                                .reportDetailsModel
-                                ?.data
-                                ?.reportdetail
-                                ?.categories ??
-                            [])
-                        .length,
-                separatorBuilder: (context, index) => heightBox(15),
-                itemBuilder: (context, i) {
-                  return ReportTable(
-                    category:
-                        (controller
-                            .reportDetailsModel
-                            ?.data
-                            ?.reportdetail
-                            ?.categories ??
-                        [])[i],
-                  );
-                },
-              ),
-            ],
-          );
+                        heightBox(10),
+                        ListView.separated(
+                          shrinkWrap: T,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              (controller
+                                          .reportDetailsModel
+                                          ?.data
+                                          ?.reportdetail
+                                          ?.categories ??
+                                      [])
+                                  .length,
+                          separatorBuilder: (context, index) => heightBox(15),
+                          itemBuilder: (context, i) {
+                            return ReportTable(
+                              category:
+                                  (controller
+                                      .reportDetailsModel
+                                      ?.data
+                                      ?.reportdetail
+                                      ?.categories ??
+                                  [])[i],
+                            );
+                          },
+                        ),
+                        heightBox(100),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        spacing: 10.0.w,
+                        children: [
+                          Expanded(
+                            child: elevatedButton(
+                              title: "Save as Draft",
+                              onPressed: () {},
+                            ),
+                          ),
+                          Expanded(
+                            child: elevatedButton(
+                              title: "Save As Final",
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+    );
   }
 }
 
@@ -110,7 +162,6 @@ Widget buildReportRow({
       Expanded(
         child: TextConstant(
           title: title,
-          height: 0.1,
           textAlign: TextAlign.start,
           fontSize: fontSize,
           fontWeight: FontWeight.bold,
@@ -119,7 +170,6 @@ Widget buildReportRow({
       Expanded(
         child: TextConstant(
           title: value,
-          height: 0.1,
           textAlign: TextAlign.end,
           fontWeight: FontWeight.w500,
         ),

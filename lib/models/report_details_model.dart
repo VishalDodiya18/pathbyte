@@ -13,7 +13,7 @@ String reportDetailsModelToJson(ReportDetailsModel data) =>
     json.encode(data.toJson());
 
 class ReportDetailsModel {
-  int? code;
+  var code;
   String? message;
   Data? data;
 
@@ -73,20 +73,20 @@ class Reportdetail {
 }
 
 class CaseDetails {
-  CaseIdEnum? id;
+  String? id;
   String? caseId;
   String? patientId;
   String? status;
   String? referringDoctor;
   String? center;
-  int? totalAmount;
+  var totalAmount;
   String? discountType;
-  int? discountValue;
-  int? finalAmount;
+  var discountValue;
+  var finalAmount;
   String? amountStatus;
   DateTime? createdAt;
   DateTime? updatedAt;
-  int? v;
+  var v;
   Patient? patient;
   Doctor? doctor;
 
@@ -110,7 +110,7 @@ class CaseDetails {
   });
 
   factory CaseDetails.fromJson(Map<String, dynamic> json) => CaseDetails(
-    id: caseIdEnumValues.map[json["_id"]]!,
+    id: json["_id"],
     caseId: json["caseId"],
     patientId: json["patientId"],
     status: json["status"],
@@ -133,7 +133,7 @@ class CaseDetails {
   );
 
   Map<String, dynamic> toJson() => {
-    "_id": caseIdEnumValues.reverse[id],
+    "_id": id,
     "caseId": caseId,
     "patientId": patientId,
     "status": status,
@@ -158,7 +158,7 @@ class Doctor {
   String? firstName;
   String? lastName;
   String? description;
-  int? age;
+  var age;
   String? gender;
   String? notificationStatus;
   String? hospitalName;
@@ -168,7 +168,7 @@ class Doctor {
   bool? deleted;
   DateTime? createdAt;
   DateTime? updatedAt;
-  int? v;
+  var v;
 
   Doctor({
     this.id,
@@ -272,27 +272,21 @@ class Address {
   };
 }
 
-enum CaseIdEnum { THE_68_BBECA7_DC371_F762_CD407_AC }
-
-final caseIdEnumValues = EnumValues({
-  "68bbeca7dc371f762cd407ac": CaseIdEnum.THE_68_BBECA7_DC371_F762_CD407_AC,
-});
-
 class Patient {
   String? id;
   String? patientId;
   String? firstName;
   String? lastName;
-  int? age;
-  int? days;
-  int? months;
+  var age;
+  var days;
+  var months;
   String? gender;
   List<String>? phoneNumbers;
   String? email;
   Address? address;
   DateTime? createdAt;
   DateTime? updatedAt;
-  int? v;
+  var v;
   DateTime? dob;
   String? title;
 
@@ -363,7 +357,7 @@ class Patient {
 }
 
 class Category {
-  CategoryIdEnum? id;
+  String? id;
   String? name;
   List<GroupedTest>? groupedTests;
   List<Test>? ungroupedTests;
@@ -371,7 +365,7 @@ class Category {
   Category({this.id, this.name, this.groupedTests, this.ungroupedTests});
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
-    id: categoryIdEnumValues.map[json["_id"]]!,
+    id: json["_id"],
     name: json["name"],
     groupedTests: json["groupedTests"] == null
         ? []
@@ -384,7 +378,7 @@ class Category {
   );
 
   Map<String, dynamic> toJson() => {
-    "_id": categoryIdEnumValues.reverse[id],
+    "_id": id,
     "name": name,
     "groupedTests": groupedTests == null
         ? []
@@ -421,19 +415,20 @@ class GroupedTest {
 
 class Test {
   String? id;
-  CaseIdEnum? caseId;
+  String? caseId;
   String? testId;
-  CategoryIdEnum? categoryId;
+  String? categoryId;
   String? groupId;
   String? unit;
-  int? price;
+  var price;
   String? footNote;
   List<Characteristic>? characteristics;
   DateTime? createdAt;
   DateTime? updatedAt;
   TestClass? test;
-  UngroupedTestAppliedReferenceRange? appliedReferenceRange;
-  TextEditingController value;
+  AppliedReferenceRange? appliedReferenceRange;
+  TextEditingController highvalue = TextEditingController();
+  TextEditingController lowvalue = TextEditingController();
 
   Test({
     this.id,
@@ -448,15 +443,18 @@ class Test {
     this.createdAt,
     this.updatedAt,
     this.test,
+
     this.appliedReferenceRange,
-    TextEditingController? value,
-  }) : value = value ?? TextEditingController();
+    TextEditingController? highvalue,
+    TextEditingController? lowvalue,
+  }) : highvalue = highvalue ?? TextEditingController(),
+       lowvalue = lowvalue ?? TextEditingController();
 
   factory Test.fromJson(Map<String, dynamic> json) => Test(
     id: json["_id"],
-    caseId: caseIdEnumValues.map[json["caseId"]]!,
+    caseId: json["caseId"],
     testId: json["testId"],
-    categoryId: categoryIdEnumValues.map[json["categoryId"]]!,
+    categoryId: json["categoryId"],
     groupId: json["groupId"],
     unit: json["unit"],
     price: json["price"],
@@ -475,16 +473,14 @@ class Test {
     test: json["test"] == null ? null : TestClass.fromJson(json["test"]),
     appliedReferenceRange: json["appliedReferenceRange"] == null
         ? null
-        : UngroupedTestAppliedReferenceRange.fromJson(
-            json["appliedReferenceRange"],
-          ),
+        : AppliedReferenceRange.fromJson(json["appliedReferenceRange"]),
   );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
-    "caseId": caseIdEnumValues.reverse[caseId],
+    "caseId": caseId,
     "testId": testId,
-    "categoryId": categoryIdEnumValues.reverse[categoryId],
+    "categoryId": categoryId,
     "groupId": groupId,
     "unit": unit,
     "price": price,
@@ -499,130 +495,275 @@ class Test {
   };
 }
 
-class UngroupedTestAppliedReferenceRange {
+class AppliedReferenceRange {
   String? appliesTo;
   String? stringValue;
   String? highValue;
   String? lowValue;
 
-  UngroupedTestAppliedReferenceRange({
+  AppliedReferenceRange({
     this.appliesTo,
     this.stringValue,
     this.highValue,
     this.lowValue,
   });
 
-  factory UngroupedTestAppliedReferenceRange.fromJson(
-    Map<String, dynamic> json,
-  ) => UngroupedTestAppliedReferenceRange(
-    appliesTo: json["appliesTo"],
-    stringValue: json["stringValue"],
-    highValue: json["highValue"],
-    lowValue: json["lowValue"],
-  );
+  factory AppliedReferenceRange.fromJson(Map<String, dynamic> json) =>
+      AppliedReferenceRange(
+        appliesTo: json["appliesTo"],
+        stringValue: json["stringValue"],
+        highValue: json["highValue"],
+        lowValue: json["lowValue"],
+      );
 
   Map<String, dynamic> toJson() => {
     "appliesTo": appliesTo,
     "stringValue": stringValue,
+    "highValue": highValue,
+    "lowValue": lowValue,
   };
 }
 
-enum CategoryIdEnum {
-  THE_68_AC916_E84_AB3_B3456_BA253_F,
-  THE_68_B7_F0_C2_BB000_F96_DDD96920,
-  THE_68_BAE58_E27_D97_A3_AB2_CAE689,
-  THE_68_BAE6_CE27_D97_A3_AB2_CAE6_B3,
-}
+// class Characteristic {
+//   String? name;
+//   String? unit;
+//   ReferenceRange? appliedReferenceRange;
 
-final categoryIdEnumValues = EnumValues({
-  "68ac916e84ab3b3456ba253f": CategoryIdEnum.THE_68_AC916_E84_AB3_B3456_BA253_F,
-  "68b7f0c2bb000f96ddd96920": CategoryIdEnum.THE_68_B7_F0_C2_BB000_F96_DDD96920,
-  "68bae58e27d97a3ab2cae689": CategoryIdEnum.THE_68_BAE58_E27_D97_A3_AB2_CAE689,
-  "68bae6ce27d97a3ab2cae6b3":
-      CategoryIdEnum.THE_68_BAE6_CE27_D97_A3_AB2_CAE6_B3,
-});
+//   Characteristic({
+//     this.name,
+//     this.unit,
+//     this.appliedReferenceRange,
+//   });
 
-class Characteristic {
-  String? name;
-  String? unit;
-  CharacteristicAppliedReferenceRange? appliedReferenceRange;
+//   factory Characteristic.fromJson(Map<String, dynamic> json) =>
+//       Characteristic(
+//         name: json["name"],
+//         unit: json["unit"],
+//         appliedReferenceRange: json["appliedReferenceRange"] == null
+//             ? null
+//             : ReferenceRange.fromJson(json["appliedReferenceRange"]),
+//       );
 
-  Characteristic({this.name, this.unit, this.appliedReferenceRange});
+//   Map<String, dynamic> toJson() => {
+//     "name": name,
+//     "unit": unit,
+//     "appliedReferenceRange": appliedReferenceRange?.toJson(),
+//   };
+// }
 
-  factory Characteristic.fromJson(Map<String, dynamic> json) => Characteristic(
-    name: json["name"],
-    unit: json["unit"],
-    appliedReferenceRange: json["appliedReferenceRange"] == null
-        ? null
-        : CharacteristicAppliedReferenceRange.fromJson(
-            json["appliedReferenceRange"],
-          ),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "unit": unit,
-    "appliedReferenceRange": appliedReferenceRange?.toJson(),
-  };
-}
-
-class CharacteristicAppliedReferenceRange {
+class ReferenceRange {
   String? appliesTo;
-  double? lowValue;
-  double? highValue;
+  var lowValue;
+  var highValue;
+  String? stringValue;
 
-  CharacteristicAppliedReferenceRange({
+  ReferenceRange({
     this.appliesTo,
     this.lowValue,
     this.highValue,
+    this.stringValue,
   });
 
-  factory CharacteristicAppliedReferenceRange.fromJson(
-    Map<String, dynamic> json,
-  ) => CharacteristicAppliedReferenceRange(
+  factory ReferenceRange.fromJson(Map<String, dynamic> json) => ReferenceRange(
     appliesTo: json["appliesTo"],
     lowValue: json["lowValue"]?.toDouble(),
     highValue: json["highValue"]?.toDouble(),
+    stringValue: json["stringValue"],
   );
 
   Map<String, dynamic> toJson() => {
     "appliesTo": appliesTo,
     "lowValue": lowValue,
     "highValue": highValue,
+    "stringValue": stringValue,
   };
 }
 
 class TestClass {
   String? id;
+  String? testId;
+  String? testCode;
   String? name;
-  int? price;
   String? footNote;
+  var price;
+  String? categoryId;
+  List? groupIds;
+  List<dynamic>? packageIds;
+  String? testType;
+  var reportingDays;
+  String? unit;
+  var numberValue;
+  List<ReferenceRange>? referenceRange;
+  List<dynamic>? possibleStringValues;
+  List<dynamic>? dependecies;
+  bool? deleted;
+  dynamic deletedAt;
+  List<Characteristic>? characteristics;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  var v;
 
-  TestClass({this.id, this.name, this.price, this.footNote});
+  TestClass({
+    this.id,
+    this.testId,
+    this.testCode,
+    this.name,
+    this.footNote,
+    this.price,
+    this.categoryId,
+    this.groupIds,
+    this.packageIds,
+    this.testType,
+    this.reportingDays,
+    this.unit,
+    this.numberValue,
+    this.referenceRange,
+    this.possibleStringValues,
+    this.dependecies,
+    this.deleted,
+    this.deletedAt,
+    this.characteristics,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+  });
 
   factory TestClass.fromJson(Map<String, dynamic> json) => TestClass(
     id: json["_id"],
+    testId: json["testId"],
+    testCode: json["testCode"],
     name: json["name"],
-    price: json["price"],
     footNote: json["footNote"],
+    price: json["price"],
+    categoryId: json["categoryId"],
+    groupIds: json["groupIds"] ?? [],
+    packageIds: json["packageIds"] == null
+        ? []
+        : List<dynamic>.from(json["packageIds"]!.map((x) => x)),
+    testType: json["testType"],
+    reportingDays: json["reportingDays"],
+    unit: json["unit"],
+    numberValue: json["numberValue"],
+    referenceRange: json["referenceRange"] == null
+        ? []
+        : List<ReferenceRange>.from(
+            json["referenceRange"]!.map((x) => ReferenceRange.fromJson(x)),
+          ),
+    possibleStringValues: json["possibleStringValues"] == null
+        ? []
+        : List<dynamic>.from(json["possibleStringValues"]!.map((x) => x)),
+    dependecies: json["dependecies"] == null
+        ? []
+        : List<dynamic>.from(json["dependecies"]!.map((x) => x)),
+    deleted: json["deleted"],
+    deletedAt: json["deletedAt"],
+    characteristics: json["characteristics"] == null
+        ? []
+        : List<Characteristic>.from(
+            json["characteristics"]!.map((x) => Characteristic.fromJson(x)),
+          ),
+    createdAt: json["createdAt"] == null
+        ? null
+        : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null
+        ? null
+        : DateTime.parse(json["updatedAt"]),
+    v: json["__v"],
   );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
+    "testId": testId,
+    "testCode": testCode,
     "name": name,
-    "price": price,
     "footNote": footNote,
+    "price": price,
+    "categoryId": categoryId,
+    "groupIds": groupIds ?? [],
+    "packageIds": packageIds == null
+        ? []
+        : List<dynamic>.from(packageIds!.map((x) => x)),
+    "testType": testType,
+    "reportingDays": reportingDays,
+    "unit": unit,
+    "numberValue": numberValue,
+    "referenceRange": referenceRange == null
+        ? []
+        : List<dynamic>.from(referenceRange!.map((x) => x.toJson())),
+    "possibleStringValues": possibleStringValues == null
+        ? []
+        : List<dynamic>.from(possibleStringValues!.map((x) => x)),
+    "dependecies": dependecies == null
+        ? []
+        : List<dynamic>.from(dependecies!.map((x) => x)),
+    "deleted": deleted,
+    "deletedAt": deletedAt,
+    "characteristics": characteristics == null
+        ? []
+        : List<dynamic>.from(characteristics!.map((x) => x.toJson())),
+    "createdAt": createdAt?.toIso8601String(),
+    "updatedAt": updatedAt?.toIso8601String(),
+    "__v": v,
   };
 }
 
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
+class Characteristic {
+  String? name;
+  String? unit;
+  List<dynamic>? dependecies;
+  List<String>? possibleStringValues;
+  String? charType;
+  List<ReferenceRange>? referenceRange;
+  ReferenceRange? appliedReferenceRange;
+  TextEditingController highvalue = TextEditingController();
+  TextEditingController lowvalue = TextEditingController();
 
-  EnumValues(this.map);
+  Characteristic({
+    this.name,
+    this.unit,
+    this.dependecies,
+    this.possibleStringValues,
+    this.charType,
+    this.referenceRange,
+    this.appliedReferenceRange,
+    TextEditingController? highvalue,
+    TextEditingController? lowvalue,
+  }) : highvalue = highvalue ?? TextEditingController(),
+       lowvalue = lowvalue ?? TextEditingController();
 
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
+  factory Characteristic.fromJson(Map<String, dynamic> json) => Characteristic(
+    name: json["name"],
+    unit: json["unit"],
+    dependecies: json["dependecies"] == null
+        ? []
+        : List<dynamic>.from(json["dependecies"]!.map((x) => x)),
+    possibleStringValues: json["possibleStringValues"] == null
+        ? []
+        : List<String>.from(json["possibleStringValues"]!.map((x) => x)),
+    appliedReferenceRange: json["appliedReferenceRange"] == null
+        ? null
+        : ReferenceRange.fromJson(json["appliedReferenceRange"]),
+    charType: json["charType"],
+    referenceRange: json["referenceRange"] == null
+        ? []
+        : List<ReferenceRange>.from(
+            json["referenceRange"]!.map((x) => ReferenceRange.fromJson(x)),
+          ),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "unit": unit,
+    "dependecies": dependecies == null
+        ? []
+        : List<dynamic>.from(dependecies!.map((x) => x)),
+    "possibleStringValues": possibleStringValues == null
+        ? []
+        : List<dynamic>.from(possibleStringValues!.map((x) => x)),
+    "charType": charType,
+    "appliedReferenceRange": appliedReferenceRange?.toJson(),
+    "referenceRange": referenceRange == null
+        ? []
+        : List<dynamic>.from(referenceRange!.map((x) => x.toJson())),
+  };
 }

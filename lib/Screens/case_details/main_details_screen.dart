@@ -53,13 +53,7 @@ class MainDetailsScreen extends StatelessWidget {
                 SizedBox(width: 10.0),
               ],
       ),
-      body: Obx(() {
-        return controller.isLoading.value
-            ? Center(child: CircularProgressIndicator())
-            : isreport
-            ? ReportDetails()
-            : CaseDetailsPage();
-      }),
+      body: isreport ? ReportDetails() : CaseDetailsPage(),
     );
   }
 }

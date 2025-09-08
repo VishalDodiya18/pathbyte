@@ -80,7 +80,7 @@ class CaseDetailsContoller extends GetxController {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final caseResponse = report.ReportDetailsModel.fromJson(jsonData);
-
+        log(jsonData.toString());
         reportDetailsModel = caseResponse;
 
         update();
@@ -89,7 +89,8 @@ class CaseDetailsContoller extends GetxController {
         //   "Error", "Failed with status: ${response.statusCode}");
       }
     } catch (e) {
-      // Get.snackbar("Exception", e.toString());
+      log(e.toString());
+      Get.snackbar("Exception", e.toString());
     } finally {
       reporting(false);
       update();

@@ -1,54 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/state_manager.dart';
+import 'package:labapp/Constants/custom_dropDown.dart';
 import 'package:labapp/Constants/textfield_constant.dart';
+import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
+import 'package:labapp/Screens/report_details/controller_report_details_screen.dart';
 import 'package:labapp/models/report_details_model.dart';
 import 'package:labapp/utils/app_color.dart';
 
 class ReportTable extends StatelessWidget {
   Category category;
   ReportTable({required this.category});
-  final List<Map<String, dynamic>> reports = [
-    {
-      "sno": "1.",
-      "test": "Haemoglobin",
-      "flag": "L",
-      "value": "12",
-      "unit": "g/dL",
-      "ref": "13-17",
-    },
-    {
-      "sno": "2.",
-      "test": "Haemoglobin",
-      "flag": "",
-      "value": "15",
-      "unit": "g/dL",
-      "ref": "13-17",
-    },
-    {
-      "sno": "3.",
-      "test": "Haemoglobin",
-      "flag": "H",
-      "value": "18",
-      "unit": "g/dL",
-      "ref": "13-17",
-    },
-    {
-      "sno": "4.",
-      "test": "Haemoglobin",
-      "flag": "",
-      "value": "15",
-      "unit": "g/dL",
-      "ref": "13-17",
-    },
-    {
-      "sno": "5.",
-      "test": "Haemoglobin",
-      "flag": "L",
-      "value": "12",
-      "unit": "g/dL",
-      "ref": "13-17",
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +20,7 @@ class ReportTable extends StatelessWidget {
         Text(
           category.name ?? "",
           style: TextStyle(
-            color: Color(0xff0A1B39),
+            color: const Color(0xff0A1B39),
 
             fontSize: 16.h,
             fontWeight: FontWeight.w500,
@@ -131,76 +93,335 @@ class ReportTable extends StatelessWidget {
             ],
 
             rows: [
-              for (int i = 0; i < (category.ungroupedTests ?? []).length; i++)
+              for (
+                int i = 0;
+                i < (category.ungroupedTests ?? []).length;
+                i++
+              ) ...[
                 DataRow(
                   cells: [
                     DataCell(Text("${i + 1}", textAlign: TextAlign.center)),
-                    DataCell(
+                    const DataCell(
                       Center(child: Text(" - ", textAlign: TextAlign.center)),
                     ),
                     DataCell(
                       Text(category.ungroupedTests?[i].test?.name ?? ""),
                     ),
                     DataCell(
-                      Row(
-                        children: [
-                          // if (row["flag"].toString().isNotEmpty)
-                          // SizedBox(
-                          //   width: 20.0,
-                          //   child: Text(
-                          //     row["flag"],
-                          //     style: const TextStyle(
-                          //       color: Colors.red,
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ),
-                          const SizedBox(width: 6),
-                          Flexible(
-                            child: TextFieldConstant(
-                              contentPadding: EdgeInsets.all(10.0),
-                              fillColor: Color(0xffEEEEEE),
-                              controller: category.ungroupedTests![i].value,
-                              hintText: "",
+                      (category.ungroupedTests?[i].test?.characteristics ?? [])
+                              .isNotEmpty
+                          ? const SizedBox()
+                          : (category.ungroupedTests?[i].test?.testType ?? "")
+                                    .toLowerCase() ==
+                                "numeric"
+                          ? Row(
+                              children: [
+                                // if (row["flag"].toString().isNotEmpty)
+                                // SizedBox(
+                                //   width: 20.0,
+                                //   child: Text(
+                                //     row["flag"],
+                                //     style: const TextStyle(
+                                //       color: Colors.red,
+                                //       fontWeight: FontWeight.bold,
+                                //     ),
+                                //   ),
+                                // ),
+                                const SizedBox(width: 6),
+                                Flexible(
+                                  child: Container(
+                                    constraints: BoxConstraints(minWidth: 80.w),
+                                    child: TextFieldConstant(
+                                      contentPadding: const EdgeInsets.all(
+                                        10.0,
+                                      ),
+                                      fillColor: const Color(0xffEEEEEE),
+                                      controller:
+                                          category.ungroupedTests![i].lowvalue,
+                                      hintText: "",
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Flexible(
+                                  child: Container(
+                                    constraints: BoxConstraints(minWidth: 80.w),
+                                    child: TextFieldConstant(
+                                      contentPadding: const EdgeInsets.all(
+                                        10.0,
+                                      ),
+                                      fillColor: const Color(0xffEEEEEE),
+                                      controller:
+                                          category.ungroupedTests![i].highvalue,
+                                      hintText: "",
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : GetBuilder<CaseDetailsContoller>(
+                              builder: (controller) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 5.0,
+                                    horizontal: 5.0,
+                                  ),
+                                  child: CustomDropdown<dynamic>(
+                                    backgroundColor: const Color(0xffEEEEEE),
+                                    items:
+                                        (category
+                                            .ungroupedTests?[i]
+                                            .test
+                                            ?.possibleStringValues ??
+                                        []),
+                                    constraints: const BoxConstraints(
+                                      minHeight: 40.0,
+                                    ),
+                                    selectedValue:
+                                        category
+                                            .ungroupedTests![i]
+                                            .lowvalue
+                                            .text
+                                            .isEmpty
+                                        ? null
+                                        : category
+                                              .ungroupedTests![i]
+                                              .lowvalue
+                                              .text,
+                                    itemLabel: (item) => item,
+                                    hintText: "Please Select",
+                                    prefixIcon: Icons.folder,
+                                    onChanged: (value) {
+                                      category
+                                              .ungroupedTests![i]
+                                              .lowvalue
+                                              .text =
+                                          value;
+                                      controller.update();
+                                    },
+                                  ),
+                                );
+                              },
                             ),
-                          ),
-                        ],
-                      ),
                     ),
-                    DataCell(Text(category.ungroupedTests?[i].unit ?? "")),
                     DataCell(
-                      Text(
-                        "${category.ungroupedTests?[i].appliedReferenceRange?.lowValue ?? ""} - ${category.ungroupedTests?[i].appliedReferenceRange?.highValue ?? ""} ",
-                      ),
+                      (category.ungroupedTests?[i].test?.characteristics ?? [])
+                              .isNotEmpty
+                          ? const SizedBox()
+                          : Text(category.ungroupedTests?[i].unit ?? ""),
+                    ),
+                    DataCell(
+                      (category.ungroupedTests?[i].test?.characteristics ?? [])
+                              .isNotEmpty
+                          ? const SizedBox()
+                          : Center(
+                              child: Text(
+                                "${category.ungroupedTests?[i].appliedReferenceRange?.lowValue ?? ""} - ${category.ungroupedTests?[i].appliedReferenceRange?.highValue ?? ""} ",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                     ),
                   ],
                 ),
-
-              for (int i = 0; i < (category.groupedTests ?? []).length; i++)
                 for (
                   int j = 0;
-                  j < (category.groupedTests?[i].caseTests ?? []).length;
+                  j <
+                      (category.ungroupedTests?[i].test?.characteristics ?? [])
+                          .length;
                   j++
                 )
                   DataRow(
                     cells: [
+                      const DataCell(SizedBox()),
+                      const DataCell(SizedBox()),
                       DataCell(
                         Text(
-                          j == 0
-                              ? "${(category.ungroupedTests ?? []).length + i + 1}"
-                              : "",
-                          textAlign: TextAlign.center,
+                          category
+                                  .ungroupedTests?[i]
+                                  .test
+                                  ?.characteristics?[j]
+                                  .name ??
+                              "",
+                        ),
+                      ),
+                      DataCell(
+                        (category
+                                            .ungroupedTests?[i]
+                                            .test
+                                            ?.characteristics?[j]
+                                            .charType ??
+                                        "")
+                                    .toLowerCase() ==
+                                "numeric"
+                            ? Row(
+                                children: [
+                                  // if (row["flag"].toString().isNotEmpty)
+                                  // SizedBox(
+                                  //   width: 20.0,
+                                  //   child: Text(
+                                  //     row["flag"],
+                                  //     style: const TextStyle(
+                                  //       color: Colors.red,
+                                  //       fontWeight: FontWeight.bold,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  const SizedBox(width: 6),
+                                  Flexible(
+                                    child: Container(
+                                      constraints: BoxConstraints(
+                                        minWidth: 80.w,
+                                      ),
+                                      child: TextFieldConstant(
+                                        contentPadding: const EdgeInsets.all(
+                                          10.0,
+                                        ),
+                                        fillColor: const Color(0xffEEEEEE),
+                                        controller: category
+                                            .ungroupedTests![i]
+                                            .test!
+                                            .characteristics![j]
+                                            .lowvalue,
+                                        hintText: "",
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Flexible(
+                                    child: Container(
+                                      constraints: BoxConstraints(
+                                        minWidth: 80.w,
+                                      ),
+                                      child: TextFieldConstant(
+                                        contentPadding: const EdgeInsets.all(
+                                          10.0,
+                                        ),
+                                        fillColor: const Color(0xffEEEEEE),
+                                        controller: category
+                                            .ungroupedTests![i]
+                                            .test!
+                                            .characteristics![j]
+                                            .highvalue,
+                                        hintText: "",
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : GetBuilder<CaseDetailsContoller>(
+                                builder: (controller) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 5.0,
+                                      horizontal: 5.0,
+                                    ),
+                                    child: CustomDropdown<dynamic>(
+                                      backgroundColor: const Color(0xffEEEEEE),
+                                      items:
+                                          (category
+                                              .ungroupedTests?[i]
+                                              .test
+                                              ?.characteristics?[j]
+                                              .possibleStringValues ??
+                                          []),
+                                      constraints: const BoxConstraints(
+                                        minHeight: 40.0,
+                                      ),
+                                      selectedValue:
+                                          category
+                                              .ungroupedTests![i]
+                                              .test!
+                                              .characteristics![j]
+                                              .lowvalue
+                                              .text
+                                              .isEmpty
+                                          ? null
+                                          : category
+                                                .ungroupedTests![i]
+                                                .test!
+                                                .characteristics![j]
+                                                .lowvalue
+                                                .text,
+                                      itemLabel: (item) => item,
+                                      hintText: "Please Select",
+                                      prefixIcon: Icons.folder,
+                                      onChanged: (value) {
+                                        category
+                                                .ungroupedTests![i]
+                                                .test!
+                                                .characteristics![j]
+                                                .lowvalue
+                                                .text =
+                                            value;
+                                        controller.update();
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                      ),
+                      DataCell(
+                        Text(
+                          category
+                                  .ungroupedTests?[i]
+                                  .test
+                                  ?.characteristics?[j]
+                                  .unit ??
+                              "",
                         ),
                       ),
                       DataCell(
                         Center(
                           child: Text(
-                            j == 0
-                                ? (category.groupedTests?[i].name ?? "")
-                                : " - ",
+                            "${category.ungroupedTests?[i].test?.characteristics?[j].appliedReferenceRange?.lowValue ?? ""} - ${category.ungroupedTests?[i].test?.characteristics?[j].appliedReferenceRange?.highValue ?? ""} ",
                             textAlign: TextAlign.center,
                           ),
                         ),
+                      ),
+                    ],
+                  ),
+              ],
+              for (int i = 0; i < (category.groupedTests ?? []).length; i++)
+                for (
+                  int j = 0;
+                  j < (category.groupedTests?[i].caseTests ?? []).length;
+                  j++
+                ) ...[
+                  DataRow(
+                    cells: [
+                      DataCell(
+                        (category
+                                        .groupedTests?[i]
+                                        .caseTests?[j]
+                                        .test
+                                        ?.characteristics ??
+                                    [])
+                                .isNotEmpty
+                            ? const SizedBox()
+                            : Text(
+                                j == 0
+                                    ? "${(category.ungroupedTests ?? []).length + i + 1}"
+                                    : "",
+                                textAlign: TextAlign.center,
+                              ),
+                      ),
+                      DataCell(
+                        (category
+                                        .groupedTests?[i]
+                                        .caseTests?[j]
+                                        .test
+                                        ?.characteristics ??
+                                    [])
+                                .isNotEmpty
+                            ? const SizedBox()
+                            : Center(
+                                child: Text(
+                                  j == 0
+                                      ? (category.groupedTests?[i].name ?? "")
+                                      : " - ",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                       ),
                       DataCell(
                         Text(
@@ -209,46 +430,332 @@ class ReportTable extends StatelessWidget {
                         ),
                       ),
                       DataCell(
-                        Row(
-                          children: [
-                            // if (row["flag"].toString().isNotEmpty)
-                            // SizedBox(
-                            //   width: 20.0,
-                            //   child: Text(
-                            //     row["flag"],
-                            //     style: const TextStyle(
-                            //       color: Colors.red,
-                            //       fontWeight: FontWeight.bold,
-                            //     ),
-                            //   ),
-                            // ),
-                            const SizedBox(width: 6),
-                            Flexible(
-                              child: TextFieldConstant(
-                                contentPadding: EdgeInsets.all(10.0),
-                                fillColor: Color(0xffEEEEEE),
-                                controller: category
-                                    .groupedTests![i]
-                                    .caseTests![j]
-                                    .value,
-                                hintText: "",
+                        (category
+                                        .groupedTests?[i]
+                                        .caseTests?[j]
+                                        .test
+                                        ?.characteristics ??
+                                    [])
+                                .isNotEmpty
+                            ? const SizedBox()
+                            : (category
+                                              .groupedTests?[i]
+                                              .caseTests?[j]
+                                              .test
+                                              ?.testType ??
+                                          "")
+                                      .toLowerCase() ==
+                                  "numeric"
+                            ? Row(
+                                children: [
+                                  // if (row["flag"].toString().isNotEmpty)
+                                  // SizedBox(
+                                  //   width: 20.0,
+                                  //   child: Text(
+                                  //     row["flag"],
+                                  //     style: const TextStyle(
+                                  //       color: Colors.red,
+                                  //       fontWeight: FontWeight.bold,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  const SizedBox(width: 6),
+                                  Flexible(
+                                    child: Container(
+                                      constraints: BoxConstraints(
+                                        minWidth: 80.w,
+                                      ),
+                                      child: TextFieldConstant(
+                                        contentPadding: const EdgeInsets.all(
+                                          10.0,
+                                        ),
+                                        fillColor: const Color(0xffEEEEEE),
+                                        controller: category
+                                            .groupedTests![i]
+                                            .caseTests![j]
+                                            .lowvalue,
+                                        hintText: "",
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Flexible(
+                                    child: Container(
+                                      constraints: BoxConstraints(
+                                        minWidth: 80.w,
+                                      ),
+                                      child: TextFieldConstant(
+                                        contentPadding: const EdgeInsets.all(
+                                          10.0,
+                                        ),
+                                        fillColor: const Color(0xffEEEEEE),
+                                        controller: category
+                                            .groupedTests![i]
+                                            .caseTests![j]
+                                            .highvalue,
+                                        hintText: "",
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : GetBuilder<CaseDetailsContoller>(
+                                builder: (controller) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 5.0,
+                                      horizontal: 5.0,
+                                    ),
+                                    child: CustomDropdown<dynamic>(
+                                      backgroundColor: const Color(0xffEEEEEE),
+                                      items:
+                                          (category
+                                              .groupedTests![i]
+                                              .caseTests![j]
+                                              .test
+                                              ?.possibleStringValues ??
+                                          []),
+                                      constraints: const BoxConstraints(
+                                        minHeight: 40.0,
+                                      ),
+                                      selectedValue:
+                                          category
+                                              .groupedTests![i]
+                                              .caseTests![j]
+                                              .lowvalue
+                                              .text
+                                              .isEmpty
+                                          ? null
+                                          : category
+                                                .groupedTests![i]
+                                                .caseTests![j]
+                                                .lowvalue
+                                                .text,
+                                      itemLabel: (item) => item,
+                                      hintText: "Please Select",
+                                      prefixIcon: Icons.folder,
+                                      onChanged: (value) {
+                                        category
+                                                .groupedTests![i]
+                                                .caseTests![j]
+                                                .lowvalue
+                                                .text =
+                                            value;
+                                        controller.update();
+                                      },
+                                    ),
+                                  );
+                                },
                               ),
-                            ),
-                          ],
-                        ),
                       ),
                       DataCell(
-                        Text(
-                          category.groupedTests![i].caseTests![j].unit ?? "",
-                        ),
+                        (category
+                                        .groupedTests?[i]
+                                        .caseTests?[j]
+                                        .test
+                                        ?.characteristics ??
+                                    [])
+                                .isNotEmpty
+                            ? const SizedBox()
+                            : Text(
+                                category.groupedTests![i].caseTests![j].unit ??
+                                    "",
+                              ),
                       ),
                       DataCell(
-                        Text(
-                          "${category.groupedTests![i].caseTests![j].appliedReferenceRange?.lowValue ?? ""} - ${category.groupedTests![i].caseTests![j].appliedReferenceRange?.highValue ?? ""} ",
-                        ),
+                        (category
+                                        .groupedTests?[i]
+                                        .caseTests?[j]
+                                        .test
+                                        ?.characteristics ??
+                                    [])
+                                .isNotEmpty
+                            ? const SizedBox()
+                            : Center(
+                                child: Text(
+                                  "${category.groupedTests![i].caseTests![j].appliedReferenceRange?.lowValue ?? ""} - ${category.groupedTests![i].caseTests![j].appliedReferenceRange?.highValue ?? ""} ",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                       ),
                     ],
                   ),
+
+                  for (
+                    int k = 0;
+                    k <
+                        (category
+                                    .groupedTests?[i]
+                                    .caseTests?[j]
+                                    .test
+                                    ?.characteristics ??
+                                [])
+                            .length;
+                    k++
+                  )
+                    DataRow(
+                      cells: [
+                        const DataCell(SizedBox()),
+                        const DataCell(SizedBox()),
+                        DataCell(
+                          Text(
+                            category
+                                    .groupedTests?[i]
+                                    .caseTests?[j]
+                                    .test
+                                    ?.characteristics?[k]
+                                    .name ??
+                                "",
+                          ),
+                        ),
+                        DataCell(
+                          (category
+                                              .groupedTests?[i]
+                                              .caseTests?[j]
+                                              .test
+                                              ?.characteristics?[k]
+                                              .charType ??
+                                          "")
+                                      .toLowerCase() ==
+                                  "numeric"
+                              ? Row(
+                                  children: [
+                                    // if (row["flag"].toString().isNotEmpty)
+                                    // SizedBox(
+                                    //   width: 20.0,
+                                    //   child: Text(
+                                    //     row["flag"],
+                                    //     style: const TextStyle(
+                                    //       color: Colors.red,
+                                    //       fontWeight: FontWeight.bold,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    const SizedBox(width: 6),
+                                    Flexible(
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                          minWidth: 80.w,
+                                        ),
+                                        child: TextFieldConstant(
+                                          contentPadding: const EdgeInsets.all(
+                                            10.0,
+                                          ),
+                                          fillColor: const Color(0xffEEEEEE),
+                                          controller: category
+                                              .groupedTests![i]
+                                              .caseTests![j]
+                                              .test!
+                                              .characteristics![k]
+                                              .lowvalue,
+                                          hintText: "",
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Flexible(
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                          minWidth: 80.w,
+                                        ),
+                                        child: TextFieldConstant(
+                                          contentPadding: const EdgeInsets.all(
+                                            10.0,
+                                          ),
+                                          fillColor: const Color(0xffEEEEEE),
+                                          controller: category
+                                              .groupedTests![i]
+                                              .caseTests![j]
+                                              .test!
+                                              .characteristics![k]
+                                              .highvalue,
+                                          hintText: "",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : GetBuilder<CaseDetailsContoller>(
+                                  builder: (controller) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 5.0,
+                                        horizontal: 5.0,
+                                      ),
+                                      child: CustomDropdown<dynamic>(
+                                        backgroundColor: const Color(
+                                          0xffEEEEEE,
+                                        ),
+                                        items:
+                                            (category
+                                                .groupedTests![i]
+                                                .caseTests![j]
+                                                .test!
+                                                .characteristics![k]
+                                                .possibleStringValues ??
+                                            []),
+                                        constraints: const BoxConstraints(
+                                          minHeight: 40.0,
+                                        ),
+                                        selectedValue:
+                                            category
+                                                .groupedTests![i]
+                                                .caseTests![j]
+                                                .test!
+                                                .characteristics![k]
+                                                .lowvalue
+                                                .text
+                                                .isEmpty
+                                            ? null
+                                            : category
+                                                  .groupedTests![i]
+                                                  .caseTests![j]
+                                                  .test!
+                                                  .characteristics![k]
+                                                  .lowvalue
+                                                  .text,
+                                        itemLabel: (item) => item,
+                                        hintText: "Please Select",
+                                        prefixIcon: Icons.folder,
+                                        onChanged: (value) {
+                                          category
+                                                  .groupedTests![i]
+                                                  .caseTests![j]
+                                                  .test!
+                                                  .characteristics![k]
+                                                  .lowvalue
+                                                  .text =
+                                              value;
+                                          controller.update();
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ),
+                        ),
+                        DataCell(
+                          Text(
+                            category
+                                    .groupedTests?[i]
+                                    .caseTests?[j]
+                                    .test
+                                    ?.characteristics?[k]
+                                    .unit ??
+                                "",
+                          ),
+                        ),
+                        DataCell(
+                          Center(
+                            child: Text(
+                              "${category.groupedTests?[i].caseTests?[j].test?.characteristics?[k].appliedReferenceRange?.lowValue ?? ""} - ${category.groupedTests?[i].caseTests?[j].test?.characteristics?[k].appliedReferenceRange?.highValue ?? ""} ",
+
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
             ],
           ),
         ),
