@@ -247,7 +247,7 @@ class CaseDetailsPage extends StatelessWidget {
                               ),
                               DataColumn(
                                 label: Text(
-                                  "Test Code",
+                                  "Code",
                                   style: TextStyle(
                                     fontSize: 13.h,
                                     fontWeight: FontWeight.w500,

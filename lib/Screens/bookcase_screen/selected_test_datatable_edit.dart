@@ -31,7 +31,7 @@ class EditSelectedTestsTable extends StatelessWidget {
             columns: const [
               DataColumn(label: Text("S.No")),
               DataColumn(label: Text("Group Name")),
-              DataColumn(label: Text("Test Code")),
+              DataColumn(label: Text("Code")),
               DataColumn(label: Text("Test Name")),
               DataColumn(label: Text("R.D.")),
               DataColumn(label: Text("Price")),

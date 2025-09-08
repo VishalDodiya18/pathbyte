@@ -498,8 +498,8 @@ class Test {
 class AppliedReferenceRange {
   String? appliesTo;
   String? stringValue;
-  String? highValue;
-  String? lowValue;
+  var highValue;
+  var lowValue;
 
   AppliedReferenceRange({
     this.appliesTo,
@@ -566,8 +566,8 @@ class ReferenceRange {
 
   factory ReferenceRange.fromJson(Map<String, dynamic> json) => ReferenceRange(
     appliesTo: json["appliesTo"],
-    lowValue: json["lowValue"]?.toDouble(),
-    highValue: json["highValue"]?.toDouble(),
+    lowValue: json["lowValue"],
+    highValue: json["highValue"],
     stringValue: json["stringValue"],
   );
 

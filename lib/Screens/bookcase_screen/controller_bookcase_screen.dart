@@ -133,7 +133,7 @@ class BookCaseController extends GetxController {
       );
 
       final data = jsonDecode(response.body);
-      log(data.toString());
+      //log(data.toString());
       GetAllTestModel getAllTestModel = GetAllTestModel.fromJson(data);
       final List<Test> newItems = getAllTestModel.data?.tests ?? [];
 
@@ -147,7 +147,7 @@ class BookCaseController extends GetxController {
         pagingController.appendPage(newItems, nextPageKey);
       }
     } catch (error) {
-      log(error.toString());
+      //log(error.toString());
       pagingController.error = error;
     }
   }
@@ -161,7 +161,7 @@ class BookCaseController extends GetxController {
       );
 
       final data = jsonDecode(response.body);
-      log(data.toString());
+      //log(data.toString());
       GroupTestModel getAllTestModel = GroupTestModel.fromJson(data);
       final List<Group> newItems = getAllTestModel.data?.groups ?? [];
 
@@ -175,7 +175,7 @@ class BookCaseController extends GetxController {
         grouptestController.appendPage(newItems, nextPageKey);
       }
     } catch (error) {
-      log(error.toString());
+      //log(error.toString());
       grouptestController.error = error;
     }
   }
@@ -248,7 +248,7 @@ class BookCaseController extends GetxController {
         "finalAmount": gettotalwitdiscountamount(),
       };
 
-      log(body.toString());
+      //log(body.toString());
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
@@ -256,8 +256,8 @@ class BookCaseController extends GetxController {
       );
 
       var model = jsonDecode(response.body);
-      log(response.statusCode.toString());
-      log(model.toString());
+      //log(response.statusCode.toString());
+      //log(model.toString());
       if (response.statusCode == 201 && model["code"] == 201) {
         if (recivedamount.text.trim().isEmpty ||
             recivedamount.text.trim() == "0") {
@@ -267,7 +267,7 @@ class BookCaseController extends GetxController {
           await CreateTransaction(model["data"]["case"]["_id"]);
         }
       } else {
-        log(model["message"]);
+        //log(model["message"]);
         Get.snackbar(
           "Error",
           model["message"] ?? "Case creation failed please try again",

@@ -31,7 +31,7 @@ PhoneFormField(
   validator: PhoneValidator.compose(
       [PhoneValidator.required(), PhoneValidator.validMobile()]),
   countrySelectorNavigator: const CountrySelectorNavigator.page(),
-  onChanged: (phoneNumber) => 'changed into $phoneNumber'.log(),
+  onChanged: (phoneNumber) => 'changed into $phoneNumber'.//log(),
   enabled: true,
   isCountrySelectionEnabled: true,
   isCountryButtonPersistent: true,

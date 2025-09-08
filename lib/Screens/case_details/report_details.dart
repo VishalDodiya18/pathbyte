@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,136 +19,156 @@ class ReportDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => controller.reporting.value
-          ? Center(child: CircularProgressIndicator())
-          : controller.reporting.isFalse &&
-                controller.reportDetailsModel == null
-          ? Center(
-              child: Text(
-                "Report Detail Not Found",
-                style: TextStyle(fontSize: 20.h, fontWeight: FontWeight.bold),
-              ),
-            )
-          : Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 15.0,
-                            vertical: 20.0,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.r),
-                            border: Border.all(color: AppColor.bordercolor),
-                          ),
-                          child: Column(
-                            spacing: 5.0,
-                            children: [
-                              buildReportRow(
-                                title: "Case ID :",
-                                value:
-                                    "#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.caseId ?? ""}",
-                              ),
-                              buildReportRow(
-                                title: "Patient Name :",
-                                value:
-                                    "${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.firstName ?? ""}  (#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.patientId})",
-                              ),
-                              buildReportRow(
-                                title: "Age/ Sex :",
-                                value:
-                                    "${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.age ?? 0}/ ${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.gender}",
-                              ),
-                              buildReportRow(
-                                title: "Referred By :",
-                                value:
-                                    controller
-                                        .reportDetailsModel
-                                        ?.data
-                                        ?.reportdetail
-                                        ?.caseDetails
-                                        ?.doctor
-                                        ?.firstName ??
-                                    "",
-                              ),
-                              // buildReportRow(
-                              //   title: "Registration Time :",
-                              //   value: DateFormat("dd MMMM ,yyyy").format(
-                              //     controller
-                              //             .reportDetailsModel
-                              //             ?.data
-                              //             ?.reportdetail
-                              //             ?.caseDetails
-                              //             ?.createdAt ??
-                              //         DateTime.now(),
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                        ),
-
-                        heightBox(10),
-                        ListView.separated(
-                          shrinkWrap: T,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount:
-                              (controller
+    return PopScope(
+      canPop: F,
+      onPopInvokedWithResult: (didPop, result) {
+        Discard(context);
+      },
+      child: Obx(
+        () => controller.reporting.value
+            ? Center(child: CircularProgressIndicator())
+            : controller.reporting.isFalse &&
+                  controller.reportDetailsModel == null
+            ? Center(
+                child: Text(
+                  "Report Detail Not Found",
+                  style: TextStyle(fontSize: 20.h, fontWeight: FontWeight.bold),
+                ),
+              )
+            : Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0,
+                              vertical: 20.0,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.r),
+                              border: Border.all(color: AppColor.bordercolor),
+                            ),
+                            child: Column(
+                              spacing: 5.0,
+                              children: [
+                                buildReportRow(
+                                  title: "Case ID :",
+                                  value:
+                                      "#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.caseId ?? ""}",
+                                ),
+                                buildReportRow(
+                                  title: "Patient ID :",
+                                  value:
+                                      "(#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.patientId})",
+                                ),
+                                buildReportRow(
+                                  title: "Patient Name :",
+                                  value:
+                                      controller
                                           .reportDetailsModel
                                           ?.data
                                           ?.reportdetail
-                                          ?.categories ??
-                                      [])
-                                  .length,
-                          separatorBuilder: (context, index) => heightBox(15),
-                          itemBuilder: (context, i) {
-                            return ReportTable(
-                              category:
-                                  (controller
-                                      .reportDetailsModel
-                                      ?.data
-                                      ?.reportdetail
-                                      ?.categories ??
-                                  [])[i],
-                            );
-                          },
+                                          ?.caseDetails
+                                          ?.patient
+                                          ?.firstName ??
+                                      "",
+                                ),
+                                buildReportRow(
+                                  title: "Age/ Sex :",
+                                  value:
+                                      "${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.age ?? 0}/ ${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.gender}",
+                                ),
+                                buildReportRow(
+                                  title: "Referred By :",
+                                  value:
+                                      controller
+                                          .reportDetailsModel
+                                          ?.data
+                                          ?.reportdetail
+                                          ?.caseDetails
+                                          ?.doctor
+                                          ?.firstName ??
+                                      "",
+                                ),
+                                // buildReportRow(
+                                //   title: "Registration Time :",
+                                //   value: DateFormat("dd MMMM ,yyyy").format(
+                                //     controller
+                                //             .reportDetailsModel
+                                //             ?.data
+                                //             ?.reportdetail
+                                //             ?.caseDetails
+                                //             ?.createdAt ??
+                                //         DateTime.now(),
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                          ),
+
+                          heightBox(10),
+                          ListView.separated(
+                            shrinkWrap: T,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount:
+                                (controller
+                                            .reportDetailsModel
+                                            ?.data
+                                            ?.reportdetail
+                                            ?.categories ??
+                                        [])
+                                    .length,
+                            separatorBuilder: (context, index) => heightBox(15),
+                            itemBuilder: (context, i) {
+                              return ReportTable(
+                                category:
+                                    (controller
+                                        .reportDetailsModel
+                                        ?.data
+                                        ?.reportdetail
+                                        ?.categories ??
+                                    [])[i],
+                              );
+                            },
+                          ),
+                          heightBox(100),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          spacing: 10.0.w,
+                          children: [
+                            Expanded(
+                              child: elevatedButton(
+                                title: "Save as Draft",
+                                onPressed: () {
+                                  controller.CreateReportResult();
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              child: elevatedButton(
+                                title: "Save As Final",
+                                onPressed: () {},
+                              ),
+                            ),
+                          ],
                         ),
-                        heightBox(100),
                       ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        spacing: 10.0.w,
-                        children: [
-                          Expanded(
-                            child: elevatedButton(
-                              title: "Save as Draft",
-                              onPressed: () {},
-                            ),
-                          ),
-                          Expanded(
-                            child: elevatedButton(
-                              title: "Save As Final",
-                              onPressed: () {},
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 }
@@ -175,5 +197,81 @@ Widget buildReportRow({
         ),
       ),
     ],
+  );
+}
+
+Discard(context) {
+  var height = MediaQuery.of(context).size.height;
+  return showDialog(
+    context: context,
+    builder: (context) => BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+      child: StatefulBuilder(
+        builder: (context, set) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 10.0,
+              ),
+              child: Center(
+                child: Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30.0,
+                    vertical: 20,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColor.primary, width: 1.5),
+                    color: const Color(0XFFFDEFE0),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: ListView(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    children: [
+                      SizedBox(height: height * 0.018),
+                      Text(
+                        "Discard",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primary,
+                          fontSize: height * 0.022,
+                        ),
+                      ),
+                      SizedBox(height: height * 0.008),
+                      Text(
+                        "are you sure want to discard your changes?",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: height * 0.018,
+                        ),
+                      ),
+                      SizedBox(height: height * 0.03),
+                      elevatedButton(
+                        onPressed: () {
+                          Get.back();
+                          Get.back();
+                        },
+                        title: "Yes",
+                      ),
+                      SizedBox(height: height * 0.028),
+                      elevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        title: "No",
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    ),
   );
 }

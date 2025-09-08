@@ -257,7 +257,7 @@ class HomeController extends GetxController
         controller.error = "Error: ${response.statusCode}";
       }
     } catch (e) {
-      log(e.toString());
+      //log(e.toString());
       controller.error = e;
     }
   }
@@ -265,8 +265,6 @@ class HomeController extends GetxController
   void setTabIndex(int index) {
     selectedIndex.value = index;
   }
-
- 
 
   @override
   void onClose() {

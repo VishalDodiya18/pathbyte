@@ -130,7 +130,7 @@ class PatientDetailsController extends GetxController {
         controller.error = "Error: ${response.statusCode}";
       }
     } catch (e) {
-      log(e.toString());
+      //log(e.toString());
       controller.error = e;
     }
   }

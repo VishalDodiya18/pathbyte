@@ -3,10 +3,12 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
 import 'package:labapp/models/case_details_model.dart';
 import 'package:labapp/models/group_test_model.dart';
 import 'package:labapp/models/report_details_model.dart' as report;
 import 'package:labapp/models/test_model.dart';
+import 'package:labapp/utils/app_color.dart';
 import 'package:labapp/utils/app_config.dart';
 
 class CaseDetailsContoller extends GetxController {
@@ -56,6 +58,12 @@ class CaseDetailsContoller extends GetxController {
             .values
             .toList()
             .cast<Group>();
+        selectedGroupTests.forEach((element) {
+          element.tests = (caseDetails?.casetests ?? [])
+              .where((e) => e.groupId == element.id)
+              .map((e) => e.test!)
+              .toList();
+        });
         update();
       } else {
         // Get.snackbar(
@@ -80,7 +88,7 @@ class CaseDetailsContoller extends GetxController {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final caseResponse = report.ReportDetailsModel.fromJson(jsonData);
-        log(jsonData.toString());
+        //log(jsonData.toString());
         reportDetailsModel = caseResponse;
 
         update();
@@ -89,11 +97,144 @@ class CaseDetailsContoller extends GetxController {
         //   "Error", "Failed with status: ${response.statusCode}");
       }
     } catch (e) {
-      log(e.toString());
-      Get.snackbar("Exception", e.toString());
+      //log(e.toString());
+      // Get.snackbar("Exception", e.toString());
     } finally {
       reporting(false);
       update();
+    }
+  }
+
+  CreateReportResult({isdraft = true}) async {
+    reporting.value = true;
+    List<report.Category> category =
+        reportDetailsModel?.data?.reportdetail?.categories ?? [];
+    try {
+      final url = Uri.parse("${AppConfig.baseUrl}/case-tests/$caseId");
+
+      final body = {
+        "status": isdraft ? "InProgress" : "Final",
+        "updates": [
+          for (int i = 0; i < category.length; i++) ...[
+            for (
+              int j = 0;
+              j < (category[i].groupedTests ?? []).length;
+              j++
+            ) ...[
+              for (
+                int k = 0;
+                k < (category[i].groupedTests?[j].caseTests ?? []).length;
+                k++
+              )
+                {
+                  "testId": category[i].groupedTests?[j].caseTests?[k].test?.id,
+                  "groupId": category[i].groupedTests?[j].id,
+                  if ((category[i]
+                              .groupedTests?[j]
+                              .caseTests?[k]
+                              .characteristics ??
+                          [])
+                      .isEmpty)
+                    "value": category[i]
+                        .groupedTests?[j]
+                        .caseTests?[k]
+                        .lowvalue
+                        .text,
+                  if ((category[i]
+                              .groupedTests?[j]
+                              .caseTests?[k]
+                              .characteristics ??
+                          [])
+                      .isNotEmpty)
+                    "characteristics":
+                        (category[i]
+                                    .groupedTests?[j]
+                                    .caseTests?[k]
+                                    .characteristics ??
+                                [])
+                            .isEmpty
+                        ? []
+                        : (category[i]
+                                      .groupedTests?[j]
+                                      .caseTests?[k]
+                                      .characteristics ??
+                                  [])
+                              .map(
+                                (e) => {
+                                  "name": e.name ?? "",
+                                  if ((e.charType ?? "").toLowerCase() ==
+                                      "numeric")
+                                    "numberValue": e.lowvalue.text.isEmpty
+                                        ? ""
+                                        : num.parse(e.lowvalue.text)
+                                  else
+                                    "stringValue": e.lowvalue.text,
+                                },
+                              )
+                              .toList(),
+                },
+            ],
+            for (int j = 0; j < (category[i].ungroupedTests ?? []).length; j++)
+              {
+                "testId": category[i].ungroupedTests?[j].id,
+                if ((category[i].ungroupedTests?[j].characteristics ?? [])
+                    .isEmpty)
+                  "value": category[i].ungroupedTests?[j].lowvalue.text,
+                if ((category[i].ungroupedTests?[j].characteristics ?? [])
+                    .isNotEmpty)
+                  "characteristics":
+                      (category[i].ungroupedTests?[j].characteristics ?? [])
+                          .isEmpty
+                      ? []
+                      : (category[i].ungroupedTests?[j].characteristics ?? [])
+                            .map(
+                              (e) => {
+                                "name": e.name ?? "",
+                                if ((e.charType ?? "").toLowerCase() ==
+                                    "numeric")
+                                  "numberValue": e.lowvalue.text.isEmpty
+                                      ? ""
+                                      : num.parse(e.lowvalue.text)
+                                else
+                                  "stringValue": e.lowvalue.text,
+                              },
+                            )
+                            .toList(),
+              },
+          ],
+        ],
+      };
+      log(body.toString());
+      final response = await http.patch(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
+      );
+
+      var model = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && model["code"] == 200) {
+        Get.back();
+      } else {
+        //log(model["message"]);
+        Get.snackbar(
+          "Error",
+          model["message"] ?? "Case updation failed please try again",
+          colorText: AppColor.whitecolor,
+
+          backgroundColor: AppColor.redcolor,
+        );
+        reporting.value = false;
+
+        return null;
+      }
+    } catch (e) {
+      reporting.value = false;
+
+      print("Exception: $e");
+      return null;
+    } finally {
+      reporting.value = false;
     }
   }
 

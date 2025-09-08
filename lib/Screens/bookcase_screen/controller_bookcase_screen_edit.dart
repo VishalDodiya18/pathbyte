@@ -122,12 +122,12 @@ class EditBookCaseController extends GetxController {
           .cast<Group>();
       selectedpatient = caseDetails.patient;
 
-      // selectedGroupTests.forEach((element) {
-      //   element.tests = (caseDetails.casetests ?? [])
-      //       .where((e) => e.groupId == element.id)
-      //       .map((e) => e.test!)
-      //       .toList();
-      // });
+      selectedGroupTests.forEach((element) {
+        element.tests = (caseDetails.casetests ?? [])
+            .where((e) => e.groupId == element.id)
+            .map((e) => e.test!)
+            .toList();
+      });
     }
     super.onInit();
   }
@@ -185,7 +185,7 @@ class EditBookCaseController extends GetxController {
       );
 
       final data = jsonDecode(response.body);
-      log(data.toString());
+      //log(data.toString());
       GetAllTestModel getAllTestModel = GetAllTestModel.fromJson(data);
       final List<Test> newItems = getAllTestModel.data?.tests ?? [];
 
@@ -199,7 +199,7 @@ class EditBookCaseController extends GetxController {
         pagingController.appendPage(newItems, nextPageKey);
       }
     } catch (error) {
-      log(error.toString());
+      //log(error.toString());
       pagingController.error = error;
     }
   }
@@ -213,7 +213,7 @@ class EditBookCaseController extends GetxController {
       );
 
       final data = jsonDecode(response.body);
-      log(data.toString());
+      //log(data.toString());
       GroupTestModel getAllTestModel = GroupTestModel.fromJson(data);
       final List<Group> newItems = getAllTestModel.data?.groups ?? [];
 
@@ -227,7 +227,7 @@ class EditBookCaseController extends GetxController {
         grouptestController.appendPage(newItems, nextPageKey);
       }
     } catch (error) {
-      log(error.toString());
+      //log(error.toString());
       grouptestController.error = error;
     }
   }
@@ -298,8 +298,8 @@ class EditBookCaseController extends GetxController {
         ),
         "finalAmount": gettotalwitdiscountamount(),
       };
-
-      log(body.toString());
+      //log("${AppConfig.baseUrl}/cases/${caseDetails.id}");
+      //log(body.toString());
       final response = await http.patch(
         url,
         headers: {"Content-Type": "application/json"},
@@ -307,8 +307,8 @@ class EditBookCaseController extends GetxController {
       );
 
       var model = jsonDecode(response.body);
-      log(response.statusCode.toString());
-      log(model.toString());
+      //log(response.statusCode.toString());
+      //log(model.toString());
       if (response.statusCode == 200 && model["code"] == 200) {
         Get.back();
         Get.find<CaseDetailsContoller>().fetchCaseById();
@@ -319,7 +319,7 @@ class EditBookCaseController extends GetxController {
           Get.find<PatientDetailsController>().allPagingController.refresh();
         }
       } else {
-        log(model["message"]);
+        //log(model["message"]);
         Get.snackbar(
           "Error",
           model["message"] ?? "Case updation failed please try again",
