@@ -197,7 +197,7 @@ class CaseDetailsContoller extends GetxController {
                               .map(
                                 (e) => {
                                   "name": e.name ?? "",
-                                  // "id": e.sId,
+                                  "id": e.sId,
                                   if ((e.charType ?? "").toLowerCase() ==
                                       "numeric")
                                     "numberValue": e.lowvalue.text.isEmpty
@@ -246,7 +246,7 @@ class CaseDetailsContoller extends GetxController {
                             .map(
                               (e) => {
                                 "name": e.name ?? "",
-                                //  "id": e.sId,
+                                 "id": e.sId,
                                 if ((e.charType ?? "").toLowerCase() ==
                                     "numeric")
                                   "numberValue": e.lowvalue.text.isEmpty
