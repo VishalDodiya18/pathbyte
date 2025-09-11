@@ -16,6 +16,7 @@ class CustomDropdown<T> extends StatelessWidget {
   final Color? backgroundColor;
   final String? Function(T?)? validator;
   BoxConstraints? constraints;
+  bool ischange;
 
   CustomDropdown({
     Key? key,
@@ -29,6 +30,7 @@ class CustomDropdown<T> extends StatelessWidget {
     this.backgroundColor,
     this.constraints,
     this.validator,
+    this.ischange = true,
   }) : super(key: key);
 
   @override
@@ -58,10 +60,12 @@ class CustomDropdown<T> extends StatelessWidget {
               value: selectedValue,
               isDense: true,
 
-              onChanged: (val) {
-                onChanged(val);
-                state.didChange(val); // ✅ Sync with validator
-              },
+              onChanged: ischange
+                  ? (val) {
+                      onChanged(val);
+                      state.didChange(val);
+                    }
+                  : null,
               dropdownStyleData: DropdownStyleData(
                 maxHeight: dropdownHeight,
                 decoration: BoxDecoration(

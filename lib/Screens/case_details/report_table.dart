@@ -8,8 +8,9 @@ import 'package:labapp/models/report_details_model.dart';
 import 'package:labapp/utils/app_color.dart';
 
 class ReportTable extends StatelessWidget {
+  bool isfinal;
   Category category;
-  ReportTable({required this.category});
+  ReportTable({required this.category, required this.isfinal});
 
   @override
   Widget build(BuildContext context) {
@@ -234,6 +235,7 @@ class ReportTable extends StatelessWidget {
                                             minWidth: 80.w,
                                           ),
                                           child: TextFieldConstant(
+                                            isReadOnly: isfinal,
                                             onChanged: (v) {
                                               controller.update();
                                             },
@@ -285,6 +287,7 @@ class ReportTable extends StatelessWidget {
                                       horizontal: 5.0,
                                     ),
                                     child: CustomDropdown<dynamic>(
+                                      ischange: !isfinal,
                                       backgroundColor: const Color(0xffEEEEEE),
                                       items:
                                           (category
@@ -478,6 +481,8 @@ class ReportTable extends StatelessWidget {
                                               minWidth: 80.w,
                                             ),
                                             child: TextFieldConstant(
+                                              isReadOnly: isfinal,
+
                                               onChanged: (v) {
                                                 controller.update();
                                               },
@@ -534,6 +539,7 @@ class ReportTable extends StatelessWidget {
                                         horizontal: 5.0,
                                       ),
                                       child: CustomDropdown<dynamic>(
+                                        ischange: !isfinal,
                                         backgroundColor: const Color(
                                           0xffEEEEEE,
                                         ),
@@ -754,6 +760,8 @@ class ReportTable extends StatelessWidget {
                                             minWidth: 80.w,
                                           ),
                                           child: TextFieldConstant(
+                                            isReadOnly: isfinal,
+
                                             onChanged: (v) {
                                               controller.update();
                                             },
@@ -800,6 +808,7 @@ class ReportTable extends StatelessWidget {
                                       horizontal: 5.0,
                                     ),
                                     child: CustomDropdown<dynamic>(
+                                      ischange: !isfinal,
                                       backgroundColor: const Color(0xffEEEEEE),
                                       items:
                                           (category
@@ -962,6 +971,8 @@ class ReportTable extends StatelessWidget {
                                               minWidth: 80.w,
                                             ),
                                             child: TextFieldConstant(
+                                              isReadOnly: isfinal,
+
                                               onChanged: (v) {
                                                 controller.update();
                                               },
@@ -1016,6 +1027,8 @@ class ReportTable extends StatelessWidget {
                                         horizontal: 5.0,
                                       ),
                                       child: CustomDropdown<dynamic>(
+                                        ischange: !isfinal,
+
                                         backgroundColor: const Color(
                                           0xffEEEEEE,
                                         ),

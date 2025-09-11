@@ -54,65 +54,63 @@ class FilterBottomSheet extends StatelessWidget {
                   Expanded(
                     child: TextFieldConstant(
                       onTap: () async {
-                        DateTime? result = await pickDateTime(
-                          context: Get.context!,
-                          firstDate: DateTime(DateTime.now().year - 100),
-                          initialDate: DateTime.now(),
-                          mode: PickerMode.date,
+                        final DateTimeRange? picked = await showDateRangePicker(
+                          context: context,
+
+                          initialDateRange: controller.dates,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                          helpText: 'Select Date Range',
                         );
-                        if (result != null) {
-                          controller.startdateController.text = result
-                              .toString();
+
+                        if (picked != null && picked != controller.dates) {
+                          controller.dates = picked;
                           controller.update();
                         }
                       },
                       controller: TextEditingController(
-                        text: controller.startdateController.text.isEmpty
+                        text: controller.dates == null
                             ? ""
-                            : DateFormat('d MMM, yyyy').format(
-                                DateTime.parse(
-                                  controller.startdateController.text,
-                                ),
-                              ),
+                            : "${DateFormat('d MMM, yyyy').format(controller.dates!.start)} -  ${DateFormat('d MMM, yyyy').format(controller.dates!.end)}",
                       ),
-                      hintText: "Date",
+                      hintText: "Date Range",
                       suffixIcon: TablerIcons.calendar_month,
 
                       textAlign: TextAlign.center,
                       isReadOnly: true,
                     ),
                   ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: TextFieldConstant(
-                      onTap: () async {
-                        DateTime? result = await pickDateTime(
-                          context: Get.context!,
-                          firstDate: DateTime(DateTime.now().year - 100),
+                  // SizedBox(width: 12.w),
+                  // Expanded(
+                  //   child: TextFieldConstant(
+                  //     onTap: () async {
+                  //       DateTime? result = await pickDateTime(
+                  //         context: Get.context!,
+                  //         firstDate: DateTime(DateTime.now().year - 100),
 
-                          initialDate: DateTime.now(),
-                          mode: PickerMode.date,
-                        );
-                        if (result != null) {
-                          controller.enddateController.text = result.toString();
-                          controller.update();
-                        }
-                      },
-                      controller: TextEditingController(
-                        text: controller.enddateController.text.isEmpty
-                            ? ""
-                            : DateFormat('d MMM, yyyy').format(
-                                DateTime.parse(
-                                  controller.enddateController.text,
-                                ),
-                              ),
-                      ),
-                      hintText: "Date",
-                      suffixIcon: TablerIcons.calendar_month,
-                      textAlign: TextAlign.center,
-                      isReadOnly: true,
-                    ),
-                  ),
+                  //         initialDate: DateTime.now(),
+                  //         mode: PickerMode.date,
+                  //       );
+                  //       if (result != null) {
+                  //         controller.enddateController.text = result.toString();
+                  //         controller.update();
+                  //       }
+                  //     },
+                  //     controller: TextEditingController(
+                  //       text: controller.enddateController.text.isEmpty
+                  //           ? ""
+                  //           : DateFormat('d MMM, yyyy').format(
+                  //               DateTime.parse(
+                  //                 controller.enddateController.text,
+                  //               ),
+                  //             ),
+                  //     ),
+                  //     hintText: "Date",
+                  //     suffixIcon: TablerIcons.calendar_month,
+                  //     textAlign: TextAlign.center,
+                  //     isReadOnly: true,
+                  //   ),
+                  // ),
                 ],
               ),
               SizedBox(height: 16.h),
@@ -217,7 +215,6 @@ class FilterBottomSheet extends StatelessWidget {
                         controller.doctorsearch.clear();
                         controller.doctorPagingController.refresh();
                       });
-                  ;
 
                   if (selected != null) {
                     controller.selectedDoctor = selected;
@@ -275,8 +272,6 @@ class FilterBottomSheet extends StatelessWidget {
                       backgroundColor: const Color(0xff8B8B8B),
                       textColor: AppColor.whitecolor,
                       onPressed: () {
-                        controller.startdateController.clear();
-                        controller.enddateController.clear();
                         controller.selectedCenter = null;
                         controller.selectedDoctor = null;
                         controller.selectedCaseStatus = null;

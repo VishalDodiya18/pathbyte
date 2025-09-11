@@ -12,6 +12,7 @@ import 'package:labapp/Screens/patients/patient_details_controller.dart';
 import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
 import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/utils/app_color.dart';
+import 'package:labapp/utils/app_config.dart';
 
 class HomeScreenWidget {
   Widget tabbarWidget(int tabIndex) {
@@ -54,12 +55,8 @@ class HomeScreenWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
         builderDelegate: PagedChildBuilderDelegate<Cases>(
-          noItemsFoundIndicatorBuilder: (context) => Center(
-            child: Text(
-              "No cases found",
-              style: TextStyle(fontSize: 20.h, fontWeight: FontWeight.bold),
-            ),
-          ),
+          noItemsFoundIndicatorBuilder: (context) =>
+              Center(child: Image.asset(AppImage.nodatafound)),
           itemBuilder: (context, item, index) {
             return InkWell(
               onTap: () {

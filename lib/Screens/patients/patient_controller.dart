@@ -13,7 +13,7 @@ class PatientController extends GetxController {
       PagingController(firstPageKey: 1);
   TextEditingController patientSearchController = TextEditingController();
   static const int _pageSize = 10;
-
+  PatientResponseModel? responseModel;
   @override
   void onInit() {
     patientPagingController.addPageRequestListener((pageKey) {
@@ -37,10 +37,13 @@ class PatientController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        final data = PatientResponseModel.fromJson(jsonDecode(response.body));
-        final patients = data.data?.patients ?? [];
+        responseModel = PatientResponseModel.fromJson(
+          jsonDecode(response.body),
+        );
+        final patients = responseModel?.data?.patients ?? [];
 
-        final isLastPage = !(data.data?.pagination?.hasNextPage ?? false);
+        final isLastPage =
+            !(responseModel?.data?.pagination?.hasNextPage ?? false);
         if (isLastPage) {
           controller.appendLastPage(patients);
         } else {
@@ -51,6 +54,8 @@ class PatientController extends GetxController {
       }
     } catch (e) {
       controller.error = e.toString();
+    } finally {
+      update();
     }
   }
 }

@@ -85,66 +85,92 @@ class HomeScreen extends StatelessWidget {
               },
             ),
             heightBox(14),
-            Obx(() {
-              return TabBar(
-                controller: controller.tabController,
-                tabAlignment: TabAlignment.start,
-                padding: EdgeInsets.zero,
-                isScrollable: true,
-                dividerColor: Colors.grey.withValues(alpha: 0.5),
-                indicatorSize: TabBarIndicatorSize.tab,
-                onTap: (index) {
-                  controller.setTabIndex(index);
-                },
-                tabs: [
-                  Tab(
-                    child: TextConstant(
-                      title: 'All',
-                      textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 0
-                          ? FontWeight.bold
-                          : FontWeight.w400,
-                    ),
+
+            GetBuilder<HomeController>(
+              builder: (controller) {
+                return Obx(
+                  () => TabBar(
+                    controller: controller.tabController,
+                    tabAlignment: TabAlignment.start,
+                    padding: EdgeInsets.zero,
+                    isScrollable: true,
+                    dividerColor: Colors.grey.withValues(alpha: 0.5),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    onTap: (index) {
+                      controller.setTabIndex(index);
+                    },
+                    tabs: [
+                      Tab(
+                        child: TextConstant(
+                          title:
+                              'All${controller.selectedIndex.value != 0
+                                  ? ""
+                                  : controller.allCaselistmodel != null
+                                  ? " ( ${controller.allCaselistmodel?.data?.pagination?.total ?? 0} )"
+                                  : " ( 0 )"}',
+                          textAlign: TextAlign.center,
+                          fontWeight: controller.selectedIndex.value == 0
+                              ? FontWeight.bold
+                              : FontWeight.w400,
+                        ),
+                      ),
+                      Tab(
+                        child: TextConstant(
+                          title:
+                              "New${controller.selectedIndex.value != 1
+                                  ? ""
+                                  : controller.newCaselistmodel != null
+                                  ? " ( ${controller.newCaselistmodel?.data?.pagination?.total ?? 0} )"
+                                  : " ( 0 )"}",
+                          textAlign: TextAlign.center,
+                          fontWeight: controller.selectedIndex.value == 1
+                              ? FontWeight.bold
+                              : FontWeight.w400,
+                        ),
+                      ),
+                      // Tab(
+                      //   child: TextConstant(
+                      //     title: 'In Progress',
+                      //     textAlign: TextAlign.center,
+                      //     fontWeight: controller.selectedIndex.value == 2
+                      //         ? FontWeight.bold
+                      //         : FontWeight.w400,
+                      //   ),
+                      // ),
+                      Tab(
+                        child: TextConstant(
+                          title:
+                              'Final${controller.selectedIndex.value != 2
+                                  ? ""
+                                  : controller.finalCaselistmodel != null
+                                  ? " ( ${controller.finalCaselistmodel?.data?.pagination?.total ?? 0} )"
+                                  : " ( 0 )"}',
+                          textAlign: TextAlign.center,
+                          fontWeight: controller.selectedIndex.value == 2
+                              ? FontWeight.bold
+                              : FontWeight.w400,
+                        ),
+                      ),
+                      Tab(
+                        child: TextConstant(
+                          title:
+                              'Signed Off${controller.selectedIndex.value != 3
+                                  ? ""
+                                  : controller.signoffCaselistmodel != null
+                                  ? " ( ${controller.signoffCaselistmodel?.data?.pagination?.total ?? 0} )"
+                                  : " ( 0 )"}',
+                          textAlign: TextAlign.center,
+                          fontWeight: controller.selectedIndex.value == 3
+                              ? FontWeight.bold
+                              : FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
-                  Tab(
-                    child: TextConstant(
-                      title: 'New',
-                      textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 1
-                          ? FontWeight.bold
-                          : FontWeight.w400,
-                    ),
-                  ),
-                  // Tab(
-                  //   child: TextConstant(
-                  //     title: 'In Progress',
-                  //     textAlign: TextAlign.center,
-                  //     fontWeight: controller.selectedIndex.value == 2
-                  //         ? FontWeight.bold
-                  //         : FontWeight.w400,
-                  //   ),
-                  // ),
-                  Tab(
-                    child: TextConstant(
-                      title: 'Final',
-                      textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 2
-                          ? FontWeight.bold
-                          : FontWeight.w400,
-                    ),
-                  ),
-                  Tab(
-                    child: TextConstant(
-                      title: 'Signed Off',
-                      textAlign: TextAlign.center,
-                      fontWeight: controller.selectedIndex.value == 3
-                          ? FontWeight.bold
-                          : FontWeight.w400,
-                    ),
-                  ),
-                ],
-              );
-            }),
+                );
+              },
+            ),
+
             Obx(() {
               controller.selectedIndex.value;
               return Expanded(

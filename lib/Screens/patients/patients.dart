@@ -2,9 +2,6 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:labapp/Constants/text_constant.dart';
 import 'package:labapp/Constants/textfield_constant.dart';
@@ -15,6 +12,7 @@ import 'package:labapp/Screens/patients/patient_details.dart';
 import 'package:labapp/Screens/patients/patient_details_controller.dart';
 import 'package:labapp/models/caseModel.dart';
 import 'package:labapp/utils/app_color.dart';
+import 'package:labapp/utils/app_config.dart';
 
 class Patientes extends StatelessWidget {
   const Patientes({super.key});
@@ -31,7 +29,8 @@ class Patientes extends StatelessWidget {
               children: [
                 heightBox(14),
                 TextConstant(
-                  title: 'Patients',
+                  title:
+                      'Patients${contorller.responseModel == null ? "" : " ( ${contorller.responseModel?.data?.pagination?.total} )"}',
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -78,6 +77,8 @@ class Patientes extends StatelessWidget {
                     child: PagedListView<int, Patient>(
                       pagingController: contorller.patientPagingController,
                       builderDelegate: PagedChildBuilderDelegate<Patient>(
+                        noItemsFoundIndicatorBuilder: (context) =>
+                            Center(child: Image.asset(AppImage.nodatafound)),
                         itemBuilder: (context, patient, index) =>
                             GestureDetector(
                               onTap: () {

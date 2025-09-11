@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -7,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:http/http.dart' as http;
 import 'package:labapp/models/caseModel.dart';
+import 'package:labapp/models/case_list_model.dart';
 import 'package:labapp/models/doctor_model.dart';
 import 'package:labapp/models/lab_center_model.dart';
 import 'package:labapp/models/patient_response_model.dart';
@@ -15,9 +18,7 @@ import 'package:labapp/utils/app_config.dart';
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
   TextEditingController searchController = TextEditingController();
-  TextEditingController startdateController = TextEditingController();
-  TextEditingController enddateController = TextEditingController();
-
+  DateTimeRange? dates;
   late TabController tabController;
   RxInt selectedIndex = 0.obs;
 
@@ -26,8 +27,14 @@ class HomeController extends GetxController
   String? selectedCaseStatus;
   String? selectedAmountStatus;
 
-  final List<String> caseStatus = ["Final", "Pending", "Draft"];
-  final List<String> amountStatus = ["Paid", "Unpaid", "Partially Paid"];
+  CaseListModel? allCaselistmodel;
+
+  CaseListModel? newCaselistmodel;
+  CaseListModel? finalCaselistmodel;
+  CaseListModel? signoffCaselistmodel;
+
+  final List<String> caseStatus = ["New", "Final", "InProgress", "SignOff"];
+  final List<String> amountStatus = ["Paid", "Unpaid", "PartiallyPaid"];
 
   static const int _pageSize = 10;
 
@@ -97,15 +104,30 @@ class HomeController extends GetxController
 
     /// Cases pagination
     allPagingController.addPageRequestListener((pageKey) {
-      fetchCases(pageKey, status: "All", controller: allPagingController);
+      fetchCases(
+        pageKey,
+        status: "All",
+        controller: allPagingController,
+        caseListModel: allCaselistmodel,
+      );
     });
 
     newPagingController.addPageRequestListener((pageKey) {
-      fetchCases(pageKey, status: "New", controller: newPagingController);
+      fetchCases(
+        pageKey,
+        status: "New",
+        controller: newPagingController,
+        caseListModel: newCaselistmodel,
+      );
     });
 
     finalPagingController.addPageRequestListener((pageKey) {
-      fetchCases(pageKey, status: "Final", controller: finalPagingController);
+      fetchCases(
+        pageKey,
+        status: "Final",
+        controller: finalPagingController,
+        caseListModel: finalCaselistmodel,
+      );
     });
 
     signOffPagingController.addPageRequestListener((pageKey) {
@@ -113,6 +135,7 @@ class HomeController extends GetxController
         pageKey,
         status: "SignOff",
         controller: signOffPagingController,
+        caseListModel: signoffCaselistmodel,
       );
     });
   }
@@ -219,19 +242,16 @@ class HomeController extends GetxController
     int pageKey, {
     required String status,
     required PagingController<int, Cases> controller,
+    required CaseListModel? caseListModel,
   }) async {
     try {
       final query = searchController.text.trim();
       var url =
           "${AppConfig.baseUrl}/cases?search=$query${status == "All" ? "" : "&status=$status"}&page=$pageKey&limit=$_pageSize";
 
-      if (startdateController.text.isNotEmpty) {
-        url +=
-            "&createdAtFrom=${DateTime.parse(startdateController.text).toIso8601String()}";
-      }
-      if (enddateController.text.isNotEmpty) {
-        url +=
-            "&createdAtTo=${DateTime.parse(enddateController.text).toIso8601String()}";
+      if (dates != null) {
+        url += "&createdAtFrom=${dates?.start.toIso8601String()}";
+        url += "&createdAtTo=${dates?.end.toIso8601String()}";
       }
       if (selectedCenter != null) {
         url += "&center=${selectedCenter?.id}";
@@ -239,10 +259,25 @@ class HomeController extends GetxController
       if (selectedDoctor != null) {
         url += "&referringDoctor=${selectedDoctor?.id}";
       }
+      if (selectedAmountStatus != null) {
+        url += "&amountStatus=$selectedAmountStatus";
+      }
+      if (selectedCaseStatus != null) {
+        url += "&status=$selectedCaseStatus";
+      }
 
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+
+        if (status == "All")
+          allCaselistmodel = CaseListModel.fromJson(data);
+        else if (status == "New")
+          newCaselistmodel = CaseListModel.fromJson(data);
+        else if (status == "Final")
+          finalCaselistmodel = CaseListModel.fromJson(data);
+        else
+          signoffCaselistmodel = CaseListModel.fromJson(data);
 
         final List casesJson = data["data"]["cases"] ?? [];
         final cases = casesJson.map((e) => Cases.fromJson(e)).toList();
@@ -257,8 +292,10 @@ class HomeController extends GetxController
         controller.error = "Error: ${response.statusCode}";
       }
     } catch (e) {
-      //log(e.toString());
+      log(e.toString());
       controller.error = e;
+    } finally {
+      update();
     }
   }
 

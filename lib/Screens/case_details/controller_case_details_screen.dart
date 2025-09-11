@@ -1,15 +1,20 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_native_html_to_pdf/flutter_native_html_to_pdf.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
 import 'package:labapp/models/case_details_model.dart';
 import 'package:labapp/models/group_test_model.dart';
 import 'package:labapp/models/report_details_model.dart' as report;
 import 'package:labapp/models/test_model.dart';
 import 'package:labapp/utils/app_color.dart';
 import 'package:labapp/utils/app_config.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CaseDetailsContoller extends GetxController {
   var caseId;
@@ -17,6 +22,7 @@ class CaseDetailsContoller extends GetxController {
 
   RxBool isLoading = true.obs;
   RxBool reporting = true.obs;
+  RxBool isreportshareing = F.obs;
 
   List<Test> selectedTests = [];
   List<Group> selectedGroupTests = [];
@@ -74,6 +80,50 @@ class CaseDetailsContoller extends GetxController {
     } finally {
       isLoading(false);
       update();
+    }
+  }
+
+  Future<String> fetchHtml() async {
+    isreportshareing(true);
+    try {
+      final url = Uri.parse(
+        "${AppConfig.baseUrl}/cases/$caseId/html?printFootnote=true",
+      );
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        throw Exception("Failed to load HTML");
+      }
+    } catch (e) {
+      isreportshareing(false);
+      throw Exception("Failed to load HTML");
+    }
+  }
+
+  Future<void> downloadAndSharePdf() async {
+    isreportshareing(T);
+    try {
+      final htmlContent = await fetchHtml();
+      final _flutterNativeHtmlToPdfPlugin = FlutterNativeHtmlToPdf();
+      Directory appDocDir = await getTemporaryDirectory();
+
+      final generatedPdfFile = await _flutterNativeHtmlToPdfPlugin
+          .convertHtmlToPdf(
+            html: htmlContent,
+            targetDirectory: appDocDir.path,
+            targetName: "${caseDetails?.caseId}_Report",
+          );
+
+      await SharePlus.instance.share(
+        ShareParams(files: [XFile(generatedPdfFile!.path)]),
+      );
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isreportshareing(F);
     }
   }
 
@@ -246,7 +296,7 @@ class CaseDetailsContoller extends GetxController {
                             .map(
                               (e) => {
                                 "name": e.name ?? "",
-                                 "id": e.sId,
+                                "id": e.sId,
                                 if ((e.charType ?? "").toLowerCase() ==
                                     "numeric")
                                   "numberValue": e.lowvalue.text.isEmpty

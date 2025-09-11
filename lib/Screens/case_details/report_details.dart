@@ -19,8 +19,8 @@ class ReportDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.reporting.value
-          ? Center(child: CircularProgressIndicator())
+      () => controller.reporting.value || controller.isreportshareing.value
+          ? const Center(child: CircularProgressIndicator())
           : controller.reporting.isFalse &&
                 controller.reportDetailsModel == null
           ? Center(
@@ -125,6 +125,15 @@ class ReportDetails extends StatelessWidget {
                                       ?.reportdetail
                                       ?.categories ??
                                   [])[i],
+                              isfinal:
+                                  (controller
+                                          .reportDetailsModel
+                                          ?.data
+                                          ?.reportdetail
+                                          ?.caseDetails
+                                          ?.status ??
+                                      "") ==
+                                  "Final",
                             );
                           },
                         ),
@@ -133,18 +142,19 @@ class ReportDetails extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (controller
-                        .reportDetailsModel
-                        ?.data
-                        ?.reportdetail
-                        ?.caseDetails
-                        ?.status !=
-                    "Final")
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (controller
+                              .reportDetailsModel
+                              ?.data
+                              ?.reportdetail
+                              ?.caseDetails
+                              ?.status !=
+                          "Final")
                         Row(
                           spacing: 10.0.w,
                           children: [
@@ -173,9 +183,16 @@ class ReportDetails extends StatelessWidget {
                               ),
                           ],
                         ),
-                      ],
-                    ),
+                      const SizedBox(height: 15.0),
+                      elevatedButton(
+                        title: "Show Report",
+                        onPressed: () {
+                          controller.downloadAndSharePdf();
+                        },
+                      ),
+                    ],
                   ),
+                ),
               ],
             ),
     );
@@ -262,7 +279,7 @@ Discard(context) {
                       elevatedButton(
                         onPressed: () {
                           Get.back();
-                          Future.delayed(Duration(milliseconds: 100), () {
+                          Future.delayed(const Duration(milliseconds: 100), () {
                             Get.back();
                           });
                         },
