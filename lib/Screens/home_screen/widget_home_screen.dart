@@ -3,16 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:labapp/Constants/extensions.dart';
-import 'package:labapp/Constants/text_constant.dart';
-import 'package:labapp/Constants/widget_constant.dart';
-import 'package:labapp/Screens/case_details/main_details_screen.dart';
-import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
-import 'package:labapp/Screens/patients/patient_details_controller.dart';
-import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
-import 'package:labapp/models/caseModel.dart';
-import 'package:labapp/utils/app_color.dart';
-import 'package:labapp/utils/app_config.dart';
+import 'package:Pathbyte/Constants/extensions.dart';
+import 'package:Pathbyte/Constants/text_constant.dart';
+import 'package:Pathbyte/Constants/widget_constant.dart';
+import 'package:Pathbyte/Screens/case_details/main_details_screen.dart';
+import 'package:Pathbyte/Screens/case_details/controller_case_details_screen.dart';
+import 'package:Pathbyte/Screens/patients/patient_details_controller.dart';
+import 'package:Pathbyte/Screens/home_screen/controller_home_screen.dart';
+import 'package:Pathbyte/models/caseModel.dart';
+import 'package:Pathbyte/utils/app_color.dart';
+import 'package:Pathbyte/utils/app_config.dart';
 
 class HomeScreenWidget {
   Widget tabbarWidget(int tabIndex) {
@@ -61,7 +61,13 @@ class HomeScreenWidget {
             return InkWell(
               onTap: () {
                 Get.lazyPut(() => CaseDetailsContoller(caseId: item.sId));
-                Get.to(() => MainDetailsScreen(isreport: T));
+                Get.to(
+                  () => MainDetailsScreen(
+                    isreport: AppConfig.Role.toUpperCase() == "LABTECHNICIAN"
+                        ? T
+                        : F,
+                  ),
+                );
                 //     return;
                 // if (!isOdd) {
                 // } else {

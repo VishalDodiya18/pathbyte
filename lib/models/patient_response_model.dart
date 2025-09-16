@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:labapp/models/caseModel.dart';
+import 'package:Pathbyte/models/caseModel.dart';
 
 PatientResponseModel patientResponseModelFromJson(String str) =>
     PatientResponseModel.fromJson(json.decode(str));

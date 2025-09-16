@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:labapp/models/test_model.dart';
+import 'package:Pathbyte/models/test_model.dart';
 
 GroupTestModel groupTestModelFromJson(String str) =>
     GroupTestModel.fromJson(json.decode(str));

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:labapp/Screens/bookcase_screen/controller_bookcase_screen_edit.dart';
-import 'package:labapp/Screens/bookcase_screen/ui_bookcase_screen_edit.dart';
-import 'package:labapp/Screens/case_details/case_details.dart';
-import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
-import 'package:labapp/Screens/case_details/report_details.dart';
-import 'package:labapp/models/case_details_model.dart';
-import 'package:labapp/utils/app_color.dart';
+import 'package:Pathbyte/Screens/bookcase_screen/controller_bookcase_screen_edit.dart';
+import 'package:Pathbyte/Screens/bookcase_screen/ui_bookcase_screen_edit.dart';
+import 'package:Pathbyte/Screens/case_details/case_details.dart';
+import 'package:Pathbyte/Screens/case_details/controller_case_details_screen.dart';
+import 'package:Pathbyte/Screens/case_details/report_details.dart';
+import 'package:Pathbyte/models/case_details_model.dart';
+import 'package:Pathbyte/utils/app_color.dart';
 
 class MainDetailsScreen extends StatelessWidget {
   bool isreport;

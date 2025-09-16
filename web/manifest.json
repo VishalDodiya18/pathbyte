@@ -1,6 +1,6 @@
 {
-    "name": "labapp",
-    "short_name": "labapp",
+    "name": "Pathbyte",
+    "short_name": "Pathbyte",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

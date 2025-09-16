@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:labapp/Constants/elevated_button_constant.dart';
-import 'package:labapp/Constants/textfield_constant.dart';
-import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
-import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
-import 'package:labapp/utils/app_color.dart';
-import 'package:labapp/utils/app_config.dart';
+import 'package:Pathbyte/Constants/elevated_button_constant.dart';
+import 'package:Pathbyte/Constants/textfield_constant.dart';
+import 'package:Pathbyte/Screens/case_details/controller_case_details_screen.dart';
+import 'package:Pathbyte/Screens/home_screen/controller_home_screen.dart';
+import 'package:Pathbyte/utils/app_color.dart';
+import 'package:Pathbyte/utils/app_config.dart';
 
 class AddPaymentDialog extends StatefulWidget {
   var caseid;
@@ -45,7 +45,10 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
       print(body.toString());
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${AppConfig.Token}",
+        },
         body: jsonEncode(body),
       );
 

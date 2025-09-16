@@ -8,12 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:http/http.dart' as http;
-import 'package:labapp/models/caseModel.dart';
-import 'package:labapp/models/case_list_model.dart';
-import 'package:labapp/models/doctor_model.dart';
-import 'package:labapp/models/lab_center_model.dart';
-import 'package:labapp/models/patient_response_model.dart';
-import 'package:labapp/utils/app_config.dart';
+import 'package:Pathbyte/models/caseModel.dart';
+import 'package:Pathbyte/models/case_list_model.dart';
+import 'package:Pathbyte/models/doctor_model.dart';
+import 'package:Pathbyte/models/lab_center_model.dart';
+import 'package:Pathbyte/models/patient_response_model.dart';
+import 'package:Pathbyte/utils/app_config.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -150,8 +150,11 @@ class HomeController extends GetxController
       final response = await http.get(
         Uri.parse(
           "${AppConfig.baseUrl}/patients?page=$pageKey&limit=$_pageSize${query.isEmpty ? "" : "&search=$query"}",
+          
         ),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
+
 
       if (response.statusCode == 200) {
         final data = PatientResponseModel.fromJson(jsonDecode(response.body));
@@ -182,6 +185,7 @@ class HomeController extends GetxController
         Uri.parse(
           "${AppConfig.baseUrl}/doctors?page=$pageKey&limit=$_pageSize${search != null && search.text.trim().isNotEmpty ? "&search=${search.text}" : ""}",
         ),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
 
       if (response.statusCode == 200) {
@@ -215,6 +219,7 @@ class HomeController extends GetxController
         Uri.parse(
           "${AppConfig.baseUrl}/lab-centers?page=$pageKey&limit=$_pageSize${search != null && search.text.trim().isNotEmpty ? "&search=${search.text}" : ""}",
         ),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
 
       if (response.statusCode == 200) {
@@ -266,7 +271,10 @@ class HomeController extends GetxController
         url += "&status=$selectedCaseStatus";
       }
 
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
+      );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 

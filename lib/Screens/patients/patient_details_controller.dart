@@ -6,11 +6,11 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:labapp/models/caseModel.dart';
-import 'package:labapp/models/case_details_model.dart';
-import 'package:labapp/models/patient_details_model.dart';
-import 'package:labapp/models/transactionResponse.dart';
-import 'package:labapp/utils/app_config.dart';
+import 'package:Pathbyte/models/caseModel.dart';
+import 'package:Pathbyte/models/case_details_model.dart';
+import 'package:Pathbyte/models/patient_details_model.dart';
+import 'package:Pathbyte/models/transactionResponse.dart';
+import 'package:Pathbyte/utils/app_config.dart';
 
 class PatientDetailsController extends GetxController {
   Patient patient;
@@ -60,7 +60,10 @@ class PatientDetailsController extends GetxController {
         "${AppConfig.baseUrl}/transactions/?patientId=${patient.sId}&page=$pageKey&limit=$_pageSize",
       );
 
-      final response = await http.get(url);
+      final response = await http.get(
+        url,
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
+      );
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
@@ -86,6 +89,7 @@ class PatientDetailsController extends GetxController {
 
       final response = await http.get(
         Uri.parse("${AppConfig.baseUrl}/patients/${patient.sId}"),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
 
       if (response.statusCode == 200) {
@@ -113,7 +117,10 @@ class PatientDetailsController extends GetxController {
       var url =
           "${AppConfig.baseUrl}/cases?page=$pageKey&limit=$_pageSize&patientId=${patient.sId}";
 
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
+      );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 

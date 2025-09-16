@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:labapp/Constants/elevated_button_constant.dart';
-import 'package:labapp/Constants/extensions.dart';
-import 'package:labapp/Constants/text_constant.dart';
-import 'package:labapp/Screens/case_details/add_payment_dailoge.dart';
-import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
-import 'package:labapp/utils/app_color.dart';
+import 'package:Pathbyte/Constants/elevated_button_constant.dart';
+import 'package:Pathbyte/Constants/extensions.dart';
+import 'package:Pathbyte/Constants/text_constant.dart';
+import 'package:Pathbyte/Screens/case_details/add_payment_dailoge.dart';
+import 'package:Pathbyte/Screens/case_details/controller_case_details_screen.dart';
+import 'package:Pathbyte/utils/app_color.dart';
 
 class CaseDetailsPage extends StatelessWidget {
   CaseDetailsPage({super.key});

@@ -5,19 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:labapp/Constants/extensions.dart';
-import 'package:labapp/Screens/case_details/controller_case_details_screen.dart';
-import 'package:labapp/Screens/home_screen/controller_home_screen.dart';
-import 'package:labapp/Screens/patients/patient_controller.dart';
-import 'package:labapp/Screens/patients/patient_details_controller.dart';
-import 'package:labapp/models/caseModel.dart';
-import 'package:labapp/models/case_details_model.dart' hide Doctor, Patient;
-import 'package:labapp/models/doctor_model.dart' hide Address;
-import 'package:labapp/models/group_test_model.dart';
-import 'package:labapp/models/lab_center_model.dart';
-import 'package:labapp/models/test_model.dart';
-import 'package:labapp/utils/app_color.dart';
-import 'package:labapp/utils/app_config.dart';
+import 'package:Pathbyte/Constants/extensions.dart';
+import 'package:Pathbyte/Screens/case_details/controller_case_details_screen.dart';
+import 'package:Pathbyte/Screens/home_screen/controller_home_screen.dart';
+import 'package:Pathbyte/Screens/patients/patient_controller.dart';
+import 'package:Pathbyte/Screens/patients/patient_details_controller.dart';
+import 'package:Pathbyte/models/caseModel.dart';
+import 'package:Pathbyte/models/case_details_model.dart' hide Doctor, Patient;
+import 'package:Pathbyte/models/doctor_model.dart' hide Address;
+import 'package:Pathbyte/models/group_test_model.dart';
+import 'package:Pathbyte/models/lab_center_model.dart';
+import 'package:Pathbyte/models/test_model.dart';
+import 'package:Pathbyte/utils/app_color.dart';
+import 'package:Pathbyte/utils/app_config.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 class EditBookCaseController extends GetxController {
@@ -182,6 +182,7 @@ class EditBookCaseController extends GetxController {
         Uri.parse(
           "${AppConfig.baseUrl}/tests?page=$pageKey&limit=$_pageSize${searchcontrller.text.trim().isNotEmpty ? "&search=${searchcontrller.text}" : ""}",
         ),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
 
       final data = jsonDecode(response.body);
@@ -210,6 +211,7 @@ class EditBookCaseController extends GetxController {
         Uri.parse(
           "${AppConfig.baseUrl}/tests/groups?page=$pageKey&limit=$_pageSize${searchcontrller.text.trim().isNotEmpty ? "&search=${searchcontrller.text}" : ""}",
         ),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
 
       final data = jsonDecode(response.body);
@@ -302,7 +304,10 @@ class EditBookCaseController extends GetxController {
       //log(body.toString());
       final response = await http.patch(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${AppConfig.Token}",
+        },
         body: jsonEncode(body),
       );
 
@@ -356,7 +361,7 @@ class EditBookCaseController extends GetxController {
   //     print(body.toString());
   //     final response = await http.post(
   //       url,
-  //       headers: {"Content-Type": "application/json"},
+  //       headers: {"Content-Type": "application/json","Authorization":"Bearer ${AppConfig.Token}"},
   //       body: jsonEncode(body),
   //     );
 

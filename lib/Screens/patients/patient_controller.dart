@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:labapp/models/caseModel.dart';
-import 'package:labapp/models/patient_response_model.dart';
-import 'package:labapp/utils/app_config.dart';
+import 'package:Pathbyte/models/caseModel.dart';
+import 'package:Pathbyte/models/patient_response_model.dart';
+import 'package:Pathbyte/utils/app_config.dart';
 
 class PatientController extends GetxController {
   final PagingController<int, Patient> patientPagingController =
@@ -34,6 +34,7 @@ class PatientController extends GetxController {
         Uri.parse(
           "${AppConfig.baseUrl}/patients?page=$pageKey&limit=$_pageSize${query.isEmpty ? "" : "&search=$query"}",
         ),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
 
       if (response.statusCode == 200) {

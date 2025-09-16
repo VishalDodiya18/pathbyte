@@ -4,13 +4,13 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
-import 'package:labapp/Constants/extensions.dart';
-import 'package:labapp/Constants/widget_constant.dart';
-import 'package:labapp/Screens/home_screen/widget_home_screen.dart';
-import 'package:labapp/Screens/patients/patient_details_controller.dart';
-import 'package:labapp/Screens/patients/patients.dart';
-import 'package:labapp/models/case_details_model.dart';
-import 'package:labapp/utils/app_color.dart';
+import 'package:Pathbyte/Constants/extensions.dart';
+import 'package:Pathbyte/Constants/widget_constant.dart';
+import 'package:Pathbyte/Screens/home_screen/widget_home_screen.dart';
+import 'package:Pathbyte/Screens/patients/patient_details_controller.dart';
+import 'package:Pathbyte/Screens/patients/patients.dart';
+import 'package:Pathbyte/models/case_details_model.dart';
+import 'package:Pathbyte/utils/app_color.dart';
 
 class PatientDetails extends StatelessWidget {
   const PatientDetails({super.key});

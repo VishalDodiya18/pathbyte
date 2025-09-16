@@ -7,19 +7,19 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:labapp/Constants/custom_dropDown.dart';
-import 'package:labapp/Constants/elevated_button_constant.dart';
-import 'package:labapp/Constants/extensions.dart';
-import 'package:labapp/Constants/text_constant.dart';
-import 'package:labapp/Constants/textfield_constant.dart'
+import 'package:Pathbyte/Constants/custom_dropDown.dart';
+import 'package:Pathbyte/Constants/elevated_button_constant.dart';
+import 'package:Pathbyte/Constants/extensions.dart';
+import 'package:Pathbyte/Constants/text_constant.dart';
+import 'package:Pathbyte/Constants/textfield_constant.dart'
     hide UpperCaseTextFormatter;
-import 'package:labapp/Constants/widget_constant.dart';
-import 'package:labapp/Screens/bookcase_screen/bookcase_widget.dart';
-import 'package:labapp/Screens/patients/patient_controller.dart';
-import 'package:labapp/Screens/patients/patient_details_controller.dart';
-import 'package:labapp/models/caseModel.dart';
-import 'package:labapp/utils/app_color.dart';
-import 'package:labapp/utils/app_config.dart';
+import 'package:Pathbyte/Constants/widget_constant.dart';
+import 'package:Pathbyte/Screens/bookcase_screen/bookcase_widget.dart';
+import 'package:Pathbyte/Screens/patients/patient_controller.dart';
+import 'package:Pathbyte/Screens/patients/patient_details_controller.dart';
+import 'package:Pathbyte/models/caseModel.dart';
+import 'package:Pathbyte/utils/app_color.dart';
+import 'package:Pathbyte/utils/app_config.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 class PatientDialog extends StatefulWidget {
@@ -154,7 +154,10 @@ class _PatientDialogState extends State<PatientDialog> {
     try {
       final response = await http.patch(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${AppConfig.Token}",
+        },
         body: jsonEncode(body),
       );
       var model = jsonDecode(response.body);

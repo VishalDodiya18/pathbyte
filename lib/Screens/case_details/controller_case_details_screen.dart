@@ -7,12 +7,12 @@ import 'package:flutter_native_html_to_pdf/flutter_native_html_to_pdf.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:labapp/models/case_details_model.dart';
-import 'package:labapp/models/group_test_model.dart';
-import 'package:labapp/models/report_details_model.dart' as report;
-import 'package:labapp/models/test_model.dart';
-import 'package:labapp/utils/app_color.dart';
-import 'package:labapp/utils/app_config.dart';
+import 'package:Pathbyte/models/case_details_model.dart';
+import 'package:Pathbyte/models/group_test_model.dart';
+import 'package:Pathbyte/models/report_details_model.dart' as report;
+import 'package:Pathbyte/models/test_model.dart';
+import 'package:Pathbyte/utils/app_color.dart';
+import 'package:Pathbyte/utils/app_config.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -42,6 +42,7 @@ class CaseDetailsContoller extends GetxController {
 
       final response = await http.get(
         Uri.parse("${AppConfig.baseUrl}/cases/$caseId"),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
 
       if (response.statusCode == 200) {
@@ -90,7 +91,9 @@ class CaseDetailsContoller extends GetxController {
         "${AppConfig.baseUrl}/cases/$caseId/html?printFootnote=true",
       );
 
-      final response = await http.get(url);
+      final response = await http.get(url,
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
+      );
 
       if (response.statusCode == 200) {
         return response.body;
@@ -133,6 +136,7 @@ class CaseDetailsContoller extends GetxController {
 
       final response = await http.get(
         Uri.parse("${AppConfig.baseUrl}/case-tests/$caseId"),
+        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
 
       if (response.statusCode == 200) {
@@ -316,7 +320,10 @@ class CaseDetailsContoller extends GetxController {
       log(body.toString());
       final response = await http.patch(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${AppConfig.Token}",
+        },
         body: jsonEncode(body),
       );
 

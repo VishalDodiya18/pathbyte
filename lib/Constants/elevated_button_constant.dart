@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:labapp/Constants/text_constant.dart';
-import 'package:labapp/utils/app_color.dart';
+import 'package:Pathbyte/Constants/text_constant.dart';
+import 'package:Pathbyte/utils/app_color.dart';
 
 Widget elevatedButton({
   required String title,
@@ -17,6 +17,8 @@ Widget elevatedButton({
   FontWeight? fontWeight = FontWeight.w600,
   bool isleftIcon = false,
   bool isrightIcon = false,
+  bool isLoading = false,
+
   Widget? Icon,
 }) {
   return SizedBox(
@@ -38,22 +40,37 @@ Widget elevatedButton({
           ),
         ),
       ),
-      onPressed: isEnable ? onPressed : null,
-      child: Row(
-        spacing: 10.w,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (isleftIcon) Icon!,
-          TextConstant(
-            title: title,
-            color: textColor ?? Colors.white,
-            fontSize: (fontSize ?? 16).h,
-            fontWeight: fontWeight,
-          ),
-          if (isrightIcon) Icon!,
-        ],
-      ),
+      onPressed: isLoading
+          ? null
+          : isEnable
+          ? onPressed
+          : null,
+      child: isLoading
+          ? Center(
+              child: SizedBox(
+                height: 25.0,
+                width: 25.0,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2.0,
+                  color: Colors.white,
+                ),
+              ),
+            )
+          : Row(
+              spacing: 10.w,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (isleftIcon) Icon!,
+                TextConstant(
+                  title: title,
+                  color: textColor ?? Colors.white,
+                  fontSize: (fontSize ?? 16).h,
+                  fontWeight: fontWeight,
+                ),
+                if (isrightIcon) Icon!,
+              ],
+            ),
     ),
   );
 }

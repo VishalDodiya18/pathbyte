@@ -1,4 +1,4 @@
-name: labapp
+name: Pathbyte
 description: "A new Flutter project."
 
 publish_to: 'none'
@@ -25,6 +25,7 @@ dependencies:
   phone_form_field:
     path: plugin/phone_form_field_example
   share_plus: ^11.1.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_lints: ^3.0.0

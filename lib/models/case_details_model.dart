@@ -4,11 +4,11 @@
 
 import 'dart:convert';
 
-import 'package:labapp/models/caseModel.dart';
-import 'package:labapp/models/doctor_model.dart';
-import 'package:labapp/models/group_test_model.dart';
-import 'package:labapp/models/lab_center_model.dart';
-import 'package:labapp/models/test_model.dart';
+import 'package:Pathbyte/models/caseModel.dart';
+import 'package:Pathbyte/models/doctor_model.dart';
+import 'package:Pathbyte/models/group_test_model.dart';
+import 'package:Pathbyte/models/lab_center_model.dart';
+import 'package:Pathbyte/models/test_model.dart';
 
 CaseDetailsResponse caseDetailsResponseFromJson(String str) =>
     CaseDetailsResponse.fromJson(json.decode(str));
