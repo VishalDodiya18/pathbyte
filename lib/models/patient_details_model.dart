@@ -1,4 +1,4 @@
-import 'package:Pathbyte/models/caseModel.dart';
+import 'package:pathbyte/models/caseModel.dart';
 
 class PatientDetailsModel {
   int? code;

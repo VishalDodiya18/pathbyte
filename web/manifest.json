@@ -1,6 +1,6 @@
 {
-    "name": "Pathbyte",
-    "short_name": "Pathbyte",
+    "name": "pathbyte",
+    "short_name": "pathbyte",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

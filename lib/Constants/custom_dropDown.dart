@@ -2,8 +2,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:Pathbyte/Constants/text_constant.dart';
-import 'package:Pathbyte/utils/app_color.dart';
+import 'package:pathbyte/Constants/text_constant.dart';
+import 'package:pathbyte/utils/app_color.dart';
 
 class CustomDropdown<T> extends StatelessWidget {
   final List<T> items;

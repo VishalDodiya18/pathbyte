@@ -5,12 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
-import 'package:Pathbyte/Constants/elevated_button_constant.dart';
-import 'package:Pathbyte/Constants/text_constant.dart';
-import 'package:Pathbyte/Constants/widget_constant.dart';
-import 'package:Pathbyte/Screens/case_details/controller_case_details_screen.dart';
-import 'package:Pathbyte/Screens/case_details/report_table.dart';
-import 'package:Pathbyte/utils/app_color.dart';
+import 'package:pathbyte/Constants/elevated_button_constant.dart';
+import 'package:pathbyte/Constants/text_constant.dart';
+import 'package:pathbyte/Constants/widget_constant.dart';
+import 'package:pathbyte/Screens/case_details/controller_case_details_screen.dart';
+import 'package:pathbyte/Screens/case_details/report_table.dart';
+import 'package:pathbyte/utils/app_color.dart';
 
 class ReportDetails extends StatelessWidget {
   ReportDetails({super.key});

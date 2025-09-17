@@ -1,13 +1,13 @@
 import 'dart:developer';
 
-import 'package:Pathbyte/Screens/bottombar.dart';
+import 'package:pathbyte/Screens/bottombar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:Pathbyte/Screens/home_screen/ui_home_screen.dart';
-import 'package:Pathbyte/Screens/splashscreen/Login.dart';
-import 'package:Pathbyte/helper/helpers.dart';
-import 'package:Pathbyte/utils/app_color.dart';
-import 'package:Pathbyte/utils/app_config.dart';
+import 'package:pathbyte/Screens/home_screen/ui_home_screen.dart';
+import 'package:pathbyte/Screens/splashscreen/Login.dart';
+import 'package:pathbyte/helper/helpers.dart';
+import 'package:pathbyte/utils/app_color.dart';
+import 'package:pathbyte/utils/app_config.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

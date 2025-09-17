@@ -10,13 +10,13 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/state_manager.dart';
 import 'package:http/http.dart' as http;
-import 'package:Pathbyte/Constants/elevated_button_constant.dart';
-import 'package:Pathbyte/Constants/textfield_constant.dart';
-import 'package:Pathbyte/Screens/bottombar.dart';
-import 'package:Pathbyte/Screens/home_screen/ui_home_screen.dart';
-import 'package:Pathbyte/helper/helpers.dart';
-import 'package:Pathbyte/utils/app_color.dart';
-import 'package:Pathbyte/utils/app_config.dart';
+import 'package:pathbyte/Constants/elevated_button_constant.dart';
+import 'package:pathbyte/Constants/textfield_constant.dart';
+import 'package:pathbyte/Screens/bottombar.dart';
+import 'package:pathbyte/Screens/home_screen/ui_home_screen.dart';
+import 'package:pathbyte/helper/helpers.dart';
+import 'package:pathbyte/utils/app_color.dart';
+import 'package:pathbyte/utils/app_config.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

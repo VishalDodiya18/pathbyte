@@ -730,6 +730,7 @@ class Characteristic {
   List<dynamic>? dependecies;
   List<String>? possibleStringValues;
   String? charType;
+  String? formula;
   var numberValue;
   var stringValue;
   List<ReferenceRange>? referenceRange;
@@ -747,6 +748,7 @@ class Characteristic {
     this.charType,
     this.referenceRange,
     this.numberValue,
+    this.formula,
     this.stringValue,
     this.appliedReferenceRange,
     TextEditingController? highvalue,
@@ -766,6 +768,7 @@ class Characteristic {
     ),
     name: json["name"],
     unit: json["unit"],
+    formula: json["formula"],
     dependecies: json["dependecies"] == null
         ? []
         : List<dynamic>.from(json["dependecies"]!.map((x) => x)),
@@ -790,10 +793,11 @@ class Characteristic {
     "dependecies": dependecies == null
         ? []
         : List<dynamic>.from(dependecies!.map((x) => x)),
-    "possibleStringValues": possibleStringValues == null
+"possibleStringValues": possibleStringValues == null
         ? []
         : List<dynamic>.from(possibleStringValues!.map((x) => x)),
     "charType": charType,
+    "formula": formula,
     "appliedReferenceRange": appliedReferenceRange?.toJson(),
     "referenceRange": referenceRange == null
         ? []

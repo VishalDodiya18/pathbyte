@@ -1,4 +1,4 @@
-import 'package:Pathbyte/models/case_details_model.dart';
+import 'package:pathbyte/models/case_details_model.dart';
 
 class TransactionResponse {
   int? code;

@@ -7,19 +7,19 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:Pathbyte/Constants/custom_dropDown.dart';
-import 'package:Pathbyte/Constants/elevated_button_constant.dart';
-import 'package:Pathbyte/Constants/extensions.dart';
-import 'package:Pathbyte/Constants/text_constant.dart';
-import 'package:Pathbyte/Constants/textfield_constant.dart'
+import 'package:pathbyte/Constants/custom_dropDown.dart';
+import 'package:pathbyte/Constants/elevated_button_constant.dart';
+import 'package:pathbyte/Constants/extensions.dart';
+import 'package:pathbyte/Constants/text_constant.dart';
+import 'package:pathbyte/Constants/textfield_constant.dart'
     hide UpperCaseTextFormatter;
-import 'package:Pathbyte/Constants/widget_constant.dart';
-import 'package:Pathbyte/Screens/bookcase_screen/bookcase_widget.dart';
-import 'package:Pathbyte/Screens/patients/patient_controller.dart';
-import 'package:Pathbyte/Screens/patients/patient_details_controller.dart';
-import 'package:Pathbyte/models/caseModel.dart';
-import 'package:Pathbyte/utils/app_color.dart';
-import 'package:Pathbyte/utils/app_config.dart';
+import 'package:pathbyte/Constants/widget_constant.dart';
+import 'package:pathbyte/Screens/bookcase_screen/bookcase_widget.dart';
+import 'package:pathbyte/Screens/patients/patient_controller.dart';
+import 'package:pathbyte/Screens/patients/patient_details_controller.dart';
+import 'package:pathbyte/models/caseModel.dart';
+import 'package:pathbyte/utils/app_color.dart';
+import 'package:pathbyte/utils/app_config.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 class PatientDialog extends StatefulWidget {

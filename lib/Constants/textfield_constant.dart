@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:Pathbyte/Constants/text_constant.dart';
-import 'package:Pathbyte/utils/app_color.dart';
+import 'package:pathbyte/Constants/text_constant.dart';
+import 'package:pathbyte/utils/app_color.dart';
 
 class TextFieldConstant extends StatelessWidget {
   const TextFieldConstant({

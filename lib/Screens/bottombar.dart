@@ -1,24 +1,24 @@
 import 'dart:ui';
 
-import 'package:Pathbyte/Screens/splashscreen/Login.dart';
-import 'package:Pathbyte/utils/app_color.dart';
-import 'package:Pathbyte/utils/app_config.dart';
+import 'package:pathbyte/Screens/splashscreen/Login.dart';
+import 'package:pathbyte/utils/app_color.dart';
+import 'package:pathbyte/utils/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/instance_manager.dart';
-import 'package:Pathbyte/Constants/elevated_button_constant.dart';
-import 'package:Pathbyte/Constants/text_constant.dart';
-import 'package:Pathbyte/Constants/widget_constant.dart';
-import 'package:Pathbyte/Screens/bookcase_screen/controller_bookcase_screen.dart';
-import 'package:Pathbyte/Screens/bookcase_screen/ui_bookcase_screen.dart';
-import 'package:Pathbyte/Screens/home_screen/controller_home_screen.dart';
-import 'package:Pathbyte/Screens/home_screen/ui_home_screen.dart';
-import 'package:Pathbyte/Screens/patients/patient_controller.dart';
-import 'package:Pathbyte/Screens/patients/patients.dart';
-import 'package:Pathbyte/helper/helpers.dart';
+import 'package:pathbyte/Constants/elevated_button_constant.dart';
+import 'package:pathbyte/Constants/text_constant.dart';
+import 'package:pathbyte/Constants/widget_constant.dart';
+import 'package:pathbyte/Screens/bookcase_screen/controller_bookcase_screen.dart';
+import 'package:pathbyte/Screens/bookcase_screen/ui_bookcase_screen.dart';
+import 'package:pathbyte/Screens/home_screen/controller_home_screen.dart';
+import 'package:pathbyte/Screens/home_screen/ui_home_screen.dart';
+import 'package:pathbyte/Screens/patients/patient_controller.dart';
+import 'package:pathbyte/Screens/patients/patients.dart';
+import 'package:pathbyte/helper/helpers.dart';
 
 class Bottombar extends StatefulWidget {
   const Bottombar({super.key});

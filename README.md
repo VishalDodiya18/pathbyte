@@ -1,4 +1,4 @@
-# Pathbyte
+# pathbyte
 
 A new Flutter project.
 

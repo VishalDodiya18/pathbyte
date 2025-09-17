@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Pathbyte/utils/app_color.dart';
+import 'package:pathbyte/utils/app_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SetString(key, value) async {
@@ -17,7 +17,7 @@ PreferredSizeWidget CustomAppBar({
   bool? centerTitle,
   List<Widget>? actions,
   FontWeight? fontWeight,
-  bool automaticallyImplyLeading = true,
+  bool automaticallyImplyLeading = false,
   String? leading,
   textColor,
   fontSize,

@@ -3,11 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:Pathbyte/Screens/bottombar.dart';
-import 'package:Pathbyte/Screens/home_screen/controller_home_screen.dart';
-import 'package:Pathbyte/Screens/home_screen/ui_home_screen.dart';
-import 'package:Pathbyte/Screens/splashscreen/SplashScreen.dart';
-import 'package:Pathbyte/utils/app_color.dart';
+import 'package:pathbyte/Screens/splashscreen/SplashScreen.dart';
+import 'package:pathbyte/utils/app_color.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +24,7 @@ class MyApp extends StatelessWidget {
         designSize: const Size(428, 926),
         builder: (_, child) {
           return GetMaterialApp(
-            title: 'Pathbyte',
+            title: 'pathbyte',
 
             debugShowCheckedModeBanner: false,
             theme: ThemeData(

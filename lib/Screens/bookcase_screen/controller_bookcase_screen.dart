@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:Pathbyte/Constants/extensions.dart';
-import 'package:Pathbyte/Screens/home_screen/controller_home_screen.dart';
-import 'package:Pathbyte/models/caseModel.dart';
-import 'package:Pathbyte/models/doctor_model.dart' hide Address;
-import 'package:Pathbyte/models/group_test_model.dart';
-import 'package:Pathbyte/models/lab_center_model.dart';
-import 'package:Pathbyte/models/test_model.dart';
-import 'package:Pathbyte/utils/app_color.dart';
-import 'package:Pathbyte/utils/app_config.dart';
+import 'package:pathbyte/Constants/extensions.dart';
+import 'package:pathbyte/Screens/home_screen/controller_home_screen.dart';
+import 'package:pathbyte/models/caseModel.dart';
+import 'package:pathbyte/models/doctor_model.dart' hide Address;
+import 'package:pathbyte/models/group_test_model.dart';
+import 'package:pathbyte/models/lab_center_model.dart';
+import 'package:pathbyte/models/test_model.dart';
+import 'package:pathbyte/utils/app_color.dart';
+import 'package:pathbyte/utils/app_config.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 class BookCaseController extends GetxController {

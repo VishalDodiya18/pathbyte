@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:Pathbyte/Constants/extensions.dart';
-import 'package:Pathbyte/Screens/bookcase_screen/controller_bookcase_screen.dart';
-import 'package:Pathbyte/models/group_test_model.dart';
-import 'package:Pathbyte/models/test_model.dart';
+import 'package:pathbyte/Constants/extensions.dart';
+import 'package:pathbyte/Screens/bookcase_screen/controller_bookcase_screen.dart';
+import 'package:pathbyte/models/group_test_model.dart';
+import 'package:pathbyte/models/test_model.dart';
 
 class SelectedTestsTable extends StatelessWidget {
   @override

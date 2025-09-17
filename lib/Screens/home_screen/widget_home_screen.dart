@@ -3,16 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:Pathbyte/Constants/extensions.dart';
-import 'package:Pathbyte/Constants/text_constant.dart';
-import 'package:Pathbyte/Constants/widget_constant.dart';
-import 'package:Pathbyte/Screens/case_details/main_details_screen.dart';
-import 'package:Pathbyte/Screens/case_details/controller_case_details_screen.dart';
-import 'package:Pathbyte/Screens/patients/patient_details_controller.dart';
-import 'package:Pathbyte/Screens/home_screen/controller_home_screen.dart';
-import 'package:Pathbyte/models/caseModel.dart';
-import 'package:Pathbyte/utils/app_color.dart';
-import 'package:Pathbyte/utils/app_config.dart';
+import 'package:pathbyte/Constants/extensions.dart';
+import 'package:pathbyte/Constants/text_constant.dart';
+import 'package:pathbyte/Constants/widget_constant.dart';
+import 'package:pathbyte/Screens/case_details/main_details_screen.dart';
+import 'package:pathbyte/Screens/case_details/controller_case_details_screen.dart';
+import 'package:pathbyte/Screens/patients/patient_details_controller.dart';
+import 'package:pathbyte/Screens/home_screen/controller_home_screen.dart';
+import 'package:pathbyte/models/caseModel.dart';
+import 'package:pathbyte/utils/app_color.dart';
+import 'package:pathbyte/utils/app_config.dart';
 
 class HomeScreenWidget {
   Widget tabbarWidget(int tabIndex) {

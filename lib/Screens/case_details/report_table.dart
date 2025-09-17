@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/state_manager.dart';
-import 'package:Pathbyte/Constants/custom_dropDown.dart';
-import 'package:Pathbyte/Constants/textfield_constant.dart';
-import 'package:Pathbyte/Screens/case_details/controller_case_details_screen.dart';
-import 'package:Pathbyte/models/report_details_model.dart';
-import 'package:Pathbyte/utils/app_color.dart';
+import 'package:pathbyte/Constants/custom_dropDown.dart';
+import 'package:pathbyte/Constants/textfield_constant.dart';
+import 'package:pathbyte/Screens/case_details/controller_case_details_screen.dart';
+import 'package:pathbyte/models/report_details_model.dart';
+import 'package:pathbyte/utils/app_color.dart';
 
 class ReportTable extends StatelessWidget {
   bool isfinal;

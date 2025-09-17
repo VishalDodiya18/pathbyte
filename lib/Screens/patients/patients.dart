@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:Pathbyte/Constants/text_constant.dart';
-import 'package:Pathbyte/Constants/textfield_constant.dart';
-import 'package:Pathbyte/Constants/widget_constant.dart';
-import 'package:Pathbyte/Screens/patients/edit_patient.dart';
-import 'package:Pathbyte/Screens/patients/patient_controller.dart';
-import 'package:Pathbyte/Screens/patients/patient_details.dart';
-import 'package:Pathbyte/Screens/patients/patient_details_controller.dart';
-import 'package:Pathbyte/models/caseModel.dart';
-import 'package:Pathbyte/utils/app_color.dart';
-import 'package:Pathbyte/utils/app_config.dart';
+import 'package:pathbyte/Constants/text_constant.dart';
+import 'package:pathbyte/Constants/textfield_constant.dart';
+import 'package:pathbyte/Constants/widget_constant.dart';
+import 'package:pathbyte/Screens/patients/edit_patient.dart';
+import 'package:pathbyte/Screens/patients/patient_controller.dart';
+import 'package:pathbyte/Screens/patients/patient_details.dart';
+import 'package:pathbyte/Screens/patients/patient_details_controller.dart';
+import 'package:pathbyte/models/caseModel.dart';
+import 'package:pathbyte/utils/app_color.dart';
+import 'package:pathbyte/utils/app_config.dart';
 
 class Patientes extends StatelessWidget {
   const Patientes({super.key});

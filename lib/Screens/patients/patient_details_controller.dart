@@ -6,11 +6,11 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:Pathbyte/models/caseModel.dart';
-import 'package:Pathbyte/models/case_details_model.dart';
-import 'package:Pathbyte/models/patient_details_model.dart';
-import 'package:Pathbyte/models/transactionResponse.dart';
-import 'package:Pathbyte/utils/app_config.dart';
+import 'package:pathbyte/models/caseModel.dart';
+import 'package:pathbyte/models/case_details_model.dart';
+import 'package:pathbyte/models/patient_details_model.dart';
+import 'package:pathbyte/models/transactionResponse.dart';
+import 'package:pathbyte/utils/app_config.dart';
 
 class PatientDetailsController extends GetxController {
   Patient patient;

@@ -7,12 +7,12 @@ import 'package:flutter_native_html_to_pdf/flutter_native_html_to_pdf.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:Pathbyte/models/case_details_model.dart';
-import 'package:Pathbyte/models/group_test_model.dart';
-import 'package:Pathbyte/models/report_details_model.dart' as report;
-import 'package:Pathbyte/models/test_model.dart';
-import 'package:Pathbyte/utils/app_color.dart';
-import 'package:Pathbyte/utils/app_config.dart';
+import 'package:pathbyte/models/case_details_model.dart';
+import 'package:pathbyte/models/group_test_model.dart';
+import 'package:pathbyte/models/report_details_model.dart' as report;
+import 'package:pathbyte/models/test_model.dart';
+import 'package:pathbyte/utils/app_color.dart';
+import 'package:pathbyte/utils/app_config.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -91,7 +91,8 @@ class CaseDetailsContoller extends GetxController {
         "${AppConfig.baseUrl}/cases/$caseId/html?printFootnote=true",
       );
 
-      final response = await http.get(url,
+      final response = await http.get(
+        url,
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
 

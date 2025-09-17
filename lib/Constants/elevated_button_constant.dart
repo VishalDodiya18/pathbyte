@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:Pathbyte/Constants/text_constant.dart';
-import 'package:Pathbyte/utils/app_color.dart';
+import 'package:pathbyte/Constants/text_constant.dart';
+import 'package:pathbyte/utils/app_color.dart';
 
 Widget elevatedButton({
   required String title,
@@ -18,7 +18,6 @@ Widget elevatedButton({
   bool isleftIcon = false,
   bool isrightIcon = false,
   bool isLoading = false,
-
   Widget? Icon,
 }) {
   return SizedBox(

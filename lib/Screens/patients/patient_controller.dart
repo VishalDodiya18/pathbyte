@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:Pathbyte/models/caseModel.dart';
-import 'package:Pathbyte/models/patient_response_model.dart';
-import 'package:Pathbyte/utils/app_config.dart';
+import 'package:pathbyte/models/caseModel.dart';
+import 'package:pathbyte/models/patient_response_model.dart';
+import 'package:pathbyte/utils/app_config.dart';
 
 class PatientController extends GetxController {
   final PagingController<int, Patient> patientPagingController =
