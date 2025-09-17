@@ -2,9 +2,12 @@
 //
 //     final reportDetailsModel = reportDetailsModelFromJson(jsonString);
 
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 ReportDetailsModel reportDetailsModelFromJson(String str) =>
     ReportDetailsModel.fromJson(json.decode(str));
@@ -431,7 +434,7 @@ class Test {
   AppliedReferenceRange? appliedReferenceRange;
   TextEditingController highvalue = TextEditingController();
   TextEditingController lowvalue = TextEditingController();
-
+  Map<String, Characteristic> get charMap => characteristics.toCharMap();
   Test({
     this.id,
     this.caseId,
@@ -793,7 +796,7 @@ class Characteristic {
     "dependecies": dependecies == null
         ? []
         : List<dynamic>.from(dependecies!.map((x) => x)),
-"possibleStringValues": possibleStringValues == null
+    "possibleStringValues": possibleStringValues == null
         ? []
         : List<dynamic>.from(possibleStringValues!.map((x) => x)),
     "charType": charType,
@@ -803,4 +806,71 @@ class Characteristic {
         ? []
         : List<dynamic>.from(referenceRange!.map((x) => x.toJson())),
   };
+}
+
+extension CharacteristicMapper on List<Characteristic>? {
+  Map<String, Characteristic> toCharMap() {
+    final map = <String, Characteristic>{};
+    if (this == null) return map;
+    for (var char in this!) {
+      if (char.name != null) {
+        map[char.name!] = char;
+      }
+    }
+    return map;
+  }
+}
+
+double? calculateFormulaWithModel(
+  String? formula,
+  List<Characteristic> characteristics,
+) {
+  if (formula == null || formula.isEmpty || characteristics.isEmpty)
+    return null;
+
+  try {
+    // Debug info
+    print("Formula: $formula");
+    print("Characteristics count: ${characteristics.length}");
+
+    // Expression formula (A, B, C… को values से replace करना है)
+    String expression = formula.toUpperCase();
+
+    // Position wise mapping (A → 1st, B → 2nd, C → 3rd…)
+    final letterMap = <String, double>{};
+    for (int i = 0; i < characteristics.length; i++) {
+      final char = characteristics[i];
+      final numValue = double.tryParse(char.lowvalue.text);
+      if (numValue != null) {
+        final letter = String.fromCharCode(65 + i); // A, B, C...
+        letterMap[letter] = numValue;
+      }
+    }
+
+    // Replace letters with values
+    letterMap.forEach((letter, value) {
+      final regex = RegExp(r'\b' + letter + r'\b');
+      expression = expression.replaceAll(regex, value.toString());
+    });
+
+    print("Expression after replacement: $expression");
+
+    // Validate expression
+    final sanitized = expression.replaceAll(RegExp(r'[^0-9+\-*/().\s]'), '');
+    if (sanitized != expression) {
+      print("Formula contains invalid characters: $expression");
+      return null;
+    }
+
+    // Evaluate
+    Parser p = Parser();
+    Expression exp = p.parse(expression);
+    double result = exp.evaluate(EvaluationType.REAL, ContextModel());
+
+    print("Calculated result: $result");
+    return result.isNaN ? null : result;
+  } catch (e) {
+    print("Error calculating formula: $e");
+    return null;
+  }
 }

@@ -4,6 +4,7 @@ class AppConfig {
   static String Role = '';
   static String UserId = "";
   static String FullName = "";
+  static String labname = "";
 }
 
 class AppImage {

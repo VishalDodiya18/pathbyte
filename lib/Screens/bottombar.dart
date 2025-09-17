@@ -41,6 +41,7 @@ class _BottombarState extends State<Bottombar> {
     AppConfig.Role = await GetString("role");
     AppConfig.UserId = await GetString("userid");
     AppConfig.FullName = await GetString("name");
+    AppConfig.labname = await GetString("labname");
     setState(() {});
   }
 
@@ -53,6 +54,7 @@ class _BottombarState extends State<Bottombar> {
       },
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: F,
           title: Row(
             spacing: 10.w,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -61,7 +63,7 @@ class _BottombarState extends State<Bottombar> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const TextConstant(title: 'Pathology Lab'),
+                  TextConstant(title: AppConfig.labname ?? ""),
                   TextConstant(
                     title: AppConfig.FullName ?? "",
                     fontSize: 16,

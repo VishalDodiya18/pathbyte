@@ -160,9 +160,10 @@ class _LoginPageState extends State<LoginPage> {
     log(model.toString());
     if (model["code"] == 200) {
       SetString("token", model["data"]["accessToken"]);
-      // SetString("userid", model["data"]["user"]["_id"]);
+      SetString("userid", model["data"]["user"]["_id"]);
       SetString("role", model["data"]["user"]["roles"][0]["name"]);
-      SetString("name", model["data"]["user"]["firstName"]);
+      SetString("name", model["data"]["user"]["fullName"]);
+      SetString("labname", model["data"]["user"]["labs"][0]["name"]);
       setState(() {
         isLoading = false;
         AppConfig.Token = model["data"]["accessToken"];
