@@ -9,6 +9,7 @@ import 'package:pathbyte/Constants/elevated_button_constant.dart';
 import 'package:pathbyte/Constants/textfield_constant.dart';
 import 'package:pathbyte/Screens/case_details/controller_case_details_screen.dart';
 import 'package:pathbyte/Screens/home_screen/controller_home_screen.dart';
+import 'package:pathbyte/helper/helpers.dart';
 import 'package:pathbyte/utils/app_color.dart';
 import 'package:pathbyte/utils/app_config.dart';
 
@@ -53,7 +54,10 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
       );
 
       var model = jsonDecode(response.body);
-
+      if (response.statusCode == 500) {
+        Logout(message: model["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 201 && model["code"] == 201) {
         Get.back();
         Get.find<CaseDetailsContoller>().fetchCaseById();

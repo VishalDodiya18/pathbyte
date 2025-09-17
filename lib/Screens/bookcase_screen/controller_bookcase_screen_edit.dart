@@ -10,6 +10,7 @@ import 'package:pathbyte/Screens/case_details/controller_case_details_screen.dar
 import 'package:pathbyte/Screens/home_screen/controller_home_screen.dart';
 import 'package:pathbyte/Screens/patients/patient_controller.dart';
 import 'package:pathbyte/Screens/patients/patient_details_controller.dart';
+import 'package:pathbyte/helper/helpers.dart';
 import 'package:pathbyte/models/caseModel.dart';
 import 'package:pathbyte/models/case_details_model.dart' hide Doctor, Patient;
 import 'package:pathbyte/models/doctor_model.dart' hide Address;
@@ -186,10 +187,14 @@ class EditBookCaseController extends GetxController {
       );
 
       final data = jsonDecode(response.body);
+        if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       //log(data.toString());
       GetAllTestModel getAllTestModel = GetAllTestModel.fromJson(data);
       final List<Test> newItems = getAllTestModel.data?.tests ?? [];
-
+    
       final isLastPage =
           pageKey >= (getAllTestModel.data?.pagination?.totalPages ?? 0);
 
@@ -216,6 +221,10 @@ class EditBookCaseController extends GetxController {
 
       final data = jsonDecode(response.body);
       //log(data.toString());
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       GroupTestModel getAllTestModel = GroupTestModel.fromJson(data);
       final List<Group> newItems = getAllTestModel.data?.groups ?? [];
 
@@ -314,6 +323,10 @@ class EditBookCaseController extends GetxController {
       var model = jsonDecode(response.body);
       //log(response.statusCode.toString());
       //log(model.toString());
+      if (response.statusCode == 500) {
+        Logout(message: model["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 200 && model["code"] == 200) {
         Get.back();
         Get.find<CaseDetailsContoller>().fetchCaseById();

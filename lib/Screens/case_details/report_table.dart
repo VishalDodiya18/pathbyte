@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/state_manager.dart';
+import 'package:math_expressions/math_expressions.dart';
 import 'package:pathbyte/Constants/custom_dropDown.dart';
 import 'package:pathbyte/Constants/textfield_constant.dart';
 import 'package:pathbyte/Screens/case_details/controller_case_details_screen.dart';
@@ -481,9 +484,28 @@ class ReportTable extends StatelessWidget {
                                               minWidth: 80.w,
                                             ),
                                             child: TextFieldConstant(
-                                              isReadOnly: isfinal,
+                                              isReadOnly:
+                                                  isfinal ||
+                                                  isValidMathExpression(
+                                                    category
+                                                        .groupedTests![i]
+                                                        .caseTests![j]
+                                                        .characteristics![k]
+                                                        .formula,
+                                                  ),
 
                                               onChanged: (v) {
+                                                // evaluateCharacteristic(
+                                                //   category
+                                                //       .groupedTests![i]
+                                                //       .caseTests![j]
+                                                //       .characteristics![k],
+                                                //   category
+                                                //           .groupedTests![i]
+                                                //           .caseTests![j]
+                                                //           .characteristics ??
+                                                //       [],
+                                                // );
                                                 controller.update();
                                               },
                                               inputFormatters: [
@@ -494,11 +516,31 @@ class ReportTable extends StatelessWidget {
                                               fillColor: const Color(
                                                 0xffEEEEEE,
                                               ),
-                                              controller: category
-                                                  .groupedTests![i]
-                                                  .caseTests![j]
-                                                  .characteristics![k]
-                                                  .lowvalue,
+                                              controller:
+                                                  isValidMathExpression(
+                                                    category
+                                                        .groupedTests![i]
+                                                        .caseTests![j]
+                                                        .characteristics![k]
+                                                        .formula,
+                                                  )
+                                                  ? TextEditingController(
+                                                      text: evaluateCharacteristicValue(
+                                                        category
+                                                            .groupedTests![i]
+                                                            .caseTests![j]
+                                                            .characteristics![k],
+                                                        category
+                                                            .groupedTests![i]
+                                                            .caseTests![j]
+                                                            .characteristics!,
+                                                      ).toString(),
+                                                    )
+                                                  : category
+                                                        .groupedTests![i]
+                                                        .caseTests![j]
+                                                        .characteristics![k]
+                                                        .lowvalue,
                                               hintText: "",
                                             ),
                                           ),
@@ -674,6 +716,7 @@ class ReportTable extends StatelessWidget {
                     cells: [
                       DataCell(
                         Text(
+                          // category.ungroupedTests![i].charMap.toString(),
                           "${(category.groupedTests ?? []).length + i + 1}",
                           textAlign: TextAlign.center,
                         ),
@@ -971,9 +1014,28 @@ class ReportTable extends StatelessWidget {
                                               minWidth: 80.w,
                                             ),
                                             child: TextFieldConstant(
-                                              isReadOnly: isfinal,
+                                              isReadOnly:
+                                                  isfinal ||
+                                                  isValidMathExpression(
+                                                    category
+                                                        .ungroupedTests?[i]
+                                                        .characteristics?[j]
+                                                        .formula,
+                                                  ),
 
                                               onChanged: (v) {
+                                                // category
+                                                //         .ungroupedTests?[i]
+                                                //         .characteristics =
+                                                //     evaluateCharacteristicValue(
+                                                //       category
+                                                //           .ungroupedTests?[i]
+                                                //           .characteristics?[j],
+                                                //       category
+                                                //               .ungroupedTests?[i]
+                                                //               .characteristics ??
+                                                //           [],
+                                                //     );
                                                 controller.update();
                                               },
                                               inputFormatters: [
@@ -984,10 +1046,28 @@ class ReportTable extends StatelessWidget {
                                               fillColor: const Color(
                                                 0xffEEEEEE,
                                               ),
-                                              controller: category
-                                                  .ungroupedTests![i]
-                                                  .characteristics![j]
-                                                  .lowvalue,
+                                              controller:
+                                                  isValidMathExpression(
+                                                    category
+                                                        .ungroupedTests?[i]
+                                                        .characteristics?[j]
+                                                        .formula,
+                                                  )
+                                                  ? TextEditingController(
+                                                      text: evaluateCharacteristicValue(
+                                                        category
+                                                            .ungroupedTests?[i]
+                                                            .characteristics?[j],
+                                                        category
+                                                                .ungroupedTests?[i]
+                                                                .characteristics ??
+                                                            [],
+                                                      ).toString(),
+                                                    )
+                                                  : category
+                                                        .ungroupedTests![i]
+                                                        .characteristics![j]
+                                                        .lowvalue,
                                               hintText: "",
                                             ),
                                           ),
@@ -1142,4 +1222,83 @@ Color? getRangeColor(String? current, String? low, String? high) {
 
 bool areValuesValid(String? current, String? low, String? high) {
   return _toNum(current) != null && _toNum(low) != null && _toNum(high) != null;
+}
+
+bool isValidRegex(String pattern) {
+  try {
+    // Agar regex compile ho gaya to valid hai
+    RegExp(pattern);
+    return true;
+  } catch (e) {
+    // Agar error aaya to invalid regex hai
+    return false;
+  }
+}
+
+bool isValidMathExpression(String? expression) {
+  if (expression == null || expression.trim().isEmpty) {
+    return false;
+  }
+
+  final exp = expression.trim();
+
+  // Condition: कम से कम ek operator होना चाहिए
+  final hasOperator = RegExp(r'[+\-*/^]').hasMatch(exp);
+
+  if (!hasOperator) return false;
+
+  try {
+    final parser = Parser();
+    parser.parse(exp);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+num? evaluateCharacteristicValue(
+  Characteristic? current,
+  List<Characteristic> all,
+) {
+  if (current == null ||
+      current.formula == null ||
+      current.formula!.trim().isEmpty) {
+    return 0;
+  }
+
+  try {
+    List<String> finalstring = breakStringToChars(current.formula ?? "");
+
+    for (var i = 0; i < finalstring.length; i++) {
+      final match = all.firstWhere(
+        (e) => (e.formula ?? "") == finalstring[i].toString(),
+        orElse: () => Characteristic(),
+      );
+
+      finalstring[i] = match.lowvalue.text.isNotEmpty
+          ? match.lowvalue.text
+          : finalstring[i];
+    }
+
+    Parser parser = Parser();
+    Expression exp = parser.parse(finalstring.join());
+
+    // Evaluate expression
+    final result = exp.evaluate(EvaluationType.REAL, ContextModel());
+
+    if (result.isNaN || result.isInfinite) {
+      debugPrint("⚠️ Invalid result for formula: ${current.formula}");
+      return 0;
+    }
+
+    return result; // <-- actual evaluated result return hoga
+  } catch (e) {
+    debugPrint("⚠️ Formula evaluation failed: ${current.formula} -> $e");
+    return 0;
+  }
+}
+
+List<String> breakStringToChars(String input) {
+  // sabhi spaces hatao aur har character ko alag karo
+  return input.replaceAll(" ", "").split("");
 }

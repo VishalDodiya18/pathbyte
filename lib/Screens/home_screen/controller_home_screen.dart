@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:http/http.dart' as http;
+import 'package:pathbyte/helper/helpers.dart';
 import 'package:pathbyte/models/caseModel.dart';
 import 'package:pathbyte/models/case_list_model.dart';
 import 'package:pathbyte/models/doctor_model.dart';
@@ -153,7 +154,11 @@ class HomeController extends GetxController
         ),
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
-
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 200) {
         final data = PatientResponseModel.fromJson(jsonDecode(response.body));
         final patients = data.data?.patients ?? [];
@@ -178,32 +183,37 @@ class HomeController extends GetxController
     required PagingController<int, Doctor> controller,
     TextEditingController? search,
   }) async {
-    try {
-      final response = await http.get(
-        Uri.parse(
-          "${AppConfig.baseUrl}/doctors?page=$pageKey&limit=$_pageSize${search != null && search.text.trim().isNotEmpty ? "&search=${search.text}" : ""}",
-        ),
-        headers: {"Authorization": "Bearer ${AppConfig.Token}"},
-      );
-
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        final doctorResponse = DoctorResponse.fromJson(jsonData);
-
-        final doctorsList = doctorResponse.data.doctors;
-
-        final isLastPage = doctorsList.length < _pageSize;
-        if (isLastPage) {
-          controller.appendLastPage(doctorsList);
-        } else {
-          controller.appendPage(doctorsList, pageKey + 1);
-        }
-      } else {
-        controller.error = "Failed: ${response.statusCode}";
-      }
-    } catch (e) {
-      controller.error = e.toString();
+    // try {
+    final response = await http.get(
+      Uri.parse(
+        "${AppConfig.baseUrl}/doctors?page=$pageKey&limit=$_pageSize${search != null && search.text.trim().isNotEmpty ? "&search=${search.text}" : ""}",
+      ),
+      headers: {"Authorization": "Bearer ${AppConfig.Token}"},
+    );
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 500) {
+      Logout(message: data["message"] ?? "Your Session is expired");
+      return;
     }
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      final doctorResponse = DoctorResponse.fromJson(jsonData);
+
+      final doctorsList = doctorResponse.data?.doctors;
+
+      final isLastPage = (doctorsList ?? []).length < _pageSize;
+      if (isLastPage) {
+        controller.appendLastPage(doctorsList ?? []);
+      } else {
+        controller.appendPage(doctorsList ?? [], pageKey + 1);
+      }
+    } else {
+      controller.error = "Failed: ${response.statusCode}";
+    }
+    // } catch (e) {
+    //   log(e.toString());
+    //   controller.error = e.toString();
+    // }
   }
 
   /// Lab Centers with pagination
@@ -219,7 +229,11 @@ class HomeController extends GetxController
         ),
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
-
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final labResponse = LabCenterResponse.fromJson(jsonData);
@@ -273,6 +287,11 @@ class HomeController extends GetxController
         Uri.parse(url),
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
+       final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 

@@ -131,26 +131,7 @@ class _BottombarState extends State<Bottombar> {
                                             child: GestureDetector(
                                               onTap: () async {
                                                 setState(() {
-                                                  SetString("token", "null");
-                                                  SetString("userid", "null");
-                                                  SetString("role", "null");
-                                                  SetString("name", "null");
-                                                  AppConfig.Token = "null";
-                                                  AppConfig.UserId = "null";
-                                                  AppConfig.FullName = "null";
-
-                                                  Get.to(LoginPage());
-                                                  Future.delayed(
-                                                    Duration(milliseconds: 100),
-                                                    () {
-                                                      Get.delete<
-                                                        HomeController
-                                                      >(force: T);
-                                                      Get.delete<
-                                                        PatientController
-                                                      >(force: T);
-                                                    },
-                                                  );
+                                                  Logout();
                                                 });
                                                 set(() {});
                                               },

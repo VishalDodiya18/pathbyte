@@ -17,6 +17,7 @@ import 'package:pathbyte/Constants/widget_constant.dart';
 import 'package:pathbyte/Screens/bookcase_screen/bookcase_widget.dart';
 import 'package:pathbyte/Screens/patients/patient_controller.dart';
 import 'package:pathbyte/Screens/patients/patient_details_controller.dart';
+import 'package:pathbyte/helper/helpers.dart';
 import 'package:pathbyte/models/caseModel.dart';
 import 'package:pathbyte/utils/app_color.dart';
 import 'package:pathbyte/utils/app_config.dart';
@@ -161,6 +162,10 @@ class _PatientDialogState extends State<PatientDialog> {
         body: jsonEncode(body),
       );
       var model = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: model["message"] ?? "Your Session is expired");
+        return;
+      }
       log(response.statusCode.toString());
       if (response.statusCode == 200 && model["code"] == 200) {
         Get.back();

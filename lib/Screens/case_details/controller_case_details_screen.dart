@@ -7,6 +7,8 @@ import 'package:flutter_native_html_to_pdf/flutter_native_html_to_pdf.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
+import 'package:pathbyte/Screens/case_details/report_table.dart';
+import 'package:pathbyte/helper/helpers.dart';
 import 'package:pathbyte/models/case_details_model.dart';
 import 'package:pathbyte/models/group_test_model.dart';
 import 'package:pathbyte/models/report_details_model.dart' as report;
@@ -44,7 +46,11 @@ class CaseDetailsContoller extends GetxController {
         Uri.parse("${AppConfig.baseUrl}/cases/$caseId"),
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
-
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final caseResponse = CaseDetails.fromJson(jsonData["data"]["case"]);
@@ -95,7 +101,11 @@ class CaseDetailsContoller extends GetxController {
         url,
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
-
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return "";
+      }
       if (response.statusCode == 200) {
         return response.body;
       } else {
@@ -139,7 +149,11 @@ class CaseDetailsContoller extends GetxController {
         Uri.parse("${AppConfig.baseUrl}/case-tests/$caseId"),
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
-
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final caseResponse = report.ReportDetailsModel.fromJson(jsonData);
@@ -257,6 +271,15 @@ class CaseDetailsContoller extends GetxController {
                                       "numeric")
                                     "numberValue": e.lowvalue.text.isEmpty
                                         ? null
+                                        : isValidMathExpression(e.formula ?? "")
+                                        ? evaluateCharacteristicValue(
+                                            e,
+                                            category[i]
+                                                    .groupedTests?[j]
+                                                    .caseTests?[k]
+                                                    .characteristics ??
+                                                [],
+                                          ).toString()
                                         : num.parse(e.lowvalue.text)
                                   else
                                     "stringValue": e.lowvalue.text.isEmpty
@@ -305,7 +328,15 @@ class CaseDetailsContoller extends GetxController {
                                 if ((e.charType ?? "").toLowerCase() ==
                                     "numeric")
                                   "numberValue": e.lowvalue.text.isEmpty
-                                      ? ""
+                                      ? null
+                                      : isValidMathExpression(e.formula ?? "")
+                                      ? evaluateCharacteristicValue(
+                                          e,
+                                          category[i]
+                                                  .ungroupedTests?[j]
+                                                  .characteristics ??
+                                              [],
+                                        ).toString()
                                       : num.parse(e.lowvalue.text)
                                 else
                                   "stringValue": e.lowvalue.text.isEmpty
@@ -318,7 +349,7 @@ class CaseDetailsContoller extends GetxController {
           ],
         ],
       };
-      log(body.toString());
+      // log(body.toString());
       final response = await http.patch(
         url,
         headers: {
@@ -330,6 +361,10 @@ class CaseDetailsContoller extends GetxController {
 
       var model = jsonDecode(response.body);
 
+      if (response.statusCode == 500) {
+        Logout(message: model["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 200 && model["code"] == 200) {
         Get.back();
       } else {

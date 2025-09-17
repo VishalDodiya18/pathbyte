@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:pathbyte/Screens/home_screen/controller_home_screen.dart';
+import 'package:pathbyte/Screens/patients/patient_controller.dart';
+import 'package:pathbyte/Screens/splashscreen/Login.dart';
 import 'package:pathbyte/utils/app_color.dart';
+import 'package:pathbyte/utils/app_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SetString(key, value) async {
@@ -55,4 +61,27 @@ extension StringExtension on String {
 
     return initials;
   }
+}
+
+Logout({message}) {
+  SetString("token", "null");
+  SetString("userid", "null");
+  SetString("role", "null");
+  SetString("name", "null");
+  AppConfig.Token = "null";
+  AppConfig.UserId = "null";
+  AppConfig.FullName = "null";
+
+  Get.to(LoginPage());
+  Future.delayed(Duration(milliseconds: 100), () {
+    Get.delete<HomeController>(force: T);
+    Get.delete<PatientController>(force: T);
+  });
+  Get.closeAllSnackbars();
+  Get.snackbar(
+    message != null ? "Error" : "Success",
+    message ?? "Logout Successfully",
+    backgroundColor: message != null ? AppColor.redcolor : AppColor.greencolor,
+    colorText: AppColor.whitecolor,
+  );
 }

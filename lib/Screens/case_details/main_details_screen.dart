@@ -1,9 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:pathbyte/Screens/bookcase_screen/controller_bookcase_screen_edit.dart';
 import 'package:pathbyte/Screens/bookcase_screen/ui_bookcase_screen_edit.dart';
 import 'package:pathbyte/Screens/case_details/case_details.dart';

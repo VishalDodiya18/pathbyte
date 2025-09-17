@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:pathbyte/Constants/extensions.dart';
 import 'package:pathbyte/Screens/home_screen/controller_home_screen.dart';
+import 'package:pathbyte/helper/helpers.dart';
 import 'package:pathbyte/models/caseModel.dart';
 import 'package:pathbyte/models/doctor_model.dart' hide Address;
 import 'package:pathbyte/models/group_test_model.dart';
@@ -134,6 +135,10 @@ class BookCaseController extends GetxController {
       );
 
       final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       //log(data.toString());
       GetAllTestModel getAllTestModel = GetAllTestModel.fromJson(data);
       final List<Test> newItems = getAllTestModel.data?.tests ?? [];
@@ -163,6 +168,10 @@ class BookCaseController extends GetxController {
       );
 
       final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       //log(data.toString());
       GroupTestModel getAllTestModel = GroupTestModel.fromJson(data);
       final List<Group> newItems = getAllTestModel.data?.groups ?? [];
@@ -263,6 +272,10 @@ class BookCaseController extends GetxController {
       var model = jsonDecode(response.body);
       //log(response.statusCode.toString());
       //log(model.toString());
+      if (response.statusCode == 500) {
+        Logout(message: model["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 201 && model["code"] == 201) {
         if (recivedamount.text.trim().isEmpty ||
             recivedamount.text.trim() == "0") {
@@ -317,7 +330,10 @@ class BookCaseController extends GetxController {
       );
 
       var model = jsonDecode(response.body);
-
+      if (response.statusCode == 500) {
+        Logout(message: model["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 201 && model["code"] == 201) {
         Get.back();
         Get.find<HomeController>().OnRefresh();

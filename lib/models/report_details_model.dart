@@ -2,7 +2,7 @@
 //
 //     final reportDetailsModel = reportDetailsModelFromJson(jsonString);
 
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, avoid_print
 
 import 'dart:convert';
 
@@ -434,7 +434,7 @@ class Test {
   AppliedReferenceRange? appliedReferenceRange;
   TextEditingController highvalue = TextEditingController();
   TextEditingController lowvalue = TextEditingController();
-  Map<String, Characteristic> get charMap => characteristics.toCharMap();
+  Map<String, dynamic> get charMap => characteristics.toCharMap();
   Test({
     this.id,
     this.caseId,
@@ -809,12 +809,12 @@ class Characteristic {
 }
 
 extension CharacteristicMapper on List<Characteristic>? {
-  Map<String, Characteristic> toCharMap() {
-    final map = <String, Characteristic>{};
+  Map<String, dynamic> toCharMap() {
+    final map = <String, dynamic>{};
     if (this == null) return map;
     for (var char in this!) {
-      if (char.name != null) {
-        map[char.name!] = char;
+      if (char.formula != null) {
+        map[char.formula!] = char.lowvalue.text;
       }
     }
     return map;

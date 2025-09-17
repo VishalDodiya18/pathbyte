@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   // TextEditingController EmailAddress = TextEditingController();
   // TextEditingController Password = TextEditingController();
   TextEditingController EmailAddress = TextEditingController(
-    text: kDebugMode ? "admin@pathbyte.com" : "",
+    text: kDebugMode ? "admin1@pathbyte.com" : "",
   );
   TextEditingController Password = TextEditingController(
     text: kDebugMode ? "Admin@123" : "",

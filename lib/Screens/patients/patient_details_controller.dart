@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:pathbyte/helper/helpers.dart';
 import 'package:pathbyte/models/caseModel.dart';
 import 'package:pathbyte/models/case_details_model.dart';
 import 'package:pathbyte/models/patient_details_model.dart';
@@ -64,6 +65,11 @@ class PatientDetailsController extends GetxController {
         url,
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
@@ -91,7 +97,11 @@ class PatientDetailsController extends GetxController {
         Uri.parse("${AppConfig.baseUrl}/patients/${patient.sId}"),
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
-
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final caseResponse = PatientDetailsModel.fromJson(jsonData);
@@ -121,6 +131,11 @@ class PatientDetailsController extends GetxController {
         Uri.parse(url),
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return;
+      }
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 

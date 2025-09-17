@@ -1,176 +1,211 @@
 class DoctorResponse {
-  final int code;
-  final String message;
-  final DoctorData data;
+  int? code;
+  String? message;
+  Data? data;
 
-  DoctorResponse({
-    required this.code,
-    required this.message,
-    required this.data,
-  });
+  DoctorResponse({this.code, this.message, this.data});
 
-  factory DoctorResponse.fromJson(Map<String, dynamic> json) {
-    return DoctorResponse(
-      code: json['code'],
-      message: json['message'],
-      data: DoctorData.fromJson(json['data']),
-    );
+  DoctorResponse.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    message = json['message'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['code'] = code;
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
   }
 }
 
-class DoctorData {
-  final List<Doctor> doctors;
-  final Pagination pagination;
+class Data {
+  List<Doctor>? doctors;
+  Pagination? pagination;
 
-  DoctorData({required this.doctors, required this.pagination});
+  Data({this.doctors, this.pagination});
 
-  factory DoctorData.fromJson(Map<String, dynamic> json) {
-    return DoctorData(
-      doctors: List<Doctor>.from(
-        json['doctors'].map((x) => Doctor.fromJson(x)),
-      ),
-      pagination: Pagination.fromJson(json['pagination']),
-    );
+  Data.fromJson(Map<String, dynamic> json) {
+    if (json['doctors'] != null) {
+      doctors = <Doctor>[];
+      json['doctors'].forEach((v) {
+        doctors!.add(new Doctor.fromJson(v));
+      });
+    }
+    pagination = json['pagination'] != null
+        ? new Pagination.fromJson(json['pagination'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (doctors != null) {
+      data['doctors'] = doctors!.map((v) => v.toJson()).toList();
+    }
+    if (pagination != null) {
+      data['pagination'] = pagination!.toJson();
+    }
+    return data;
   }
 }
 
 class Doctor {
-  final String id;
-  final String doctorId;
-  final String firstName;
-  final String lastName;
-  final String description;
-  final int age;
-  final String gender;
-  final String notificationStatus;
-  final String hospitalName;
-  final List<String> phoneNumbers;
-  final String email;
-  final String createdAt;
-  final String updatedAt;
-  final Address address;
+  Address? address;
+  String? id;
+  String? doctorId;
+  String? firstName;
+  String? lastName;
+  String? notificationStatus;
+  List<String>? phoneNumbers;
+  bool? deleted;
+  var deletedAt;
+  String? createdAt;
+  String? updatedAt;
+  int? age;
+  String? hospitalName;
+  String? description;
+  String? gender;
+  String? email;
 
   Doctor({
-    required this.id,
-    required this.doctorId,
-    required this.firstName,
-    required this.lastName,
-    required this.description,
-    required this.age,
-    required this.gender,
-    required this.notificationStatus,
-    required this.hospitalName,
-    required this.phoneNumbers,
-    required this.email,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.address,
+    this.address,
+    this.id,
+    this.doctorId,
+    this.firstName,
+    this.lastName,
+    this.notificationStatus,
+    this.phoneNumbers,
+    this.deleted,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.age,
+    this.hospitalName,
+    this.description,
+    this.gender,
+    this.email,
   });
 
-  factory Doctor.fromJson(Map<String, dynamic> json) {
-    return Doctor(
-      id: json['_id'],
-      doctorId: json['doctorId'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      description: json['description'],
-      age: json['age'],
-      gender: json['gender'],
-      notificationStatus: json['notificationStatus'],
-      hospitalName: json['hospitalName'],
-      phoneNumbers: List<String>.from(json['phoneNumbers']),
-      email: json['email'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      address: Address.fromJson(json['address']),
-    );
+  Doctor.fromJson(Map<String, dynamic> json) {
+    address = json['address'] != null
+        ? new Address.fromJson(json['address'])
+        : null;
+    id = json['_id'];
+    doctorId = json['doctorId'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    notificationStatus = json['notificationStatus'];
+    phoneNumbers = json['phoneNumbers'].cast<String>();
+    deleted = json['deleted'];
+    deletedAt = json['deletedAt'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    age = json['age'];
+    hospitalName = json['hospitalName'];
+    description = json['description'];
+    gender = json['gender'];
+    email = json['email'];
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'doctorId': doctorId,
-      'firstName': firstName,
-      'lastName': lastName,
-      'description': description,
-      'age': age,
-      'gender': gender,
-      'notificationStatus': notificationStatus,
-      'hospitalName': hospitalName,
-      'phoneNumbers': phoneNumbers,
-      'email': email,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'address': address.toJson(),
-    };
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (address != null) {
+      data['address'] = address!.toJson();
+    }
+    data['_id'] = id;
+    data['doctorId'] = doctorId;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['notificationStatus'] = notificationStatus;
+    data['phoneNumbers'] = phoneNumbers;
+    data['deleted'] = deleted;
+    data['deletedAt'] = deletedAt;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['age'] = age;
+    data['hospitalName'] = hospitalName;
+    data['description'] = description;
+    data['gender'] = gender;
+    data['email'] = email;
+    return data;
   }
 }
 
 class Address {
-  final String line1;
-  final String line2;
-  final String city;
-  final String state;
-  final String postalCode;
-  final String country;
+  String? line1;
+  String? line2;
+  String? city;
+  String? state;
+  String? postalCode;
+  String? country;
 
   Address({
-    required this.line1,
-    required this.line2,
-    required this.city,
-    required this.state,
-    required this.postalCode,
-    required this.country,
+    this.line1,
+    this.line2,
+    this.city,
+    this.state,
+    this.postalCode,
+    this.country,
   });
 
-  factory Address.fromJson(Map<String, dynamic> json) {
-    return Address(
-      line1: json['line1'],
-      line2: json['line2'],
-      city: json['city'],
-      state: json['state'],
-      postalCode: json['postalCode'],
-      country: json['country'],
-    );
+  Address.fromJson(Map<String, dynamic> json) {
+    line1 = json['line1'];
+    line2 = json['line2'];
+    city = json['city'];
+    state = json['state'];
+    postalCode = json['postalCode'];
+    country = json['country'];
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'line1': line1,
-      'line2': line2,
-      'city': city,
-      'state': state,
-      'postalCode': postalCode,
-      'country': country,
-    };
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['line1'] = line1;
+    data['line2'] = line2;
+    data['city'] = city;
+    data['state'] = state;
+    data['postalCode'] = postalCode;
+    data['country'] = country;
+    return data;
   }
 }
 
 class Pagination {
-  final int total;
-  final int page;
-  final int limit;
-  final int totalPages;
-  final bool hasNextPage;
-  final bool hasPrevPage;
+  int? total;
+  int? page;
+  int? limit;
+  int? totalPages;
+  bool? hasNextPage;
+  bool? hasPrevPage;
 
   Pagination({
-    required this.total,
-    required this.page,
-    required this.limit,
-    required this.totalPages,
-    required this.hasNextPage,
-    required this.hasPrevPage,
+    this.total,
+    this.page,
+    this.limit,
+    this.totalPages,
+    this.hasNextPage,
+    this.hasPrevPage,
   });
 
-  factory Pagination.fromJson(Map<String, dynamic> json) {
-    return Pagination(
-      total: json['total'],
-      page: json['page'],
-      limit: json['limit'],
-      totalPages: json['totalPages'],
-      hasNextPage: json['hasNextPage'],
-      hasPrevPage: json['hasPrevPage'],
-    );
+  Pagination.fromJson(Map<String, dynamic> json) {
+    total = json['total'];
+    page = json['page'];
+    limit = json['limit'];
+    totalPages = json['totalPages'];
+    hasNextPage = json['hasNextPage'];
+    hasPrevPage = json['hasPrevPage'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['total'] = total;
+    data['page'] = page;
+    data['limit'] = limit;
+    data['totalPages'] = totalPages;
+    data['hasNextPage'] = hasNextPage;
+    data['hasPrevPage'] = hasPrevPage;
+    return data;
   }
 }

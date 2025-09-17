@@ -125,15 +125,16 @@ class ReportDetails extends StatelessWidget {
                                       ?.reportdetail
                                       ?.categories ??
                                   [])[i],
-                              isfinal:
-                                  (controller
-                                          .reportDetailsModel
-                                          ?.data
-                                          ?.reportdetail
-                                          ?.caseDetails
-                                          ?.status ??
-                                      "") ==
-                                  "Final",
+                              isfinal: F,
+                              // isfinal:
+                              //     (controller
+                              //             .reportDetailsModel
+                              //             ?.data
+                              //             ?.reportdetail
+                              //             ?.caseDetails
+                              //             ?.status ??
+                              //         "") ==
+                              //     "Final",
                             );
                           },
                         ),
@@ -167,12 +168,19 @@ class ReportDetails extends StatelessWidget {
                               ),
                             ),
                             if (controller
-                                    .reportDetailsModel
-                                    ?.data
-                                    ?.reportdetail
-                                    ?.caseDetails
-                                    ?.status ==
-                                "InProgress")
+                                        .reportDetailsModel
+                                        ?.data
+                                        ?.reportdetail
+                                        ?.caseDetails
+                                        ?.status ==
+                                    "InProgress" ||
+                                controller
+                                        .reportDetailsModel
+                                        ?.data
+                                        ?.reportdetail
+                                        ?.caseDetails
+                                        ?.status ==
+                                    "New")
                               Expanded(
                                 child: elevatedButton(
                                   title: "Save As Final",
@@ -185,7 +193,7 @@ class ReportDetails extends StatelessWidget {
                         ),
                       const SizedBox(height: 15.0),
                       elevatedButton(
-                        title: "Show Report",
+                        title: "Share Report",
                         onPressed: () {
                           controller.downloadAndSharePdf();
                         },

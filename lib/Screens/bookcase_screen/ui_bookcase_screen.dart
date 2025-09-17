@@ -786,6 +786,14 @@ class BookCaseScreen extends StatelessWidget {
                                     ),
                                     Text("Cash"),
                                     Radio(
+                                      value: "Card",
+                                      groupValue: controller.selectedMode.value,
+                                      onChanged: (value) {
+                                        controller.selectedMode.value = value!;
+                                      },
+                                    ),
+                                    Text("Card"),
+                                    Radio(
                                       value: "UPI",
                                       groupValue: controller.selectedMode.value,
                                       onChanged: (value) {
