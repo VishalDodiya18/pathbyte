@@ -252,7 +252,7 @@ class ReportTable extends StatelessWidget {
                                                 .groupedTests![i]
                                                 .caseTests![j]
                                                 .lowvalue,
-                                            hintText: "",
+                                            hintText: "Select ...",
                                           ),
                                         ),
                                       ),
@@ -274,7 +274,7 @@ class ReportTable extends StatelessWidget {
                                       //           .groupedTests![i]
                                       //           .caseTests![j]
                                       //           .highvalue,
-                                      //       hintText: "",
+                                      //        hintText: "Select ...",
                                       //     ),
                                       //   ),
                                       // ),
@@ -316,7 +316,7 @@ class ReportTable extends StatelessWidget {
                                                 .lowvalue
                                                 .text,
                                       itemLabel: (item) => item,
-                                      hintText: "",
+                                      hintText: "Select ...",
                                       prefixIcon: Icons.folder,
                                       onChanged: (value) {
                                         category
@@ -541,7 +541,7 @@ class ReportTable extends StatelessWidget {
                                                         .caseTests![j]
                                                         .characteristics![k]
                                                         .lowvalue,
-                                              hintText: "",
+                                              hintText: "Select ...",
                                             ),
                                           ),
                                         ),
@@ -565,7 +565,7 @@ class ReportTable extends StatelessWidget {
                                         //           .test!
                                         //           .characteristics![k]
                                         //           .highvalue,
-                                        //       hintText: "",
+                                        //        hintText: "Select ...",
                                         //     ),
                                         //   ),
                                         // ),
@@ -612,7 +612,7 @@ class ReportTable extends StatelessWidget {
                                                   .lowvalue
                                                   .text,
                                         itemLabel: (item) => item,
-                                        hintText: "",
+                                        hintText: "Select ...",
                                         prefixIcon: Icons.folder,
                                         onChanged: (value) {
                                           category
@@ -817,7 +817,7 @@ class ReportTable extends StatelessWidget {
                                             controller: category
                                                 .ungroupedTests![i]
                                                 .lowvalue,
-                                            hintText: "",
+                                            hintText: "Select ...",
                                           ),
                                         ),
                                       ),
@@ -835,7 +835,7 @@ class ReportTable extends StatelessWidget {
                                       //       fillColor: const Color(0xffEEEEEE),
                                       //       controller:
                                       //           category.ungroupedTests![i].highvalue,
-                                      //       hintText: "",
+                                      //        hintText: "Select ...",
                                       //     ),
                                       //   ),
                                       // ),
@@ -874,7 +874,7 @@ class ReportTable extends StatelessWidget {
                                                 .lowvalue
                                                 .text,
                                       itemLabel: (item) => item,
-                                      hintText: "",
+                                      hintText: "Select ...",
                                       prefixIcon: Icons.folder,
                                       onChanged: (value) {
                                         category
@@ -1068,7 +1068,7 @@ class ReportTable extends StatelessWidget {
                                                         .ungroupedTests![i]
                                                         .characteristics![j]
                                                         .lowvalue,
-                                              hintText: "",
+                                              hintText: "Select ...",
                                             ),
                                           ),
                                         ),
@@ -1091,7 +1091,7 @@ class ReportTable extends StatelessWidget {
                                         //           .test!
                                         //           .characteristics![j]
                                         //           .highvalue,
-                                        //       hintText: "",
+                                        //        hintText: "Select ...",
                                         //     ),
                                         //   ),
                                         // ),
@@ -1136,7 +1136,7 @@ class ReportTable extends StatelessWidget {
                                                   .lowvalue
                                                   .text,
                                         itemLabel: (item) => item,
-                                        hintText: "",
+                                        hintText: "Select ...",
                                         prefixIcon: Icons.folder,
                                         onChanged: (value) {
                                           category

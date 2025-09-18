@@ -63,9 +63,8 @@ class HomeScreenWidget {
                 Get.lazyPut(() => CaseDetailsContoller(caseId: item.sId));
                 Get.to(
                   () => MainDetailsScreen(
-                    isreport:
-                        // T,
-                        AppConfig.Role.toUpperCase() == "LABTECHNICIAN" ? T : F,
+                    isreport: T,
+                    // AppConfig.Role.toUpperCase() == "LABTECHNICIAN" ? T : F,
                   ),
                 );
                 //     return;

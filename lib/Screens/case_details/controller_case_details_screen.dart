@@ -24,6 +24,7 @@ class CaseDetailsContoller extends GetxController {
 
   RxBool isLoading = true.obs;
   RxBool reporting = true.obs;
+  RxBool printFootnote = false.obs;
   RxBool isreportshareing = F.obs;
 
   List<Test> selectedTests = [];
@@ -94,7 +95,7 @@ class CaseDetailsContoller extends GetxController {
     isreportshareing(true);
     try {
       final url = Uri.parse(
-        "${AppConfig.baseUrl}/cases/$caseId/html?printFootnote=true",
+        "${AppConfig.baseUrl}/cases/$caseId/html?printFootnote=${printFootnote.value}",
       );
 
       final response = await http.get(

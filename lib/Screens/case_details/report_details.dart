@@ -196,11 +196,41 @@ class ReportDetails extends StatelessWidget {
                           ],
                         ),
                       const SizedBox(height: 15.0),
-                      elevatedButton(
-                        title: "Share Report",
-                        onPressed: () {
-                          controller.downloadAndSharePdf();
-                        },
+                      Column(
+                        children: [
+                          Row(
+                            spacing: 20.0,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                "Print Footnote",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Obx(
+                                () => Switch(
+                                  value: controller.printFootnote.value,
+                                  activeColor: AppColor.primary,
+
+                                  onChanged: (value) {
+                                    controller.printFootnote.value = value;
+                                  },
+                                ),
+                              ),
+                              Obx(
+                                () => Text(
+                                  controller.printFootnote.value ? "Yes" : "No",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                          elevatedButton(
+                            title: "Share Report",
+                            onPressed: () {
+                              controller.downloadAndSharePdf();
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
