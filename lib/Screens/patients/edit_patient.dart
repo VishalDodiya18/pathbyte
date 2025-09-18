@@ -43,7 +43,13 @@ class _PatientDialogState extends State<PatientDialog> {
 
   // Dropdown lists
   final List<String> mrmissList = [
-    'Mr.', 'Mrs.', 'Ms.', 'Baby Of.',
+    "Mr.",
+    "Mrs.",
+    "Miss",
+    "Master",
+    "Baby",
+    "Baby of",
+    "Dr."
 
     // , 'Dr.'
   ];
@@ -85,10 +91,10 @@ class _PatientDialogState extends State<PatientDialog> {
         isoCode: IsoCode.IN,
         nsn: (widget.patient.phoneNumbers ?? []).isNotEmpty
             ? widget.patient.phoneNumbers!.first
-                  .replaceAll("+", "")
-                  .trim()
-                  .split(" ")
-                  .last
+                .replaceAll("+", "")
+                .trim()
+                .split(" ")
+                .last
             : "",
       ),
     );
@@ -178,7 +184,6 @@ class _PatientDialogState extends State<PatientDialog> {
           "Error",
           model["message"] ?? "Patient updation failed please try again",
           colorText: AppColor.whitecolor,
-
           backgroundColor: AppColor.redcolor,
         );
         print("⚠️ Failed to update patient: ${response.statusCode}");
@@ -190,7 +195,6 @@ class _PatientDialogState extends State<PatientDialog> {
         "Error",
         e.toString() ?? "Patient updation failed please try again",
         colorText: AppColor.whitecolor,
-
         backgroundColor: AppColor.redcolor,
       );
       print("❌ Error updating patient: $e");
@@ -217,7 +221,6 @@ class _PatientDialogState extends State<PatientDialog> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: F,
-
       child: IgnorePointer(
         ignoring: isLoading,
         child: Dialog(
@@ -231,7 +234,6 @@ class _PatientDialogState extends State<PatientDialog> {
             child: ListView(
               shrinkWrap: T,
               padding: const EdgeInsets.all(20),
-
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -269,13 +271,13 @@ class _PatientDialogState extends State<PatientDialog> {
                   onChanged: (p0) {},
                   countrySelectorNavigator:
                       CountrySelectorNavigator.draggableBottomSheet(
-                        flagSize: 30,
-                        searchBoxTextStyle: textStyle(fontSize: 16),
-                        titleStyle: textStyle(fontSize: 16),
-                        sortCountries: true,
-                        subtitleStyle: textStyle(fontSize: 16),
-                        showDialCode: false,
-                      ),
+                    flagSize: 30,
+                    searchBoxTextStyle: textStyle(fontSize: 16),
+                    titleStyle: textStyle(fontSize: 16),
+                    sortCountries: true,
+                    subtitleStyle: textStyle(fontSize: 16),
+                    showDialCode: false,
+                  ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: buildInputDecoration(
                     context: context,
@@ -283,7 +285,6 @@ class _PatientDialogState extends State<PatientDialog> {
                   ),
                   isCountrySelectionEnabled: F,
                   isCountryButtonPersistent: true,
-
                   countryButtonStyle: CountryButtonStyle(
                     showDialCode: true,
                     textStyle: textStyle(fontSize: 16),
@@ -435,7 +436,6 @@ class _PatientDialogState extends State<PatientDialog> {
                     ? const Center(child: CircularProgressIndicator())
                     : elevatedButton(
                         title: "Save",
-
                         onPressed: () {
                           if (formkey.currentState!.validate()) {
                             FocusScope.of(context).unfocus();

@@ -52,7 +52,13 @@ class BookCaseController extends GetxController {
   Patient? selectedpatient;
 
   List<String> mrmissList = [
-    'Mr.', 'Mrs.', 'Ms.', 'Baby Of.',
+    "Mr.",
+    "Mrs.",
+    "Miss",
+    "Master",
+    "Baby",
+    "Baby of",
+    "Dr."
 
     //  'Dr.'
   ];
@@ -114,9 +120,9 @@ class BookCaseController extends GetxController {
     return tests.isEmpty && groptests.isEmpty
         ? 0
         : tests.map((e) => e.price ?? 0).reduce((a, b) => a + b) +
-              (groptests.isEmpty
-                  ? 0
-                  : groptests.map((e) => e.price ?? 0).reduce((a, b) => a + b));
+            (groptests.isEmpty
+                ? 0
+                : groptests.map((e) => e.price ?? 0).reduce((a, b) => a + b));
   }
 
   gettotalwitdiscountamount() {
@@ -293,7 +299,6 @@ class BookCaseController extends GetxController {
           "Error",
           model["message"] ?? "Case creation failed please try again",
           colorText: AppColor.whitecolor,
-
           backgroundColor: AppColor.redcolor,
         );
         isLoading = false;
@@ -345,7 +350,6 @@ class BookCaseController extends GetxController {
           "Error",
           model["message"] ?? "Case Creation failed please try again",
           colorText: AppColor.whitecolor,
-
           backgroundColor: AppColor.redcolor,
         );
         return null;
