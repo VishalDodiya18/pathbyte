@@ -160,7 +160,13 @@ Widget buildHeaderCard(context, patient, {isedit = false}) {
                 style: TextStyle(fontSize: 16.h, fontWeight: FontWeight.bold),
               ),
               Text("Gender: ${patient.gender ?? 'N/A'}"),
-              Text("Age: ${patient.age ?? 'N/A'}"),
+              Text(
+                "Age: ${(patient.age ?? 0) != 0
+                    ? (patient.age ?? 0)
+                    : (patient.months ?? 0) != 0
+                    ? (patient.months ?? 0)
+                    : (patient.days ?? 0)}",
+              ),
             ],
           ),
         ),

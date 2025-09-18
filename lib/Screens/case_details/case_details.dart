@@ -163,7 +163,11 @@ class CaseDetailsPage extends StatelessWidget {
                                     Spacer(),
                                     TextConstant(
                                       title:
-                                          "${controller.caseDetails?.patient?.age ?? "0"}/ ${(controller.caseDetails?.patient?.gender ?? "").toUpperCase()}",
+                                          "${(controller.caseDetails?.patient?.age ?? 0) != 0
+                                              ? (controller.caseDetails?.patient?.age ?? 0)
+                                              : (controller.caseDetails?.patient?.months ?? 0) != 0
+                                              ? (controller.caseDetails?.patient?.months ?? 0)
+                                              : (controller.caseDetails?.patient?.days ?? 0)}/ ${(controller.caseDetails?.patient?.gender ?? "").toUpperCase()}",
                                       fontSize: 14.0,
                                       color: AppColor.greycolor,
                                     ),

@@ -40,8 +40,10 @@ class EditBookCaseController extends GetxController {
   TextEditingController pincode = TextEditingController();
   TextEditingController discount = TextEditingController();
   TextEditingController recivedamount = TextEditingController();
+  TextEditingController dateofbirth = TextEditingController();
+
   final TextEditingController yearsController = TextEditingController(
-    text: '24',
+    text: '18',
   );
   final TextEditingController monthsController = TextEditingController(
     text: '0',
@@ -58,7 +60,7 @@ class EditBookCaseController extends GetxController {
   Patient? selectedpatient;
 
   List<String> mrmissList = [
-    'Mr.', 'Mrs.', 'Ms.',
+    'Mr.', 'Mrs.', 'Ms.', 'Baby Of.',
 
     //  'Dr.'
   ];
@@ -187,14 +189,14 @@ class EditBookCaseController extends GetxController {
       );
 
       final data = jsonDecode(response.body);
-        if (response.statusCode == 500) {
+      if (response.statusCode == 500) {
         Logout(message: data["message"] ?? "Your Session is expired");
         return;
       }
       //log(data.toString());
       GetAllTestModel getAllTestModel = GetAllTestModel.fromJson(data);
       final List<Test> newItems = getAllTestModel.data?.tests ?? [];
-    
+
       final isLastPage =
           pageKey >= (getAllTestModel.data?.pagination?.totalPages ?? 0);
 
@@ -259,12 +261,13 @@ class EditBookCaseController extends GetxController {
           "age": int.parse(yearsController.text.trim()),
           "months": int.parse(monthsController.text.trim()),
           "days": int.parse(daysController.text.trim()),
-          "dob": getDobFromAge(
-            int.parse(yearsController.text.trim()),
-            int.parse(monthsController.text.trim()),
-            int.parse(daysController.text.trim()),
-            format: "yyyy-MM-dd",
-          ),
+          "dob": dateofbirth.text.split("-").reversed.join("-"),
+          // "dob": getDobFromAge(
+          //   int.parse(yearsController.text.trim()),
+          //   int.parse(monthsController.text.trim()),
+          //   int.parse(daysController.text.trim()),
+          //   format: "yyyy-MM-dd",
+          // ),
           "gender": selectedSex.value,
           "phoneNumbers": [
             "+${phoneNumber.value.countryCode} ${phoneNumber.value.nsn}",

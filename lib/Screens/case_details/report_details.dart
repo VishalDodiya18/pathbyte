@@ -73,7 +73,11 @@ class ReportDetails extends StatelessWidget {
                               buildReportRow(
                                 title: "Age/ Sex :",
                                 value:
-                                    "${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.age ?? 0}/ ${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.gender}",
+                                    "${(controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.age ?? 0) != 0
+                                        ? controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.age ?? 0
+                                        : (controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.months ?? 0) != 0
+                                        ? controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.months ?? 0
+                                        : controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.days ?? 0}/ ${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.patient?.gender}",
                               ),
                               buildReportRow(
                                 title: "Referred By :",

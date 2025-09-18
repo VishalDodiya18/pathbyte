@@ -104,7 +104,6 @@ class YMDInput extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
               decoration: const InputDecoration(
                 isDense: true,
-                //contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 border: InputBorder.none,
               ),
               inputFormatters: [
@@ -112,12 +111,22 @@ class YMDInput extends StatelessWidget {
                 LengthLimitingTextInputFormatter(maxDigits),
               ],
               onChanged: (txt) {
+                // ✅ agar empty ho to default "0"
+                if (txt.isEmpty) {
+                  controller.text = "0";
+                  controller.selection = const TextSelection.collapsed(
+                    offset: 1,
+                  );
+                  onParsed?.call(0);
+                  return;
+                }
+
                 int? v = int.tryParse(txt);
                 if (validator != null) v = validator(v);
+
                 // write back clamped value if needed
-                final newText = v?.toString() ?? '';
+                final newText = v?.toString() ?? '0';
                 if (newText != txt) {
-                  // keep caret at end
                   controller
                     ..text = newText
                     ..selection = TextSelection.collapsed(
@@ -165,7 +174,6 @@ Widget buildRow(
       color: isHighlighted ? const Color(0xFFF5E6A3) : Colors.transparent,
       border: Border.all(color: AppColor.secondarycolor),
     ),
-
     padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

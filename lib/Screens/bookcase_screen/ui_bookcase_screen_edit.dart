@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -654,7 +656,15 @@ class EditBookCaseScreen extends StatelessWidget {
                                       yearsCtrl: controller.yearsController,
                                       monthsCtrl: controller.monthsController,
                                       daysCtrl: controller.daysController,
+
                                       onChanged: ({years, months, days}) {
+                                        controller.dateofbirth.text =
+                                            getDobFromAge(
+                                              years!,
+                                              months!,
+                                              days!,
+                                            );
+                                        controller.update();
                                         // optional: keep a combined string, duration, etc.
                                         // controller.ymdString.value = '${years ?? 0}Y ${months ?? 0}M ${days ?? 0}D';
                                       },
@@ -663,6 +673,63 @@ class EditBookCaseScreen extends StatelessWidget {
                                 ),
                               ),
                             ],
+                          ),
+                          heightBox(15),
+                          const TextConstant(
+                            title: 'Date of Birth',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          heightBox(8),
+                          TextFieldConstant(
+                            controller: controller.dateofbirth,
+                            hintText: 'Date of birth',
+                            isReadOnly: true,
+                            onTap: () async {
+                              var pickeddate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime(
+                                  int.parse(
+                                    controller.dateofbirth.text.split("-").last,
+                                  ),
+                                  int.parse(
+                                    controller.dateofbirth.text.split("-")[1],
+                                  ),
+                                  int.parse(
+                                    controller.dateofbirth.text
+                                        .split("-")
+                                        .first,
+                                  ),
+                                ),
+
+                                firstDate: DateTime(DateTime.now().year - 2000),
+                                lastDate: DateTime.now(),
+                              );
+                              if (pickeddate != null) {
+                                log(
+                                  DateFormat(
+                                    "dd-MM-yyyy",
+                                  ).format(pickeddate).toString(),
+                                );
+                                controller.dateofbirth.text = DateFormat(
+                                  "dd-MM-yyyy",
+                                ).format(pickeddate);
+                                Age age = calculateAgeFromString(
+                                  controller.dateofbirth.text,
+                                );
+                                log(age.toString());
+                                controller.yearsController.text = age.years
+                                    .toString();
+                                controller.monthsController.text = age.months
+                                    .toString();
+                                controller.daysController.text = age.days
+                                    .toString();
+                                controller.update();
+                              }
+                            },
+
+                            // validator: (p0) =>
+                            //     p0!.isEmpty ? "Please enter address" : null,
                           ),
                           heightBox(15),
                           const TextConstant(

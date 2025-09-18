@@ -158,6 +158,16 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
                     },
                   ),
                   const Text("Cash"),
+                  Radio(
+                    value: "Card",
+                    groupValue: selectedMode,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedMode = value!;
+                      });
+                    },
+                  ),
+                  Text("Card"),
                   Radio<String>(
                     value: "UPI",
                     groupValue: selectedMode,

@@ -26,6 +26,7 @@ class BookCaseController extends GetxController {
     text: DateTime.now().toIso8601String(),
   );
   TextEditingController nameController = TextEditingController();
+  TextEditingController dateofbirth = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController address2 = TextEditingController();
   TextEditingController city = TextEditingController();
@@ -34,7 +35,7 @@ class BookCaseController extends GetxController {
   TextEditingController discount = TextEditingController();
   TextEditingController recivedamount = TextEditingController();
   final TextEditingController yearsController = TextEditingController(
-    text: '24',
+    text: '18',
   );
   final TextEditingController monthsController = TextEditingController(
     text: '0',
@@ -51,7 +52,7 @@ class BookCaseController extends GetxController {
   Patient? selectedpatient;
 
   List<String> mrmissList = [
-    'Mr.', 'Mrs.', 'Ms.',
+    'Mr.', 'Mrs.', 'Ms.', 'Baby Of.',
 
     //  'Dr.'
   ];
@@ -78,6 +79,13 @@ class BookCaseController extends GetxController {
     grouptestController.addPageRequestListener((pageKey) {
       fetchGroupTests(pageKey);
     });
+    dateofbirth = TextEditingController(
+      text: getDobFromAge(
+        int.parse(yearsController.text),
+        int.parse(monthsController.text),
+        int.parse(daysController.text),
+      ),
+    );
     super.onInit();
   }
 
@@ -207,12 +215,7 @@ class BookCaseController extends GetxController {
           "age": int.parse(yearsController.text.trim()),
           "months": int.parse(monthsController.text.trim()),
           "days": int.parse(daysController.text.trim()),
-          "dob": getDobFromAge(
-            int.parse(yearsController.text.trim()),
-            int.parse(monthsController.text.trim()),
-            int.parse(daysController.text.trim()),
-            format: "yyyy-MM-dd",
-          ),
+          "dob": dateofbirth.text.split("-").reversed.join("-"),
           "gender": selectedSex.value,
           "phoneNumbers": [
             "+${phoneNumber.value.countryCode} ${phoneNumber.value.nsn}",

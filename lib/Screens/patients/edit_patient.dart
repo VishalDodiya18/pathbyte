@@ -43,7 +43,7 @@ class _PatientDialogState extends State<PatientDialog> {
 
   // Dropdown lists
   final List<String> mrmissList = [
-    'Mr.', 'Mrs.', 'Ms.',
+    'Mr.', 'Mrs.', 'Ms.', 'Baby Of.',
 
     // , 'Dr.'
   ];
