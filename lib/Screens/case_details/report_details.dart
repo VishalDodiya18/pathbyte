@@ -9,11 +9,13 @@ import 'package:pathbyte/Constants/elevated_button_constant.dart';
 import 'package:pathbyte/Constants/text_constant.dart';
 import 'package:pathbyte/Constants/widget_constant.dart';
 import 'package:pathbyte/Screens/case_details/controller_case_details_screen.dart';
+import 'package:pathbyte/Screens/case_details/print_report_options.dart';
 import 'package:pathbyte/Screens/case_details/report_table.dart';
 import 'package:pathbyte/utils/app_color.dart';
 
 class ReportDetails extends StatelessWidget {
-  ReportDetails({super.key});
+  bool isview;
+  ReportDetails({super.key, this.isview = false});
   final CaseDetailsContoller controller = Get.find<CaseDetailsContoller>();
 
   @override
@@ -129,7 +131,7 @@ class ReportDetails extends StatelessWidget {
                                       ?.reportdetail
                                       ?.categories ??
                                   [])[i],
-                              isfinal: F,
+                              isfinal: isview,
                               // isfinal:
                               //     (controller
                               //             .reportDetailsModel
@@ -142,6 +144,7 @@ class ReportDetails extends StatelessWidget {
                             );
                           },
                         ),
+
                         heightBox(100),
                       ],
                     ),
@@ -153,13 +156,7 @@ class ReportDetails extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (controller
-                              .reportDetailsModel
-                              ?.data
-                              ?.reportdetail
-                              ?.caseDetails
-                              ?.status !=
-                          "Final")
+                      if (!isview)
                         Row(
                           spacing: 10.0.w,
                           children: [
@@ -194,44 +191,14 @@ class ReportDetails extends StatelessWidget {
                                 ),
                               ),
                           ],
+                        )
+                      else
+                        elevatedButton(
+                          title: "Print Report",
+                          onPressed: () {
+                            Get.to(PrintReportOptions());
+                          },
                         ),
-                      const SizedBox(height: 15.0),
-                      Column(
-                        children: [
-                          Row(
-                            spacing: 20.0,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                "Print Footnote",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Obx(
-                                () => Switch(
-                                  value: controller.printFootnote.value,
-                                  activeColor: AppColor.primary,
-
-                                  onChanged: (value) {
-                                    controller.printFootnote.value = value;
-                                  },
-                                ),
-                              ),
-                              Obx(
-                                () => Text(
-                                  controller.printFootnote.value ? "Yes" : "No",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                          elevatedButton(
-                            title: "Share Report",
-                            onPressed: () {
-                              controller.downloadAndSharePdf();
-                            },
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),

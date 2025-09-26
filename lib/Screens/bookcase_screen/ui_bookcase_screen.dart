@@ -432,12 +432,7 @@ class BookCaseScreen extends StatelessWidget {
                                                 Patient
                                               >(
                                                 title: "Patient",
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter
-                                                      .digitsOnly,
-                                                ],
+
                                                 controller: homecontroller
                                                     .patientPagingController,
                                                 itemId: (item) =>
@@ -601,7 +596,64 @@ class BookCaseScreen extends StatelessWidget {
                             },
                           ),
                           heightBox(15),
+                          const TextConstant(
+                            title: 'Date of Birth',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          heightBox(8),
+                          TextFieldConstant(
+                            controller: controller.dateofbirth,
+                            hintText: 'Date of birth',
+                            isReadOnly: true,
+                            onTap: () async {
+                              var pickeddate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime(
+                                  int.parse(
+                                    controller.dateofbirth.text.split("-").last,
+                                  ),
+                                  int.parse(
+                                    controller.dateofbirth.text.split("-")[1],
+                                  ),
+                                  int.parse(
+                                    controller.dateofbirth.text
+                                        .split("-")
+                                        .first,
+                                  ),
+                                ),
 
+                                firstDate: DateTime(DateTime.now().year - 2000),
+                                lastDate: DateTime.now(),
+                              );
+                              if (pickeddate != null) {
+                                log(
+                                  DateFormat(
+                                    "dd-MM-yyyy",
+                                  ).format(pickeddate).toString(),
+                                );
+                                controller.dateofbirth.text = DateFormat(
+                                  "dd-MM-yyyy",
+                                ).format(pickeddate);
+                                Age age = calculateAgeFromString(
+                                  controller.dateofbirth.text,
+                                );
+                                log(age.toString());
+                                controller.yearsController.text = age.years
+                                    .toString();
+                                controller.monthsController.text = age.months
+                                    .toString();
+                                controller.daysController.text = age.days
+                                    .toString();
+                                controller.update();
+                              }
+                            },
+
+                            // validator: (p0) =>
+                            //     p0!.isEmpty ? "Please enter address" : null,
+                          ),
+
+                          heightBox(15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -667,63 +719,6 @@ class BookCaseScreen extends StatelessWidget {
                                 ),
                               ),
                             ],
-                          ),
-                          heightBox(15),
-                          const TextConstant(
-                            title: 'Date of Birth',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          heightBox(8),
-                          TextFieldConstant(
-                            controller: controller.dateofbirth,
-                            hintText: 'Date of birth',
-                            isReadOnly: true,
-                            onTap: () async {
-                              var pickeddate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime(
-                                  int.parse(
-                                    controller.dateofbirth.text.split("-").last,
-                                  ),
-                                  int.parse(
-                                    controller.dateofbirth.text.split("-")[1],
-                                  ),
-                                  int.parse(
-                                    controller.dateofbirth.text
-                                        .split("-")
-                                        .first,
-                                  ),
-                                ),
-
-                                firstDate: DateTime(DateTime.now().year - 2000),
-                                lastDate: DateTime.now(),
-                              );
-                              if (pickeddate != null) {
-                                log(
-                                  DateFormat(
-                                    "dd-MM-yyyy",
-                                  ).format(pickeddate).toString(),
-                                );
-                                controller.dateofbirth.text = DateFormat(
-                                  "dd-MM-yyyy",
-                                ).format(pickeddate);
-                                Age age = calculateAgeFromString(
-                                  controller.dateofbirth.text,
-                                );
-                                log(age.toString());
-                                controller.yearsController.text = age.years
-                                    .toString();
-                                controller.monthsController.text = age.months
-                                    .toString();
-                                controller.daysController.text = age.days
-                                    .toString();
-                                controller.update();
-                              }
-                            },
-
-                            // validator: (p0) =>
-                            //     p0!.isEmpty ? "Please enter address" : null,
                           ),
                           heightBox(15),
 

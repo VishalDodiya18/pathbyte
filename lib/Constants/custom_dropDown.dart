@@ -40,6 +40,7 @@ class CustomDropdown<T> extends StatelessWidget {
     return FormField<T>(
       initialValue: selectedValue,
       validator: validator,
+
       builder: (state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,8 +59,8 @@ class CustomDropdown<T> extends StatelessWidget {
                   )
                   .toList(),
               value: selectedValue,
-              isDense: true,
 
+              isDense: true,
               onChanged: ischange
                   ? (val) {
                       onChanged(val);
@@ -76,7 +77,9 @@ class CustomDropdown<T> extends StatelessWidget {
               ),
               isExpanded: false,
               underline: const SizedBox.shrink(),
+
               customButton: Container(
+                
                 constraints: constraints ?? BoxConstraints(minHeight: 47.h),
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(

@@ -12,7 +12,8 @@ import 'package:pathbyte/utils/app_color.dart';
 
 class MainDetailsScreen extends StatelessWidget {
   bool isreport;
-  MainDetailsScreen({super.key, this.isreport = false});
+  bool isview;
+  MainDetailsScreen({super.key, this.isreport = false, this.isview = true});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,7 @@ class MainDetailsScreen extends StatelessWidget {
                   SizedBox(width: 10.0),
                 ],
         ),
-        body: isreport ? ReportDetails() : CaseDetailsPage(),
+        body: isreport ? ReportDetails(isview: isview) : CaseDetailsPage(),
       ),
     );
   }

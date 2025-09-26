@@ -225,299 +225,81 @@ class CaseDetailsPage extends StatelessWidget {
                         ),
                       ),
                       Divider(height: 1),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth:
-                                MediaQuery.of(context).size.width *
-                                0.9, // minimum full screen width
-                          ),
-                          child: DataTable(
-                            headingRowHeight: 30,
-                            dataRowMinHeight: 36,
-                            dividerThickness: 0,
-                            columnSpacing: 20,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Table(
+                          columnWidths: const {
+                            0: IntrinsicColumnWidth(), // Code
+                            1: FlexColumnWidth(), // Test Name (expand)
+                            2: IntrinsicColumnWidth(), // R.D.
+                            3: IntrinsicColumnWidth(), // Price
+                          },
+                          defaultVerticalAlignment:
+                              TableCellVerticalAlignment.middle,
+                          children: [
+                            /// Header Row
+                            TableRow(
+                              children: [
+                                // _buildHeader("Group Name"),
+                                _buildHeader("Code"),
+                                _buildHeader("Test name"),
+                                _buildHeader("R.D."),
+                                _buildHeader("Price"),
+                              ],
+                            ),
 
-                            columns: [
-                              DataColumn(
-                                label: Text(
-                                  "Group Name",
-                                  style: TextStyle(
-                                    fontSize: 13.h,
-                                    fontWeight: FontWeight.w500,
+                            /// Selected Tests
+                            ...List.generate(controller.selectedTests.length, (
+                              index,
+                            ) {
+                              final test = controller.selectedTests[index];
+                              return TableRow(
+                                children: [
+                                  // _buildCell(" - "),
+                                  _buildCell(test.testCode ?? ""),
+                                  _buildCell(test.name ?? "", multiline: true),
+                                  _buildCell(
+                                    (test.reportingDays ?? 1).toString(),
                                   ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  "Code",
-                                  style: TextStyle(
-                                    fontSize: 13.h,
-                                    fontWeight: FontWeight.w500,
+                                  _buildCell("₹${test.price}"),
+                                ],
+                              );
+                            }),
+
+                            /// Group Tests
+                            ...List.generate(controller.selectedGroupTests.length, (
+                              i,
+                            ) {
+                              final group = controller.selectedGroupTests[i];
+                              return TableRow(
+                                children: [
+                                  _buildCell(group.groupCode ?? ""),
+                                  _buildCell(
+                                    "${group.name ?? ""} (${(group.tests ?? []).length})",
                                   ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  "Test name",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13.h,
+                                  // _buildCell(
+                                  //   (group.tests ?? [])
+                                  //       .map((e) => e.name ?? "")
+                                  //       .join(", "),
+                                  //   multiline: true,
+                                  // ),
+                                  _buildCell(
+                                    (group.tests ?? []).isEmpty
+                                        ? "1"
+                                        : (group.tests ?? [])
+                                              .map((e) => e.reportingDays ?? 0)
+                                              .reduce((a, b) => a > b ? a : b)
+                                              .toString(),
                                   ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  "R.D.",
-                                  style: TextStyle(
-                                    fontSize: 13.h,
-                                    fontWeight: FontWeight.w500,
+                                  _buildCell(
+                                    "${formatIndianCurrency(group.price ?? 0)}",
                                   ),
-                                ),
-                              ),
-
-                              DataColumn(
-                                label: Text(
-                                  "Price",
-                                  style: TextStyle(
-                                    fontSize: 13.h,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                numeric: true,
-                              ),
-                            ],
-                            rows: [
-                              ...List.generate(controller.selectedTests.length, (
-                                index,
-                              ) {
-                                final test = controller.selectedTests[index];
-                                return DataRow(
-                                  cells: [
-                                    // DataCell(Text("${index + 1}")),
-                                    DataCell(
-                                      Center(
-                                        child: Text(
-                                          " - ",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 13.h,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black45,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        test.testId ?? "",
-                                        style: TextStyle(
-                                          fontSize: 13.h,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black45,
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        test.name ?? "",
-                                        style: TextStyle(
-                                          fontSize: 13.h,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black45,
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        (test.reportingDays ?? 1).toString(),
-                                        style: TextStyle(
-                                          fontSize: 13.h,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black45,
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        "₹${test.price}/-",
-                                        style: TextStyle(
-                                          fontSize: 13.h,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black45,
-                                        ),
-                                      ),
-                                    ),
-                                    // DataCell(
-                                    //   IconButton(
-                                    //     icon: const Icon(Icons.delete, color: Colors.red),
-                                    //     onPressed: () {
-                                    //       controller.toggleSelection(test);
-                                    //     },
-                                    //   ),
-                                    // ),
-                                  ],
-                                );
-                              }),
-
-                              for (
-                                int i = 0;
-                                i <
-                                    (controller.selectedGroupTests ?? [])
-                                        .length;
-                                i++
-                              )
-                                DataRow(
-                                  cells: [
-                                    // DataCell(Text("${index + 1}")),
-                                    DataCell(
-                                      Text(
-                                        controller.selectedGroupTests[i].name ??
-                                            "",
-                                        style: TextStyle(
-                                          fontSize: 13.h,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black45,
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        controller
-                                                .selectedGroupTests[i]
-                                                .groupId ??
-                                            "",
-                                        style: TextStyle(
-                                          fontSize: 13.h,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black45,
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      SizedBox(
-                                        child: Text(
-                                          (controller
-                                                      .selectedGroupTests[i]
-                                                      .tests ??
-                                                  [])
-                                              .map((e) => e.name ?? "")
-                                              .join(" , "),
-                                          style: TextStyle(
-                                            fontSize: 13.h,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black45,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        (controller
-                                                        .selectedGroupTests[i]
-                                                        .tests ??
-                                                    [])
-                                                .isEmpty
-                                            ? "1"
-                                            : (controller
-                                                          .selectedGroupTests[i]
-                                                          .tests ??
-                                                      [])
-                                                  .map(
-                                                    (e) => e.reportingDays ?? 0,
-                                                  )
-                                                  .reduce(
-                                                    (a, b) => a > b ? a : b,
-                                                  )
-                                                  .toString(),
-                                        style: TextStyle(
-                                          fontSize: 13.h,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black45,
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        "${formatIndianCurrency(controller.selectedGroupTests[i].price ?? 0)}/-",
-                                        style: TextStyle(
-                                          fontSize: 13.h,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black45,
-                                        ),
-                                      ),
-                                    ),
-                                    // DataCell(
-                                    //   IconButton(
-                                    //     icon: const Icon(Icons.delete, color: Colors.red),
-                                    //     onPressed: () {
-                                    //       controller.toggleSelection(test);
-                                    //     },
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
-                            ],
-
-                            // rows: (controller.caseDetails?.casetests ?? [])
-                            //     .map((testItem) {
-                            //       return DataRow(
-                            //         cells: [
-                            //           DataCell(
-                            //             Text(
-                            //               testItem.test?.testId ?? "",
-                            //               style: TextStyle(
-                            //                 fontSize: 13.h,
-
-                            //                 fontWeight: FontWeight.w500,
-                            //                 color: Colors.black45,
-                            //               ),
-                            //             ),
-                            //           ),
-                            //           DataCell(
-                            //             Text(
-                            //               testItem.test?.testId ?? "",
-                            //               style: TextStyle(
-                            //                 fontSize: 13.h,
-
-                            //                 fontWeight: FontWeight.w500,
-                            //                 color: Colors.black45,
-                            //               ),
-                            //             ),
-                            //           ),
-                            //           DataCell(
-                            //             Text(
-                            //               testItem.test?.name ?? "",
-                            //               style: TextStyle(
-                            //                 fontSize: 13.h,
-
-                            //                 fontWeight: FontWeight.w500,
-                            //                 color: Colors.black45,
-                            //               ),
-                            //             ),
-                            //           ),
-                            //           DataCell(
-                            //             Text(
-                            //               formatIndianCurrency(
-                            //                 testItem.test?.price ?? 0,
-                            //               ),
-                            //               style: TextStyle(
-                            //                 fontSize: 13.h,
-
-                            //                 fontWeight: FontWeight.w500,
-                            //                 color: Colors.black45,
-                            //               ),
-                            //             ),
-                            //           ),
-                            //         ],
-                            //       );
-                            //     })
-                            //     .toList(),
-                          ),
+                                ],
+                              );
+                            }),
+                          ],
                         ),
                       ),
-
                       Divider(height: 1),
                       Padding(
                         padding: const EdgeInsets.only(
@@ -846,4 +628,31 @@ class CaseDetailsPage extends StatelessWidget {
             ),
     );
   }
+}
+
+/// Helper Widgets
+Widget _buildHeader(String text) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2),
+    child: Text(
+      text,
+      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+    ),
+  );
+}
+
+Widget _buildCell(String text, {bool multiline = true}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
+    child: Text(
+      text,
+      style: TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        color: Colors.black54,
+      ),
+      softWrap: multiline,
+      overflow: multiline ? TextOverflow.visible : TextOverflow.ellipsis,
+    ),
+  );
 }

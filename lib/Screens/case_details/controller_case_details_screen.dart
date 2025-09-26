@@ -16,6 +16,8 @@ import 'package:pathbyte/models/test_model.dart';
 import 'package:pathbyte/utils/app_color.dart';
 import 'package:pathbyte/utils/app_config.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CaseDetailsContoller extends GetxController {
@@ -29,6 +31,10 @@ class CaseDetailsContoller extends GetxController {
 
   List<Test> selectedTests = [];
   List<Group> selectedGroupTests = [];
+  bool isnew = false;
+  bool isfootnote = T;
+  bool isselect = T;
+
   @override
   void onInit() {
     fetchCaseById();
@@ -94,16 +100,45 @@ class CaseDetailsContoller extends GetxController {
   Future<String> fetchHtml() async {
     isreportshareing(true);
     try {
-      final url = Uri.parse(
-        "${AppConfig.baseUrl}/cases/$caseId/html?printFootnote=${printFootnote.value}",
-      );
+      final url = Uri.parse("${AppConfig.baseUrl}/cases/$caseId/html");
+      // Build body map
+      final Map<String, dynamic> requestBody = {};
 
-      final response = await http.get(
+      // Categories → groupedTests → caseTests
+      for (final category
+          in reportDetailsModel?.data?.reportdetail?.categories ?? []) {
+        for (final grouped in category.groupedTests ?? []) {
+          for (final caseTest in grouped.caseTests ?? []) {
+            final id = caseTest.id ?? "";
+            if (id.isNotEmpty) {
+              requestBody[id] = {
+                "printFootnote": caseTest.isfootnote,
+                "newPage": caseTest.isnewpage,
+                "select": caseTest.isSelect,
+              };
+            }
+          }
+        }
+
+        // Categories → ungroupedTests
+        for (final ungrouped in category.ungroupedTests ?? []) {
+          final id = ungrouped.id ?? "";
+          if (id.isNotEmpty) {
+            requestBody[id] = {
+              "printFootnote": ungrouped.isfootnote,
+              "newPage": ungrouped.isnewpage,
+              "select": ungrouped.isSelect,
+            };
+          }
+        }
+      }
+      final response = await http.post(
         url,
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
+        body: jsonEncode(requestBody),
       );
-      final data = jsonDecode(response.body);
       if (response.statusCode == 500) {
+        final data = jsonDecode(response.body);
         Logout(message: data["message"] ?? "Your Session is expired");
         return "";
       }
@@ -115,6 +150,30 @@ class CaseDetailsContoller extends GetxController {
     } catch (e) {
       isreportshareing(false);
       throw Exception("Failed to load HTML");
+    }
+  }
+
+  Future<void> fetchAndPrintHtml() async {
+    isreportshareing(true);
+    try {
+      // 1. HTML fetch करो
+      final htmlContent = await fetchHtml();
+
+      // 2. Print dialog open करो
+      await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async {
+          // HTML को convert करके system print dialog को भेजना
+          final pdfBytes = await Printing.convertHtml(
+            format: format,
+            html: htmlContent,
+          );
+          return pdfBytes;
+        },
+      );
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isreportshareing(false);
     }
   }
 
@@ -415,6 +474,230 @@ class CaseDetailsContoller extends GetxController {
             : (caseDetails?.transactions ?? [])
                   .map((e) => e.amountGiven)
                   .reduce((a, b) => a + b));
+  }
+
+  isAllCheck(
+    bool v, {
+    bool isnewpage = false,
+    bool isfootnote = false,
+    bool isselect = false,
+  }) {
+    for (
+      int i = 0;
+      i < (reportDetailsModel?.data?.reportdetail?.categories ?? []).length;
+      i++
+    ) {
+      for (
+        int j = 0;
+        j <
+            (reportDetailsModel
+                        ?.data
+                        ?.reportdetail
+                        ?.categories?[i]
+                        .groupedTests ??
+                    [])
+                .length;
+        j++
+      ) {
+        for (
+          int k = 0;
+          k <
+              (reportDetailsModel
+                          ?.data
+                          ?.reportdetail
+                          ?.categories?[i]
+                          .groupedTests?[j]
+                          .caseTests ??
+                      [])
+                  .length;
+          k++
+        ) {
+          if (isnewpage) {
+            reportDetailsModel
+                    ?.data
+                    ?.reportdetail
+                    ?.categories?[i]
+                    .groupedTests?[j]
+                    .caseTests?[k]
+                    .isnewpage =
+                v;
+          }
+          if (isfootnote) {
+            reportDetailsModel
+                    ?.data
+                    ?.reportdetail
+                    ?.categories?[i]
+                    .groupedTests?[j]
+                    .caseTests?[k]
+                    .isfootnote =
+                v;
+          }
+          if (isselect) {
+            reportDetailsModel
+                    ?.data
+                    ?.reportdetail
+                    ?.categories?[i]
+                    .groupedTests?[j]
+                    .caseTests?[k]
+                    .isSelect =
+                v;
+          }
+        }
+      }
+      for (
+        int l = 0;
+        l <
+            (reportDetailsModel
+                        ?.data
+                        ?.reportdetail
+                        ?.categories?[i]
+                        .ungroupedTests ??
+                    [])
+                .length;
+        l++
+      ) {
+        if (isnewpage) {
+          reportDetailsModel
+                  ?.data
+                  ?.reportdetail
+                  ?.categories?[i]
+                  .ungroupedTests?[l]
+                  .isnewpage =
+              v;
+        }
+        if (isfootnote) {
+          reportDetailsModel
+                  ?.data
+                  ?.reportdetail
+                  ?.categories?[i]
+                  .ungroupedTests?[l]
+                  .isfootnote =
+              v;
+        }
+        if (isselect) {
+          reportDetailsModel
+                  ?.data
+                  ?.reportdetail
+                  ?.categories?[i]
+                  .ungroupedTests?[l]
+                  .isSelect =
+              v;
+        }
+      }
+    }
+    update();
+  }
+
+  returnbody(
+    bool v, {
+    bool isnewpage = false,
+    bool isfootnote = false,
+    bool isselect = false,
+  }) {
+    for (
+      int i = 0;
+      i < (reportDetailsModel?.data?.reportdetail?.categories ?? []).length;
+      i++
+    ) {
+      for (
+        int j = 0;
+        j <
+            (reportDetailsModel
+                        ?.data
+                        ?.reportdetail
+                        ?.categories?[i]
+                        .groupedTests ??
+                    [])
+                .length;
+        j++
+      ) {
+        for (
+          int k = 0;
+          k <
+              (reportDetailsModel
+                          ?.data
+                          ?.reportdetail
+                          ?.categories?[i]
+                          .groupedTests?[j]
+                          .caseTests ??
+                      [])
+                  .length;
+          k++
+        ) {
+          if (isnewpage) {
+            reportDetailsModel
+                    ?.data
+                    ?.reportdetail
+                    ?.categories?[i]
+                    .groupedTests?[j]
+                    .caseTests?[k]
+                    .isnewpage =
+                v;
+          }
+          if (isfootnote) {
+            reportDetailsModel
+                    ?.data
+                    ?.reportdetail
+                    ?.categories?[i]
+                    .groupedTests?[j]
+                    .caseTests?[k]
+                    .isfootnote =
+                v;
+          }
+          if (isselect) {
+            reportDetailsModel
+                    ?.data
+                    ?.reportdetail
+                    ?.categories?[i]
+                    .groupedTests?[j]
+                    .caseTests?[k]
+                    .isSelect =
+                v;
+          }
+        }
+      }
+      for (
+        int l = 0;
+        l <
+            (reportDetailsModel
+                        ?.data
+                        ?.reportdetail
+                        ?.categories?[i]
+                        .ungroupedTests ??
+                    [])
+                .length;
+        l++
+      ) {
+        if (isnewpage) {
+          reportDetailsModel
+                  ?.data
+                  ?.reportdetail
+                  ?.categories?[i]
+                  .ungroupedTests?[l]
+                  .isnewpage =
+              v;
+        }
+        if (isfootnote) {
+          reportDetailsModel
+                  ?.data
+                  ?.reportdetail
+                  ?.categories?[i]
+                  .ungroupedTests?[l]
+                  .isfootnote =
+              v;
+        }
+        if (isselect) {
+          reportDetailsModel
+                  ?.data
+                  ?.reportdetail
+                  ?.categories?[i]
+                  .ungroupedTests?[l]
+                  .isSelect =
+              v;
+        }
+      }
+    }
+    update();
   }
 
   String getFullAddress(Address? address) {

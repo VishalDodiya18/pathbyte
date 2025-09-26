@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:get/get_connect/http/src/utils/utils.dart';
+
 GetAllTestModel getAllTestModelFromJson(String str) =>
     GetAllTestModel.fromJson(json.decode(str));
 
@@ -116,6 +118,9 @@ class Test {
   String? description;
   List<dynamic>? headerIds;
   List<String>? categories;
+  bool isnewpage;
+  bool isfootnote;
+  bool isSelect;
 
   Test({
     this.id,
@@ -143,9 +148,15 @@ class Test {
     this.description,
     this.headerIds,
     this.categories,
+    this.isnewpage = F,
+    this.isfootnote = T,
+    this.isSelect = T,
   });
 
   factory Test.fromJson(Map<String, dynamic> json) => Test(
+    isnewpage: F,
+    isfootnote: T,
+    isSelect: T,
     id: json["_id"],
     testId: json["testId"],
     testCode: json["testCode"],

@@ -93,6 +93,7 @@ class HomeController extends GetxController
         search: doctorsearch,
       );
     });
+    fetchLabCenters(1, controller: labPagingController, search: labsearch);
 
     /// Labs pagination
     labPagingController.addPageRequestListener((pageKey) {
@@ -287,7 +288,7 @@ class HomeController extends GetxController
         Uri.parse(url),
         headers: {"Authorization": "Bearer ${AppConfig.Token}"},
       );
-       final data = jsonDecode(response.body);
+      final data = jsonDecode(response.body);
       if (response.statusCode == 500) {
         Logout(message: data["message"] ?? "Your Session is expired");
         return;

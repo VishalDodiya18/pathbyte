@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:pathbyte/Constants/elevated_button_constant.dart';
 import 'package:pathbyte/Constants/extensions.dart';
 import 'package:pathbyte/Constants/text_constant.dart';
 import 'package:pathbyte/Constants/widget_constant.dart';
@@ -58,145 +59,203 @@ class HomeScreenWidget {
           noItemsFoundIndicatorBuilder: (context) =>
               Center(child: Image.asset(AppImage.nodatafound)),
           itemBuilder: (context, item, index) {
-            return InkWell(
-              onTap: () {
-                Get.lazyPut(() => CaseDetailsContoller(caseId: item.sId));
-                Get.to(
-                  () => MainDetailsScreen(
-                    isreport: T,
-                    // AppConfig.Role.toUpperCase() == "LABTECHNICIAN" ? T : F,
-                  ),
-                );
-                //     return;
-                // if (!isOdd) {
-                // } else {
-                // Get.lazyPut(() => ReportDetailsContoller());
-                // Get.to(() => const ReportDetailsScreen());
-                // }
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: IntrinsicHeight(
-                  child: Row(
-                    spacing: 14.w,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border(
-                              bottom: BorderSide(
-                                color: AppColor.secondarycolor,
-                                width: 1.w,
-                              ),
-                            ),
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 15.w,
-                              vertical: 15.h,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              spacing: 3.0,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: TextConstant(
-                                        title: (item.patient == null)
-                                            ? "N/A"
-                                            : "${item.patient?.firstName ?? ''}",
-                                        // : "${item.patient?.firstName ?? ''} (#${item.patient?.patientId ?? ''})",
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13.0,
-                                      ),
-                                    ),
-                                    TextConstant(
-                                      title: "#${item.caseId ?? ''}",
-                                      fontSize: 13.0,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    TextConstant(
-                                      title: (item.patient == null)
-                                          ? "N/A"
-                                          : item.patient?.phoneNumbers?.first ??
-                                                '',
-                                      fontSize: 13.0,
-                                    ),
-                                    const Spacer(),
-                                    TextConstant(
-                                      title:
-                                          "${item.casetests?.length ?? 0} Tests",
-                                      fontSize: 13.0,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 83.w,
-                        alignment: Alignment.center,
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: IntrinsicHeight(
+                child: Row(
+                  spacing: 14.w,
+                  children: [
+                    Expanded(
+                      child: Container(
                         decoration: BoxDecoration(
-                          color: (item.transactions ?? []).isEmpty
-                              ? Colors.red
-                              : (item.transactions ?? [])
-                                        .map((e) => e.amountGiven)
-                                        .reduce(
-                                          (a, b) =>
-                                              num.parse((a ?? 0).toString()) +
-                                              num.parse((b ?? 0).toString()),
-                                        ) ==
-                                    item.finalAmount
-                              ? Colors.green
-                              : Colors.orange,
+                          color: Colors.white,
+                          border: Border(
+                            bottom: BorderSide(
+                              color: AppColor.secondarycolor,
+                              width: 1.w,
+                            ),
+                          ),
                           borderRadius: BorderRadius.circular(10.r),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextConstant(
-                              title: formatIndianCurrency(
-                                (item.finalAmount ?? 0),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 15.w,
+                            vertical: 15.h,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: 3.0,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: TextConstant(
+                                      title: (item.patient == null)
+                                          ? "N/A"
+                                          : "${item.patient?.firstName ?? ''}",
+                                      // : "${item.patient?.firstName ?? ''} (#${item.patient?.patientId ?? ''})",
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13.0,
+                                    ),
+                                  ),
+                                  TextConstant(
+                                    title: "#${item.caseId ?? ''}",
+                                    fontSize: 13.0,
+                                  ),
+                                ],
                               ),
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            heightBox(5),
-                            TextConstant(
-                              title: (item.transactions ?? []).isEmpty
-                                  ? "Unpaid"
-                                  : (item.transactions ?? [])
-                                            .map((e) => e.amountGiven)
-                                            .reduce(
-                                              (a, b) =>
-                                                  num.parse(
-                                                    (a ?? 0).toString(),
-                                                  ) +
-                                                  num.parse(
-                                                    (b ?? 0).toString(),
-                                                  ),
-                                            ) ==
-                                        item.finalAmount
-                                  ? "Paid"
-                                  : "Unpaid",
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ],
+                              Row(
+                                children: [
+                                  TextConstant(
+                                    title: (item.patient == null)
+                                        ? "N/A"
+                                        : item.patient?.phoneNumbers?.first ??
+                                              '',
+                                    fontSize: 13.0,
+                                  ),
+                                  const Spacer(),
+                                  TextConstant(
+                                    title:
+                                        "${item.casetests?.length ?? 0} Tests",
+                                    fontSize: 13.0,
+                                  ),
+                                ],
+                              ),
+                              if (T
+                              // AppConfig.Role.toUpperCase() ==
+                              //     "LABTECHNICIAN"
+                              ) ...[
+                                SizedBox(height: 5.0),
+                                Row(
+                                  spacing: 10.0,
+                                  children: [
+                                    Expanded(
+                                      child: elevatedButton(
+                                        height: 30.0,
+                                        title: "Enter Results",
+                                        onPressed: () {
+                                          Get.lazyPut(
+                                            () => CaseDetailsContoller(
+                                              caseId: item.sId,
+                                            ),
+                                          );
+                                          Get.to(
+                                            () => MainDetailsScreen(
+                                              isreport: T,
+                                              isview: F,
+                                              // AppConfig.Role.toUpperCase() ==
+                                              //     "LABTECHNICIAN"
+                                              // ? T
+                                              // : F,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: elevatedButton(
+                                        height: 30.0,
+                                        title: "View Report",
+                                        onPressed: () {
+                                          Get.lazyPut(
+                                            () => CaseDetailsContoller(
+                                              caseId: item.sId,
+                                            ),
+                                          );
+                                          Get.to(
+                                            () => MainDetailsScreen(
+                                              isreport: T,
+                                              // AppConfig.Role.toUpperCase() ==
+                                              //     "LABTECHNICIAN"
+                                              // ? T
+                                              // : F,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ] else ...[
+                                SizedBox(height: 5.0),
+
+                                elevatedButton(
+                                  height: 30.0,
+                                  title: "View Case",
+                                  onPressed: () {
+                                    Get.lazyPut(
+                                      () => CaseDetailsContoller(
+                                        caseId: item.sId,
+                                      ),
+                                    );
+                                    Get.to(
+                                      () => MainDetailsScreen(
+                                        isreport: F,
+                                        // AppConfig.Role.toUpperCase() ==
+                                        //     "LABTECHNICIAN"
+                                        // ? T
+                                        // : F,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ],
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      width: 83.w,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: (item.transactions ?? []).isEmpty
+                            ? Colors.red
+                            : (item.transactions ?? [])
+                                      .map((e) => e.amountGiven)
+                                      .reduce(
+                                        (a, b) =>
+                                            num.parse((a ?? 0).toString()) +
+                                            num.parse((b ?? 0).toString()),
+                                      ) ==
+                                  item.finalAmount
+                            ? Colors.green
+                            : Colors.orange,
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextConstant(
+                            title: formatIndianCurrency(
+                              (item.finalAmount ?? 0),
+                            ),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          heightBox(5),
+                          TextConstant(
+                            title: (item.transactions ?? []).isEmpty
+                                ? "Unpaid"
+                                : (item.transactions ?? [])
+                                          .map((e) => e.amountGiven)
+                                          .reduce(
+                                            (a, b) =>
+                                                num.parse((a ?? 0).toString()) +
+                                                num.parse((b ?? 0).toString()),
+                                          ) ==
+                                      item.finalAmount
+                                ? "Paid"
+                                : "Unpaid",
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );

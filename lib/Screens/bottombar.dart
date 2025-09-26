@@ -199,25 +199,27 @@ class _BottombarState extends State<Bottombar> {
               icon: const Icon(Icons.logout, color: AppColor.redcolor),
             ),
           ],
-          bottom: PreferredSize(
-            preferredSize: Size(width, 55.0),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  heightBox(15),
-                  elevatedButton(
-                    title: '+ Book A New Case',
-                    onPressed: () {
-                      Get.lazyPut(() => BookCaseController());
-                      Get.to(() => BookCaseScreen());
-                    },
+          bottom: AppConfig.Role.toUpperCase() != "LABTECHNICIAN"
+              ? PreferredSize(
+                  preferredSize: Size(width, 55.0),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        heightBox(15),
+                        elevatedButton(
+                          title: '+ Book A New Case',
+                          onPressed: () {
+                            Get.lazyPut(() => BookCaseController());
+                            Get.to(() => BookCaseScreen());
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
+                )
+              : null,
         ),
 
         bottomNavigationBar: AppConfig.Role.toUpperCase() == "LABTECHNICIAN"

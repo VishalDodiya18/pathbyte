@@ -57,6 +57,7 @@ class Data {
 class Group {
   String? id;
   String? groupId;
+  String? groupCode;
   String? name;
   String? description;
   var price;
@@ -67,6 +68,7 @@ class Group {
   Group({
     this.id,
     this.groupId,
+    this.groupCode,
     this.name,
     this.description,
     this.price,
@@ -78,6 +80,7 @@ class Group {
   factory Group.fromJson(Map<String, dynamic> json) => Group(
     id: json["_id"],
     groupId: json["groupId"],
+    groupCode: json["groupCode"],
     name: json["name"],
     description: json["description"],
     price: json["price"],
@@ -95,6 +98,7 @@ class Group {
   Map<String, dynamic> toJson() => {
     "_id": id,
     "groupId": groupId,
+    "groupCode": groupCode,
     "name": name,
     "description": description,
     "price": price,

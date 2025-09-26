@@ -79,7 +79,7 @@ class ReportTable extends StatelessWidget {
                 // ),
                 DataColumn(
                   label: Text(
-                    "Code",
+                    "Test Name",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -137,11 +137,7 @@ class ReportTable extends StatelessWidget {
                       // ),
                       DataCell(
                         Text(
-                          category
-                                  .groupedTests?[i]
-                                  .caseTests?[j]
-                                  .test
-                                  ?.testCode ??
+                          category.groupedTests?[i].caseTests?[j].test?.name ??
                               "",
                         ),
                       ),
@@ -287,7 +283,7 @@ class ReportTable extends StatelessWidget {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 5.0,
-                                      horizontal: 5.0,
+                                      horizontal: 0.0,
                                     ),
                                     child: CustomDropdown<dynamic>(
                                       ischange: !isfinal,
@@ -355,7 +351,20 @@ class ReportTable extends StatelessWidget {
                             ? const SizedBox()
                             : Center(
                                 child: Text(
-                                  "${category.groupedTests![i].caseTests![j].appliedReferenceRange?.lowValue.toString() ?? ""} - ${category.groupedTests![i].caseTests![j].appliedReferenceRange?.highValue.toString() ?? ""} ",
+                                  (category
+                                                  .groupedTests![i]
+                                                  .caseTests![j]
+                                                  .test
+                                                  ?.testType ??
+                                              "") ==
+                                          "NonNumeric"
+                                      ? (category
+                                                .groupedTests?[i]
+                                                .caseTests?[j]
+                                                .appliedReferenceRange
+                                                ?.stringValue ??
+                                            "")
+                                      : "${category.groupedTests![i].caseTests![j].appliedReferenceRange?.lowValue.toString() ?? ""} - ${category.groupedTests![i].caseTests![j].appliedReferenceRange?.highValue.toString() ?? ""} ",
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -578,7 +587,7 @@ class ReportTable extends StatelessWidget {
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 5.0,
-                                        horizontal: 5.0,
+                                        horizontal: 0.0,
                                       ),
                                       child: CustomDropdown<dynamic>(
                                         ischange: !isfinal,
@@ -682,7 +691,7 @@ class ReportTable extends StatelessWidget {
                 // ),
                 DataColumn(
                   label: Text(
-                    "Code",
+                    "Test name",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -725,7 +734,17 @@ class ReportTable extends StatelessWidget {
                       //   Center(child: Text(" - ", textAlign: TextAlign.center)),
                       // ),
                       DataCell(
-                        Text(category.ungroupedTests?[i].test?.testCode ?? ""),
+                        Text(
+                          category.ungroupedTests?[i].test?.name ?? "",
+                          style: TextStyle(
+                            fontWeight:
+                                (category.ungroupedTests?[i].characteristics ??
+                                        [])
+                                    .isNotEmpty
+                                ? FontWeight.bold
+                                : null,
+                          ),
+                        ),
                       ),
                       DataCell(
                         (category.ungroupedTests?[i].characteristics ?? [])
@@ -848,7 +867,7 @@ class ReportTable extends StatelessWidget {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 5.0,
-                                      horizontal: 5.0,
+                                      horizontal: 0.0,
                                     ),
                                     child: CustomDropdown<dynamic>(
                                       ischange: !isfinal,
@@ -901,7 +920,15 @@ class ReportTable extends StatelessWidget {
                             ? const SizedBox()
                             : Center(
                                 child: Text(
-                                  "${category.ungroupedTests?[i].appliedReferenceRange?.lowValue.toString() ?? ""} - ${category.ungroupedTests?[i].appliedReferenceRange?.highValue.toString() ?? ""} ",
+                                  (category.ungroupedTests?[i].test?.testType ??
+                                              "") ==
+                                          "NonNumeric"
+                                      ? (category
+                                                .ungroupedTests?[i]
+                                                .appliedReferenceRange
+                                                ?.stringValue ??
+                                            "")
+                                      : "${category.ungroupedTests?[i].appliedReferenceRange?.lowValue.toString() ?? ""} - ${category.ungroupedTests?[i].appliedReferenceRange?.highValue.toString() ?? ""} ",
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -1164,7 +1191,15 @@ class ReportTable extends StatelessWidget {
                         DataCell(
                           Center(
                             child: Text(
-                              "${category.ungroupedTests?[i].characteristics?[j].appliedReferenceRange?.lowValue.toString() ?? ""} - ${category.ungroupedTests?[i].characteristics?[j].appliedReferenceRange?.highValue.toString() ?? ""} ",
+                              (category.ungroupedTests?[i].test?.testType ??
+                                          "") ==
+                                      "NonNumeric"
+                                  ? (category
+                                            .ungroupedTests?[i]
+                                            .appliedReferenceRange
+                                            ?.stringValue ??
+                                        "")
+                                  : "${category.ungroupedTests?[i].characteristics?[j].appliedReferenceRange?.lowValue.toString() ?? ""} - ${category.ungroupedTests?[i].characteristics?[j].appliedReferenceRange?.highValue.toString() ?? ""} ",
                               textAlign: TextAlign.center,
                             ),
                           ),

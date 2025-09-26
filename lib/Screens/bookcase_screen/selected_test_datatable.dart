@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pathbyte/Constants/extensions.dart';
@@ -12,95 +14,134 @@ class SelectedTestsTable extends StatelessWidget {
       builder: (controller) {
         final List<Test> tests = (controller.selectedTests);
         final List<Group> groptests = (controller.selectedGroupTests);
+
         if (tests.isEmpty) {
           return const Center(child: Text("No tests selected"));
         }
 
         return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(
-            headingRowHeight: 40,
-            dataRowMinHeight: 4,
-
-            dataRowMaxHeight: 36,
-
-            headingRowColor: MaterialStateProperty.all(Colors.grey.shade200),
+          child: Table(
             border: TableBorder.all(width: 0.5, color: Colors.grey.shade400),
-
-            columns: const [
-              DataColumn(label: Text("S.No")),
-              DataColumn(label: Text("Group Name")),
-              DataColumn(label: Text("Code")),
-              DataColumn(label: Text("Test Name")),
-              DataColumn(label: Text("R.D.")),
-              DataColumn(label: Text("Price")),
-              // DataColumn(label: Text("Action")),
-            ],
-            rows: [
-              ...List.generate(tests.length, (index) {
-                final test = tests[index];
-                return DataRow(
-                  cells: [
-                    // DataCell(Text("${index + 1}")),
-                    DataCell(Text("${index + 1}")),
-                    const DataCell(
-                      Center(child: Text(" - ", textAlign: TextAlign.center)),
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            columnWidths: const {
+              0: IntrinsicColumnWidth(), // Code
+              1: FlexColumnWidth(), // Test Name (expand)
+              2: IntrinsicColumnWidth(), // R.D.
+              3: IntrinsicColumnWidth(), // Price
+            },
+            children: [
+              // Header row
+              TableRow(
+                decoration: BoxDecoration(color: Colors.grey.shade200),
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 2),
+                    child: Text(
+                      "Code",
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    DataCell(Text(test.testId ?? "")),
-                    DataCell(Text(test.name ?? "")),
-                    DataCell(Text((test.reportingDays ?? 1).toString())),
-                    DataCell(Text("₹${test.price}/-")),
-                    // DataCell(
-                    //   IconButton(
-                    //     icon: const Icon(Icons.delete, color: Colors.red),
-                    //     onPressed: () {
-                    //       controller.toggleSelection(test);
-                    //     },
-                    //   ),
-                    // ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 2),
+                    child: Text(
+                      "Test Name",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 2),
+                    child: Text(
+                      "R.D.",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 2),
+                    child: Text(
+                      "Price",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+
+              // Individual tests rows
+              ...tests.map((test) {
+                return TableRow(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                        vertical: 2,
+                      ),
+                      child: Text(test.testCode ?? ""),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                        vertical: 2,
+                      ),
+                      child: Text("${test.name ?? ""}"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                        vertical: 2,
+                      ),
+                      child: Text((test.reportingDays ?? 1).toString()),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                        vertical: 2,
+                      ),
+                      child: Text("₹${test.price}"),
+                    ),
                   ],
                 );
-              }),
+              }).toList(),
 
-              for (int i = 0; i < (groptests ?? []).length; i++)
-                DataRow(
-                  cells: [
-                    // DataCell(Text("${index + 1}")),
-                    DataCell(Text("${tests.length + i + 1}")),
-                    DataCell(Text(groptests[i].name ?? "")),
-                    DataCell(Text(groptests[i].groupId ?? "")),
-                    DataCell(
-                      SizedBox(
-                        child: Text(
-                          (groptests[i].tests ?? [])
-                              .map((e) => e.name ?? "")
-                              .join(" , "),
-                        ),
+              // Group tests rows
+              ...groptests.map((group) {
+                final maxReportingDays = (group.tests ?? [])
+                    .map((e) => e.reportingDays ?? 0)
+                    .fold<int>(0, (a, b) => a > b ? a : b);
+
+                return TableRow(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                        vertical: 2,
+                      ),
+                      child: Text(group.groupCode ?? ""),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                        vertical: 2,
+                      ),
+                      child: Text(
+                        "${group.name ?? ""} (${(group.tests ?? []).length})",
                       ),
                     ),
-                    DataCell(
-                      Text(
-                        (groptests[i].tests ?? [])
-                            .map((e) => e.reportingDays ?? 0)
-                            .reduce((a, b) => a > b ? a : b)
-                            .toString(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                        vertical: 2,
                       ),
+                      child: Text(maxReportingDays.toString()),
                     ),
-                    DataCell(
-                      Text(
-                        "${formatIndianCurrency(groptests[i].price ?? 0)}/-",
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                        vertical: 2,
                       ),
+                      child: Text("${formatIndianCurrency(group.price ?? 0)}"),
                     ),
-                    // DataCell(
-                    //   IconButton(
-                    //     icon: const Icon(Icons.delete, color: Colors.red),
-                    //     onPressed: () {
-                    //       controller.toggleSelection(test);
-                    //     },
-                    //   ),
-                    // ),
                   ],
-                ),
+                );
+              }).toList(),
             ],
           ),
         );

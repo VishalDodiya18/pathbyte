@@ -7,6 +7,7 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:math_expressions/math_expressions.dart';
 
 ReportDetailsModel reportDetailsModelFromJson(String str) =>
@@ -434,6 +435,10 @@ class Test {
   AppliedReferenceRange? appliedReferenceRange;
   TextEditingController highvalue = TextEditingController();
   TextEditingController lowvalue = TextEditingController();
+  bool isnewpage;
+  bool isfootnote;
+  bool isSelect;
+
   Map<String, dynamic> get charMap => characteristics.toCharMap();
   Test({
     this.id,
@@ -450,7 +455,9 @@ class Test {
     this.createdAt,
     this.updatedAt,
     this.test,
-
+    this.isnewpage = F,
+    this.isfootnote = T,
+    this.isSelect = T,
     this.appliedReferenceRange,
     TextEditingController? highvalue,
     TextEditingController? lowvalue,
@@ -461,7 +468,9 @@ class Test {
     id: json["_id"],
     numberValue: json['numberValue'],
     stringValue: json["stringValue"],
-
+    isnewpage: F,
+    isfootnote: T,
+    isSelect: T,
     lowvalue: TextEditingController(
       text: json['numberValue'] != null && json['numberValue'] != 0
           ? json['numberValue'].toString()
@@ -621,6 +630,9 @@ class TestClass {
   DateTime? createdAt;
   DateTime? updatedAt;
   var v;
+  bool? isnewpage;
+  bool? isfootnote;
+  bool? isSelect;
 
   TestClass({
     this.id,

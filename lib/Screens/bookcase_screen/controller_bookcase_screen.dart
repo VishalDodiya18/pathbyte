@@ -58,7 +58,7 @@ class BookCaseController extends GetxController {
     "Master",
     "Baby",
     "Baby of",
-    "Dr."
+    "Dr.",
 
     //  'Dr.'
   ];
@@ -92,6 +92,8 @@ class BookCaseController extends GetxController {
         int.parse(daysController.text),
       ),
     );
+    selectedCenter =
+        (Get.find<HomeController>().labPagingController.itemList ?? []).first;
     super.onInit();
   }
 
@@ -114,15 +116,17 @@ class BookCaseController extends GetxController {
   }
 
   gettotalamount() {
-    final List<Test> tests = (selectedTests).toList();
+    final List<Test> tests = (selectedTests ?? []).toList();
     final List<Group> groptests = (selectedGroupTests);
 
     return tests.isEmpty && groptests.isEmpty
         ? 0
-        : tests.map((e) => e.price ?? 0).reduce((a, b) => a + b) +
-            (groptests.isEmpty
-                ? 0
-                : groptests.map((e) => e.price ?? 0).reduce((a, b) => a + b));
+        : (tests.isEmpty
+                  ? 0
+                  : tests.map((e) => e.price ?? 0).reduce((a, b) => a + b)) +
+              (groptests.isEmpty
+                  ? 0
+                  : groptests.map((e) => e.price ?? 0).reduce((a, b) => a + b));
   }
 
   gettotalwitdiscountamount() {
