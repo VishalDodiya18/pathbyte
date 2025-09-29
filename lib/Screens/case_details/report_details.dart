@@ -164,7 +164,11 @@ class ReportDetails extends StatelessWidget {
                               child: elevatedButton(
                                 title: "Save as Draft",
                                 onPressed: () {
+                                  // if(controller.formkey.currentState!.validate())
+                                  // {
+
                                   controller.CreateReportResult();
+                                  // }
                                 },
                               ),
                             ),

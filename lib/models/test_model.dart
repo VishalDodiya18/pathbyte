@@ -118,6 +118,7 @@ class Test {
   String? description;
   List<dynamic>? headerIds;
   List<String>? categories;
+  List<String>? validationStrings;
   bool isnewpage;
   bool isfootnote;
   bool isSelect;
@@ -146,6 +147,7 @@ class Test {
     this.updatedAt,
     this.category,
     this.description,
+    this.validationStrings,
     this.headerIds,
     this.categories,
     this.isnewpage = F,
@@ -210,6 +212,9 @@ class Test {
     categories: json["categories"] == null
         ? []
         : List<String>.from(json["categories"]!.map((x) => x)),
+    validationStrings: json["validationStrings"] == null
+        ? []
+        : List<String>.from(json["validationStrings"]!.map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -256,6 +261,9 @@ class Test {
     "categories": categories == null
         ? []
         : List<dynamic>.from(categories!.map((x) => x)),
+    "validationStrings": validationStrings == null
+        ? []
+        : List<dynamic>.from(validationStrings!.map((x) => x)),
   };
 }
 

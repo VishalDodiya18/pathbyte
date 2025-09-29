@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:pathbyte/Constants/custom_dropDown.dart';
@@ -504,6 +505,11 @@ class ReportTable extends StatelessWidget {
                                                   ),
 
                                               onChanged: (v) {
+                                                validateTestOnChange(
+                                                  category
+                                                      .groupedTests![i]
+                                                      .caseTests![j],
+                                                );
                                                 // evaluateCharacteristic(
                                                 //   category
                                                 //       .groupedTests![i]
@@ -1051,6 +1057,11 @@ class ReportTable extends StatelessWidget {
                                                   ),
 
                                               onChanged: (v) {
+                                                validateTestOnChange2(
+                                                  category
+                                                      .ungroupedTests![i]
+                                                      .test!,
+                                                );
                                                 // category
                                                 //         .ungroupedTests?[i]
                                                 //         .characteristics =
@@ -1099,6 +1110,7 @@ class ReportTable extends StatelessWidget {
                                             ),
                                           ),
                                         ),
+
                                         // const SizedBox(width: 6),
                                         // Flexible(
                                         //   child: Container(
@@ -1336,4 +1348,171 @@ num? evaluateCharacteristicValue(
 List<String> breakStringToChars(String input) {
   // sabhi spaces hatao aur har character ko alag karo
   return input.replaceAll(" ", "").split("");
+}
+
+void validateTestOnChange(Test test) {
+  log((test.validationStrings == null).toString(), name: "log1");
+  log(((test.validationStrings ?? []).isEmpty).toString(), name: "log2");
+  if (test.validationStrings == null ||
+      (test.validationStrings ?? []).isEmpty) {
+    // Clear all errors if no validation
+    test.characteristics?.forEach((c) => c.error = null);
+    return;
+  }
+
+  log("sadsadsadsad");
+
+  final formulaValues = <String, double>{};
+  for (int i = 0; i < (test.characteristics?.length ?? 0); i++) {
+    final char = test.characteristics![i];
+    final value = double.tryParse(char.lowvalue.text);
+    if (value != null && char.formula != null && char.formula!.isNotEmpty) {
+      formulaValues[char.formula!.toUpperCase()] = value;
+    }
+  }
+
+  // Reset errors
+  test.characteristics?.forEach((c) => c.error = null);
+
+  List<String> allErrors = []; // Collect errors here
+
+  for (final validationString in test.validationStrings!) {
+    try {
+      final match = RegExp(
+        r'^([A-Z+\-*/().]+)=(\d+(?:\.\d+)?)$',
+      ).firstMatch(validationString);
+      if (match == null) continue;
+
+      final expression = match.group(1)!;
+      final expectedValue = double.parse(match.group(2)!);
+
+      final variables = RegExp(
+        r'[A-Z]',
+      ).allMatches(expression).map((e) => e.group(0)!).toSet();
+      bool allVarsPresent = variables.every(
+        (v) => formulaValues.containsKey(v),
+      );
+      if (!allVarsPresent) continue;
+
+      String evaluatedExp = expression;
+      formulaValues.forEach((key, value) {
+        evaluatedExp = evaluatedExp.replaceAll(key, value.toString());
+      });
+
+      Parser parser = Parser();
+      Expression exp = parser.parse(evaluatedExp);
+      double result = exp.evaluate(EvaluationType.REAL, ContextModel());
+
+      if ((result - expectedValue).abs() > 0.001) {
+        // Assign error to all involved characteristics
+        test.characteristics
+            ?.where(
+              (c) =>
+                  c.formula != null &&
+                  variables.contains(c.formula!.toUpperCase()),
+            )
+            .forEach((c) {
+              final errorMsg =
+                  "Expected $validationString = $expectedValue, got ${result.toStringAsFixed(2)}";
+              c.error = errorMsg;
+              allErrors.add(errorMsg); // Collect error for toast
+            });
+      }
+    } catch (e) {
+      print("Error validating formula $validationString: $e");
+    }
+  }
+  log(allErrors.toString());
+
+  // Show all errors in one toast if any
+  if (allErrors.isNotEmpty) {
+    Get.snackbar(
+      "Validation Error",
+      allErrors.join("\n"),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.red.shade400,
+      colorText: Colors.white,
+      duration: Duration(seconds: 3),
+    );
+  }
+}
+
+void validateTestOnChange2(TestClass test) {
+  if (test.validationStrings == null || test.validationStrings!.isEmpty) {
+    test.characteristics?.forEach((c) => c.error = null);
+    return;
+  }
+
+  final formulaValues = <String, double>{};
+
+  // Collect all values from characteristics
+  for (final char in test.characteristics ?? []) {
+    final value = double.tryParse(char.lowvalue.text);
+    if (value != null && char.formula != null && char.formula!.isNotEmpty) {
+      formulaValues[char.formula!.toUpperCase()] = value;
+    }
+  }
+
+  test.characteristics?.forEach((c) => c.error = null); // reset
+
+  List<String> allErrors = [];
+
+  for (final validationString in test.validationStrings!) {
+    try {
+      final match = RegExp(
+        r'^([A-Z+\-*/().]+)=(\d+(?:\.\d+)?)$',
+      ).firstMatch(validationString);
+      if (match == null) continue;
+
+      final expression = match.group(1)!;
+      final expectedValue = double.parse(match.group(2)!);
+
+      // Extract variables in expression
+      final variables = RegExp(
+        r'[A-Z]',
+      ).allMatches(expression).map((e) => e.group(0)!).toSet();
+
+      // Skip if any variable is missing
+      if (!variables.every((v) => formulaValues.containsKey(v))) continue;
+
+      // Replace variables with actual values
+      String expString = expression;
+      for (final v in variables) {
+        expString = expString.replaceAll(v, formulaValues[v]!.toString());
+      }
+
+      // Evaluate expression
+      final parser = Parser();
+      final exp = parser.parse(expString);
+      final result = exp.evaluate(EvaluationType.REAL, ContextModel());
+
+      if ((result - expectedValue).abs() > 0.001) {
+        test.characteristics
+            ?.where(
+              (c) =>
+                  c.formula != null &&
+                  variables.contains(c.formula!.toUpperCase()),
+            )
+            .forEach((c) {
+              final msg =
+                  "Expected $validationString = $expectedValue, got ${result.toStringAsFixed(2)}";
+              c.error = msg;
+              allErrors.add(msg);
+            });
+      }
+    } catch (e) {
+      print("Validation error: $e");
+    }
+  }
+
+  if (allErrors.isNotEmpty) {
+    Get.snackbar(
+      "Validation Error",
+      allErrors.join("\n"),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.red.shade400,
+      colorText: Colors.white,
+      duration: Duration(seconds: 3),
+    );
+  }
 }

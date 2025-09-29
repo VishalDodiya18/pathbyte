@@ -12,6 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   dropdown_button2: ^2.3.9
   easy_debounce: ^2.0.3
+  expressions: ^0.2.5+3
   flutter:
     sdk: flutter
   flutter_native_html_to_pdf: ^1.0.1

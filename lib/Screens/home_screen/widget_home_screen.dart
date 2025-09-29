@@ -123,10 +123,9 @@ class HomeScreenWidget {
                                   ),
                                 ],
                               ),
-                              if (
-                                // T
-                              AppConfig.Role.toUpperCase() ==
-                                  "LABTECHNICIAN"
+                              if (T
+                              // AppConfig.Role.toUpperCase() ==
+                              //     "LABTECHNICIAN"
                               ) ...[
                                 SizedBox(height: 5.0),
                                 Row(
@@ -181,7 +180,6 @@ class HomeScreenWidget {
                                 ),
                               ] else ...[
                                 SizedBox(height: 5.0),
-
                                 elevatedButton(
                                   height: 30.0,
                                   title: "View Case",

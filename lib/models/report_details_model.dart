@@ -427,6 +427,7 @@ class Test {
   var price;
   var numberValue;
   var stringValue;
+  List<String>? validationStrings;
   String? footNote;
   List<Characteristic>? characteristics;
   DateTime? createdAt;
@@ -451,6 +452,8 @@ class Test {
     this.footNote,
     this.characteristics,
     this.numberValue,
+    this.validationStrings,
+
     this.stringValue,
     this.createdAt,
     this.updatedAt,
@@ -498,6 +501,9 @@ class Test {
     appliedReferenceRange: json["appliedReferenceRange"] == null
         ? null
         : AppliedReferenceRange.fromJson(json["appliedReferenceRange"]),
+    validationStrings: json["validationStrings"] == null
+        ? []
+        : List<String>.from(json["validationStrings"]!.map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -519,6 +525,9 @@ class Test {
     "updatedAt": updatedAt?.toIso8601String(),
     "test": test?.toJson(),
     "appliedReferenceRange": appliedReferenceRange?.toJson(),
+    "validationStrings": validationStrings == null
+        ? []
+        : List<dynamic>.from(validationStrings!.map((x) => x)),
   };
 }
 
@@ -621,6 +630,8 @@ class TestClass {
   var reportingDays;
   String? unit;
   var numberValue;
+  List<String>? validationStrings;
+
   List<ReferenceRange>? referenceRange;
   List<dynamic>? possibleStringValues;
   List<dynamic>? dependecies;
@@ -648,6 +659,8 @@ class TestClass {
     this.reportingDays,
     this.unit,
     this.numberValue,
+    this.validationStrings,
+
     this.referenceRange,
     this.possibleStringValues,
     this.dependecies,
@@ -700,6 +713,9 @@ class TestClass {
         ? null
         : DateTime.parse(json["updatedAt"]),
     v: json["__v"],
+    validationStrings: json["validationStrings"] == null
+        ? []
+        : List<String>.from(json["validationStrings"]!.map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -735,6 +751,9 @@ class TestClass {
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
     "__v": v,
+    "validationStrings": validationStrings == null
+        ? []
+        : List<dynamic>.from(validationStrings!.map((x) => x)),
   };
 }
 
@@ -748,6 +767,7 @@ class Characteristic {
   String? formula;
   var numberValue;
   var stringValue;
+  String? error;
   List<ReferenceRange>? referenceRange;
   ReferenceRange? appliedReferenceRange;
   TextEditingController highvalue = TextEditingController();
@@ -765,6 +785,7 @@ class Characteristic {
     this.numberValue,
     this.formula,
     this.stringValue,
+    this.error,
     this.appliedReferenceRange,
     TextEditingController? highvalue,
     TextEditingController? lowvalue,

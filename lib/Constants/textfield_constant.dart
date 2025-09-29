@@ -6,7 +6,7 @@ import 'package:pathbyte/Constants/text_constant.dart';
 import 'package:pathbyte/utils/app_color.dart';
 
 class TextFieldConstant extends StatelessWidget {
-  const TextFieldConstant({
+  TextFieldConstant({
     super.key,
     required this.controller,
     this.contentPadding,
@@ -25,6 +25,7 @@ class TextFieldConstant extends StatelessWidget {
     this.onChanged,
     this.onFieldSubmit,
     this.validator,
+    this.errorText,
     this.textAlign = TextAlign.start,
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.none,
@@ -50,6 +51,7 @@ class TextFieldConstant extends StatelessWidget {
   final int? minLines;
   final List<TextInputFormatter>? inputFormatters;
   final TextAlign textAlign;
+  String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,7 @@ class TextFieldConstant extends StatelessWidget {
 
       decoration: InputDecoration(
         hintText: hintText,
-
+        errorText: errorText,
         hintStyle: textStyle(fontSize: 14, color: theme.hintColor),
         alignLabelWithHint: true,
         prefixIcon: prefixIcon != null
@@ -393,8 +395,13 @@ class DecimalTextInputFormatter extends TextInputFormatter {
       return newValue;
     }
 
-    // Allow only digits and one dot
-    if (!RegExp(r'^\d*\.?\d*$').hasMatch(text)) {
+    // Allow optional leading minus sign, only digits and one dot
+    if (!RegExp(r'^-?\d*\.?\d*$').hasMatch(text)) {
+      return oldValue;
+    }
+
+    // Only one minus at the beginning
+    if (text.contains('-') && !text.startsWith('-')) {
       return oldValue;
     }
 

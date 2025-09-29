@@ -35,6 +35,9 @@ class CaseDetailsContoller extends GetxController {
   bool isfootnote = T;
   bool isselect = T;
 
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  
+
   @override
   void onInit() {
     fetchCaseById();
