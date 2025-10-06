@@ -397,11 +397,24 @@ class GroupedTest {
   String? id;
   String? name;
   List<Test>? caseTests;
+  bool isnewpage;
+  bool isfootnote;
+  bool isSelect;
 
-  GroupedTest({this.id, this.name, this.caseTests});
+  GroupedTest({
+    this.id,
+    this.name,
+    this.caseTests,
+    this.isnewpage = false,
+    this.isfootnote = true,
+    this.isSelect = true,
+  });
 
   factory GroupedTest.fromJson(Map<String, dynamic> json) => GroupedTest(
     id: json["_id"],
+    isnewpage: F,
+    isfootnote: T,
+    isSelect: T,
     name: json["name"],
     caseTests: json["caseTests"] == null
         ? []

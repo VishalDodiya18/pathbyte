@@ -210,165 +210,140 @@ class PrintReportOptions extends StatelessWidget {
                                           .length;
                                   j++
                                 ) ...[
-                                  for (
-                                    int k = 0;
-                                    k <
-                                        (controller
-                                                    .reportDetailsModel
-                                                    ?.data
-                                                    ?.reportdetail
-                                                    ?.categories?[i]
-                                                    .groupedTests?[j]
-                                                    .caseTests ??
-                                                [])
-                                            .length;
-                                    k++
-                                  )
-                                    TableRow(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0,
-                                            vertical: 5,
-                                          ),
-                                          child: Text(
-                                            controller
-                                                    .reportDetailsModel
-                                                    ?.data
-                                                    ?.reportdetail
-                                                    ?.categories?[i]
-                                                    .groupedTests?[j]
-                                                    .caseTests?[k]
-                                                    .test
-                                                    ?.name ??
-                                                "",
-                                          ),
+                                  TableRow(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0,
+                                          vertical: 5,
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0,
-                                            vertical: 5,
-                                          ),
-                                          child: SizedBox(
-                                            width: 20.0,
-                                            height: 20.0,
-                                            child: Checkbox(
-                                              activeColor: AppColor.primary,
-                                              value: controller
+                                        child: Text(
+                                          controller
                                                   .reportDetailsModel
                                                   ?.data
                                                   ?.reportdetail
                                                   ?.categories?[i]
                                                   .groupedTests?[j]
-                                                  .caseTests?[k]
-                                                  .isnewpage,
-                                              onChanged: (value) {
-                                                controller
-                                                        .reportDetailsModel
-                                                        ?.data
-                                                        ?.reportdetail
-                                                        ?.categories?[i]
-                                                        .groupedTests?[j]
-                                                        .caseTests?[k]
-                                                        .isnewpage =
-                                                    !(controller
-                                                            .reportDetailsModel
-                                                            ?.data
-                                                            ?.reportdetail
-                                                            ?.categories?[i]
-                                                            .groupedTests?[j]
-                                                            .caseTests?[k]
-                                                            .isnewpage ??
-                                                        false);
-                                                controller.update();
-                                              },
-                                            ),
+                                                  .name ??
+                                              "",
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0,
+                                          vertical: 5,
+                                        ),
+                                        child: SizedBox(
+                                          width: 20.0,
+                                          height: 20.0,
+                                          child: Checkbox(
+                                            activeColor: AppColor.primary,
+                                            value: controller
+                                                .reportDetailsModel
+                                                ?.data
+                                                ?.reportdetail
+                                                ?.categories?[i]
+                                                .groupedTests?[j]
+                                                .isnewpage,
+                                            onChanged: (value) {
+                                              controller
+                                                      .reportDetailsModel
+                                                      ?.data
+                                                      ?.reportdetail
+                                                      ?.categories?[i]
+                                                      .groupedTests?[j]
+                                                      .isnewpage =
+                                                  !(controller
+                                                          .reportDetailsModel
+                                                          ?.data
+                                                          ?.reportdetail
+                                                          ?.categories?[i]
+                                                          .groupedTests?[j]
+                                                          .isnewpage ??
+                                                      false);
+                                              controller.update();
+                                            },
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0,
-                                            vertical: 5,
-                                          ),
-                                          child: SizedBox(
-                                            width: 20.0,
-                                            height: 20.0,
-                                            child: Checkbox(
-                                              activeColor: AppColor.primary,
-                                              value: controller
-                                                  .reportDetailsModel
-                                                  ?.data
-                                                  ?.reportdetail
-                                                  ?.categories?[i]
-                                                  .groupedTests?[j]
-                                                  .caseTests?[k]
-                                                  .isfootnote,
-                                              onChanged: (value) {
-                                                controller
-                                                        .reportDetailsModel
-                                                        ?.data
-                                                        ?.reportdetail
-                                                        ?.categories?[i]
-                                                        .groupedTests?[j]
-                                                        .caseTests?[k]
-                                                        .isfootnote =
-                                                    !(controller
-                                                            .reportDetailsModel
-                                                            ?.data
-                                                            ?.reportdetail
-                                                            ?.categories?[i]
-                                                            .groupedTests?[j]
-                                                            .caseTests?[k]
-                                                            .isfootnote ??
-                                                        false);
-                                                controller.update();
-                                              },
-                                            ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0,
+                                          vertical: 5,
+                                        ),
+                                        child: SizedBox(
+                                          width: 20.0,
+                                          height: 20.0,
+                                          child: Checkbox(
+                                            activeColor: AppColor.primary,
+                                            value: controller
+                                                .reportDetailsModel
+                                                ?.data
+                                                ?.reportdetail
+                                                ?.categories?[i]
+                                                .groupedTests?[j]
+                                                .isfootnote,
+                                            onChanged: (value) {
+                                              controller
+                                                      .reportDetailsModel
+                                                      ?.data
+                                                      ?.reportdetail
+                                                      ?.categories?[i]
+                                                      .groupedTests?[j]
+                                                      .isfootnote =
+                                                  !(controller
+                                                          .reportDetailsModel
+                                                          ?.data
+                                                          ?.reportdetail
+                                                          ?.categories?[i]
+                                                          .groupedTests?[j]
+                                                          .isfootnote ??
+                                                      false);
+                                              controller.update();
+                                            },
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0,
-                                            vertical: 5,
-                                          ),
-                                          child: SizedBox(
-                                            width: 20.0,
-                                            height: 20.0,
-                                            child: Checkbox(
-                                              activeColor: AppColor.primary,
-                                              value: controller
-                                                  .reportDetailsModel
-                                                  ?.data
-                                                  ?.reportdetail
-                                                  ?.categories?[i]
-                                                  .groupedTests?[j]
-                                                  .caseTests?[k]
-                                                  .isSelect,
-                                              onChanged: (value) {
-                                                controller
-                                                        .reportDetailsModel
-                                                        ?.data
-                                                        ?.reportdetail
-                                                        ?.categories?[i]
-                                                        .groupedTests?[j]
-                                                        .caseTests?[k]
-                                                        .isSelect =
-                                                    !(controller
-                                                            .reportDetailsModel
-                                                            ?.data
-                                                            ?.reportdetail
-                                                            ?.categories?[i]
-                                                            .groupedTests?[j]
-                                                            .caseTests?[k]
-                                                            .isSelect ??
-                                                        false);
-                                                controller.update();
-                                              },
-                                            ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0,
+                                          vertical: 5,
+                                        ),
+                                        child: SizedBox(
+                                          width: 20.0,
+                                          height: 20.0,
+                                          child: Checkbox(
+                                            activeColor: AppColor.primary,
+                                            value: controller
+                                                .reportDetailsModel
+                                                ?.data
+                                                ?.reportdetail
+                                                ?.categories?[i]
+                                                .groupedTests?[j]
+                                                .isSelect,
+                                            onChanged: (value) {
+                                              controller
+                                                      .reportDetailsModel
+                                                      ?.data
+                                                      ?.reportdetail
+                                                      ?.categories?[i]
+                                                      .groupedTests?[j]
+                                                      .isSelect =
+                                                  !(controller
+                                                          .reportDetailsModel
+                                                          ?.data
+                                                          ?.reportdetail
+                                                          ?.categories?[i]
+                                                          .groupedTests?[j]
+                                                          .isSelect ??
+                                                      false);
+                                              controller.update();
+                                            },
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
 
                                 for (

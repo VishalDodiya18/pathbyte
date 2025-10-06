@@ -36,7 +36,6 @@ class CaseDetailsContoller extends GetxController {
   bool isselect = T;
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
-  
 
   @override
   void onInit() {
@@ -115,9 +114,9 @@ class CaseDetailsContoller extends GetxController {
             final id = caseTest.id ?? "";
             if (id.isNotEmpty) {
               requestBody[id] = {
-                "printFootnote": caseTest.isfootnote,
-                "newPage": caseTest.isnewpage,
-                "select": caseTest.isSelect,
+                "printFootnote": grouped.isfootnote ? true : false,
+                "newPage": grouped.isnewpage ? true : false,
+                "select": grouped.isSelect ? true : false,
               };
             }
           }
@@ -502,6 +501,33 @@ class CaseDetailsContoller extends GetxController {
                 .length;
         j++
       ) {
+        if (isnewpage) {
+          reportDetailsModel
+                  ?.data
+                  ?.reportdetail
+                  ?.categories?[i]
+                  .groupedTests?[j]
+                  .isnewpage =
+              v;
+        }
+        if (isfootnote) {
+          reportDetailsModel
+                  ?.data
+                  ?.reportdetail
+                  ?.categories?[i]
+                  .groupedTests?[j]
+                  .isfootnote =
+              v;
+        }
+        if (isselect) {
+          reportDetailsModel
+                  ?.data
+                  ?.reportdetail
+                  ?.categories?[i]
+                  .groupedTests?[j]
+                  .isSelect =
+              v;
+        }
         for (
           int k = 0;
           k <
