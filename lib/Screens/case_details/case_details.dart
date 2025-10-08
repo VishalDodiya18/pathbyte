@@ -469,16 +469,19 @@ class CaseDetailsPage extends StatelessWidget {
                   children: [
                     Expanded(
                       child: elevatedButton(
-                        title: "Send on Whatsapp",
-                        onPressed: () {},
+                        title: "Send Welcome on Whatsapp",
+
+                        onPressed: () {
+                          controller.SendOnWhatsApp();
+                        },
                       ),
                     ),
-                    Expanded(
-                      child: elevatedButton(
-                        title: "Print Receipt",
-                        onPressed: () {},
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: elevatedButton(
+                    //     title: "Print Receipt",
+                    //     onPressed: () {},
+                    //   ),
+                    // ),
                   ],
                 ),
                 SizedBox(height: 25.0.h),

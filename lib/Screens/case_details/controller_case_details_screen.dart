@@ -110,17 +110,27 @@ class CaseDetailsContoller extends GetxController {
       for (final category
           in reportDetailsModel?.data?.reportdetail?.categories ?? []) {
         for (final grouped in category.groupedTests ?? []) {
-          for (final caseTest in grouped.caseTests ?? []) {
-            final id = caseTest.id ?? "";
-            if (id.isNotEmpty) {
-              requestBody[id] = {
-                "printFootnote": grouped.isfootnote ? true : false,
-                "newPage": grouped.isnewpage ? true : false,
-                "select": grouped.isSelect ? true : false,
-              };
-            }
+          final id = grouped.id ?? "";
+          if (id.isNotEmpty) {
+            requestBody[id] = {
+              "printFootnote": grouped.isfootnote,
+              "newPage": grouped.isnewpage,
+              "select": grouped.isSelect,
+            };
           }
         }
+        // for (final grouped in category.groupedTests ?? []) {
+        //   for (final caseTest in grouped.caseTests ?? []) {
+        //     final id = caseTest.id ?? "";
+        //     if (id.isNotEmpty) {
+        //       requestBody[id] = {
+        //         "printFootnote": grouped.isfootnote ? true : false,
+        //         "newPage": grouped.isnewpage ? true : false,
+        //         "select": grouped.isSelect ? true : false,
+        //       };
+        //     }
+        //   }
+        // }
 
         // Categories → ungroupedTests
         for (final ungrouped in category.ungroupedTests ?? []) {
@@ -152,6 +162,47 @@ class CaseDetailsContoller extends GetxController {
     } catch (e) {
       isreportshareing(false);
       throw Exception("Failed to load HTML");
+    }
+  }
+
+  SendOnWhatsApp() async {
+    isLoading(true);
+    try {
+      final url = Uri.parse(
+        "${AppConfig.baseUrl}/cases/$caseId/send-welcome-message",
+      );
+
+      final response = await http.post(
+        url,
+        headers: {
+          "Authorization": "Bearer ${AppConfig.Token}",
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          // "phoneNumber": "+919099059863",
+          "phoneNumber": (caseDetails?.patient?.phoneNumbers ?? []).first,
+          "name": caseDetails?.patient?.firstName ?? "",
+          "caseId": caseDetails?.caseId ?? "",
+        }),
+      );
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          "Success",
+          data["message"] ?? "Send Successfully",
+          backgroundColor: AppColor.greencolor,
+          colorText: AppColor.whitecolor,
+        );
+      }
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return "";
+      }
+    } catch (e) {
+      isLoading(false);
+      throw Exception("Failed to load HTML");
+    } finally {
+      isLoading(false);
     }
   }
 

@@ -72,7 +72,7 @@ Logout({message}) {
   AppConfig.UserId = "null";
   AppConfig.FullName = "null";
 
-  Get.to(LoginPage());
+  Get.offAll(LoginPage());
   Future.delayed(Duration(milliseconds: 100), () {
     Get.delete<HomeController>(force: T);
     Get.delete<PatientController>(force: T);

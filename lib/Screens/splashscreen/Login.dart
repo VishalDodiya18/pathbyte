@@ -141,41 +141,51 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Login() async {
-    setState(() {
-      isLoading = true;
-    });
-    var headers = {'Content-Type': 'application/json'};
-    var request = http.Request(
-      'POST',
-      Uri.parse('${AppConfig.baseUrl}/auth/login'),
-    );
-    request.body = json.encode({
-      "email": EmailAddress.text,
-      "password": Password.text,
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-    var model = jsonDecode(await response.stream.bytesToString());
-    log(model.toString());
-    if (model["code"] == 200) {
-      SetString("token", model["data"]["accessToken"]);
-      SetString("userid", model["data"]["user"]["_id"]);
-      SetString("role", model["data"]["user"]["roles"][0]["name"]);
-      SetString("name", model["data"]["user"]["fullName"]);
-      SetString("labname", model["data"]["user"]["labs"][0]["name"]);
+    try {
       setState(() {
-        isLoading = false;
-        AppConfig.Token = model["data"]["accessToken"];
-
-        Get.to(Bottombar());
+        isLoading = true;
       });
-    } else {
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request(
+        'POST',
+        Uri.parse('${AppConfig.baseUrl}/auth/login'),
+      );
+      request.body = json.encode({
+        "email": EmailAddress.text,
+        "password": Password.text,
+      });
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      var model = jsonDecode(await response.stream.bytesToString());
+      log(model.toString());
+      if (model["code"] == 200) {
+        SetString("token", model["data"]["accessToken"]);
+        SetString("userid", model["data"]["user"]["_id"]);
+        SetString("role", model["data"]["user"]["roles"][0]["name"]);
+        SetString("name", model["data"]["user"]["fullName"]);
+        SetString("labname", model["data"]["user"]["labs"][0]["name"]);
+        setState(() {
+          isLoading = false;
+          AppConfig.Token = model["data"]["accessToken"];
+
+          Get.to(Bottombar());
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(model["message"])));
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    } finally {
       setState(() {
         isLoading = false;
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(model["message"])));
       });
     }
   }

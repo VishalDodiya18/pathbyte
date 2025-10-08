@@ -196,13 +196,22 @@ class ReportDetails extends StatelessWidget {
                               ),
                           ],
                         )
-                      else
+                      else ...[
                         elevatedButton(
                           title: "Print Report",
                           onPressed: () {
                             Get.to(PrintReportOptions());
                           },
                         ),
+                        SizedBox(height: 10.0),
+                        elevatedButton(
+                          title: "Send Report on Whatsapp",
+                          backgroundColor: AppColor.greencolor,
+                          onPressed: () {
+                            Get.to(PrintReportOptions());
+                          },
+                        ),
+                      ],
                     ],
                   ),
                 ),

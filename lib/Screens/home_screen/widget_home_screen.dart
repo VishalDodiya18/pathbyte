@@ -123,10 +123,9 @@ class HomeScreenWidget {
                                   ),
                                 ],
                               ),
-                              if (
-                                // T
-                              AppConfig.Role.toUpperCase() ==
-                                  "LABTECHNICIAN"
+                              if (T
+                              // AppConfig.Role.toUpperCase() ==
+                              //     "LABTECHNICIAN"
                               ) ...[
                                 SizedBox(height: 5.0),
                                 Row(
