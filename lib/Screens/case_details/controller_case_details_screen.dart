@@ -206,6 +206,62 @@ class CaseDetailsContoller extends GetxController {
     }
   }
 
+  SendReportOnWhatsApp() async {
+    reporting(true);
+    try {
+      final url = Uri.parse("${AppConfig.baseUrl}/cases/$caseId/sendpdf");
+
+      final response = await http.post(
+        url,
+        headers: {
+          "Authorization": "Bearer ${AppConfig.Token}",
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          // "phoneNumber": "+919099059863",
+          "phoneNumber":
+              (reportDetailsModel
+                          ?.data
+                          ?.reportdetail
+                          ?.caseDetails
+                          ?.patient
+                          ?.phoneNumbers ??
+                      [])
+                  .first,
+          "name":
+              reportDetailsModel
+                  ?.data
+                  ?.reportdetail
+                  ?.caseDetails
+                  ?.patient
+                  ?.firstName ??
+              "",
+          "caseCode":
+              reportDetailsModel?.data?.reportdetail?.caseDetails?.caseId ?? "",
+          "caseId": caseId ?? "",
+        }),
+      );
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          "Success",
+          data["message"] ?? "Report Send Successfully",
+          backgroundColor: AppColor.greencolor,
+          colorText: AppColor.whitecolor,
+        );
+      }
+      if (response.statusCode == 500) {
+        Logout(message: data["message"] ?? "Your Session is expired");
+        return "";
+      }
+    } catch (e) {
+      reporting(false);
+      throw Exception("Failed to load HTML");
+    } finally {
+      reporting(false);
+    }
+  }
+
   Future<void> fetchAndPrintHtml() async {
     isreportshareing(true);
     try {

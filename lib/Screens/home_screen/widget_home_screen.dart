@@ -123,37 +123,38 @@ class HomeScreenWidget {
                                   ),
                                 ],
                               ),
-                              if (T
-                              // AppConfig.Role.toUpperCase() ==
-                              //     "LABTECHNICIAN"
-                              ) ...[
+                              if (
+                              // T
+                              AppConfig.Role.toUpperCase() ==
+                                  "LABTECHNICIAN") ...[
                                 SizedBox(height: 5.0),
                                 Row(
                                   spacing: 10.0,
                                   children: [
-                                    Expanded(
-                                      child: elevatedButton(
-                                        height: 30.0,
-                                        title: "Enter Results",
-                                        onPressed: () {
-                                          Get.lazyPut(
-                                            () => CaseDetailsContoller(
-                                              caseId: item.sId,
-                                            ),
-                                          );
-                                          Get.to(
-                                            () => MainDetailsScreen(
-                                              isreport: T,
-                                              isview: F,
-                                              // AppConfig.Role.toUpperCase() ==
-                                              //     "LABTECHNICIAN"
-                                              // ? T
-                                              // : F,
-                                            ),
-                                          );
-                                        },
+                                    if (item.status != "SignOff")
+                                      Expanded(
+                                        child: elevatedButton(
+                                          height: 30.0,
+                                          title: "Enter Results",
+                                          onPressed: () {
+                                            Get.lazyPut(
+                                              () => CaseDetailsContoller(
+                                                caseId: item.sId,
+                                              ),
+                                            );
+                                            Get.to(
+                                              () => MainDetailsScreen(
+                                                isreport: T,
+                                                isview: F,
+                                                // AppConfig.Role.toUpperCase() ==
+                                                //     "LABTECHNICIAN"
+                                                // ? T
+                                                // : F,
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
-                                    ),
                                     Expanded(
                                       child: elevatedButton(
                                         height: 30.0,
