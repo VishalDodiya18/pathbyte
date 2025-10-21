@@ -212,7 +212,7 @@ class HomeScreenWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: (item.transactions ?? []).isEmpty
-                            ? Colors.red
+                            ? Colors.orange
                             : (item.transactions ?? [])
                                       .map((e) => e.amountGiven)
                                       .reduce(

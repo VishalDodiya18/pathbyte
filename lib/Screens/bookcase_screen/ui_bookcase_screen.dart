@@ -463,6 +463,8 @@ class BookCaseScreen extends StatelessWidget {
 
                                       if (selected != null) {
                                         controller.selectedpatient = selected;
+                                        controller.selectedTitle.value =
+                                            selected.title ?? "Mr";
                                         controller.phoneNumber.value =
                                             PhoneNumber(
                                               isoCode: IsoCode.IN,

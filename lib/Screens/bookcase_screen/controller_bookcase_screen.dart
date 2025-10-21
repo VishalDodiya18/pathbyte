@@ -93,7 +93,9 @@ class BookCaseController extends GetxController {
       ),
     );
     selectedCenter =
-        (Get.find<HomeController>().labPagingController.itemList ?? []).first;
+        (Get.find<HomeController>().labPagingController.itemList ?? []).isEmpty
+        ? null
+        : (Get.find<HomeController>().labPagingController.itemList ?? []).first;
     super.onInit();
   }
 

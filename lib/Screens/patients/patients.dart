@@ -195,7 +195,7 @@ Widget buildInfoCard(patient) {
           (patient.phoneNumbers?.join(", ") ?? "N/A"),
         ),
         infoRow(Icons.email, "Email", patient.email ?? "N/A"),
-        infoRow(Icons.language, "Address", patient.address.line1 ?? "N/A"),
+        infoRow(Icons.language, "Address", (patient.address?.line1 ?? "N/A")),
         // infoRow(Icons.access_time, "Created At", patient.createdAt ?? "N/A"),
         // infoRow(Icons.update, "Updated At", patient.updatedAt ?? "N/A"),
       ],
