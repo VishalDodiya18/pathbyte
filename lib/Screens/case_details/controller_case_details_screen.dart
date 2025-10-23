@@ -535,7 +535,7 @@ class CaseDetailsContoller extends GetxController {
         return;
       }
       if (response.statusCode == 200 && model["code"] == 200) {
-        fetchreportCaseById();
+       await fetchreportCaseById();
         Get.snackbar(
           "Success",
           isdraft
