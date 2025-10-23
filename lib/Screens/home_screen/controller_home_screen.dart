@@ -35,6 +35,7 @@ class HomeController extends GetxController
   CaseListModel? newCaselistmodel;
   CaseListModel? finalCaselistmodel;
   CaseListModel? signoffCaselistmodel;
+  CaseListModel? inprogressCaselistmodel;
 
   final List<String> caseStatus = ["New", "Final", "InProgress", "SignOff"];
   final List<String> amountStatus = [
@@ -70,6 +71,8 @@ class HomeController extends GetxController
   final PagingController<int, Cases> signOffPagingController = PagingController(
     firstPageKey: 1,
   );
+  final PagingController<int, Cases> inprogressPagingController =
+      PagingController(firstPageKey: 1);
 
   final TextEditingController doctorsearch = TextEditingController();
   final TextEditingController labsearch = TextEditingController();
@@ -78,6 +81,7 @@ class HomeController extends GetxController
     newPagingController.refresh();
     finalPagingController.refresh();
     signOffPagingController.refresh();
+    inprogressPagingController.refresh();
 
     doctorPagingController.refresh();
     labPagingController.refresh();
@@ -86,7 +90,7 @@ class HomeController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 5, vsync: this);
     patientPagingController.addPageRequestListener((pageKey) {
       fetchPatients(pageKey, controller: patientPagingController);
     });
@@ -126,6 +130,14 @@ class HomeController extends GetxController
         status: "New",
         controller: newPagingController,
         caseListModel: newCaselistmodel,
+      );
+    });
+    inprogressPagingController.addPageRequestListener((pageKey) {
+      fetchCases(
+        pageKey,
+        status: "InProgress",
+        controller: inprogressPagingController,
+        caseListModel: inprogressCaselistmodel,
       );
     });
 
@@ -306,6 +318,8 @@ class HomeController extends GetxController
           allCaselistmodel = CaseListModel.fromJson(data);
         else if (status == "New")
           newCaselistmodel = CaseListModel.fromJson(data);
+        else if (status == "InProgress")
+          inprogressCaselistmodel = CaseListModel.fromJson(data);
         else if (status == "Final")
           finalCaselistmodel = CaseListModel.fromJson(data);
         else

@@ -397,6 +397,8 @@ class GroupedTest {
   String? id;
   String? name;
   List<Test>? caseTests;
+  String? groupCode;
+
   bool isnewpage;
   bool isfootnote;
   bool isSelect;
@@ -404,6 +406,8 @@ class GroupedTest {
   GroupedTest({
     this.id,
     this.name,
+    this.groupCode,
+
     this.caseTests,
     this.isnewpage = false,
     this.isfootnote = true,
@@ -415,6 +419,8 @@ class GroupedTest {
     isnewpage: F,
     isfootnote: T,
     isSelect: T,
+    groupCode: json["groupCode"],
+
     name: json["name"],
     caseTests: json["caseTests"] == null
         ? []

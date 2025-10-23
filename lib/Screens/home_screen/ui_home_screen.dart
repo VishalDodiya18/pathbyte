@@ -131,22 +131,13 @@ class HomeScreen extends StatelessWidget {
                               : FontWeight.w400,
                         ),
                       ),
-                      // Tab(
-                      //   child: TextConstant(
-                      //     title: 'In Progress',
-                      //     textAlign: TextAlign.center,
-                      //     fontWeight: controller.selectedIndex.value == 2
-                      //         ? FontWeight.bold
-                      //         : FontWeight.w400,
-                      //   ),
-                      // ),
                       Tab(
                         child: TextConstant(
                           title:
-                              'Final${controller.selectedIndex.value != 2
+                              'In Progress${controller.selectedIndex.value != 2
                                   ? ""
-                                  : controller.finalCaselistmodel != null
-                                  ? " ( ${controller.finalCaselistmodel?.data?.pagination?.total ?? 0} )"
+                                  : controller.inprogressCaselistmodel != null
+                                  ? " ( ${controller.inprogressCaselistmodel?.data?.pagination?.total ?? 0} )"
                                   : " ( 0 )"}',
                           textAlign: TextAlign.center,
                           fontWeight: controller.selectedIndex.value == 2
@@ -154,16 +145,31 @@ class HomeScreen extends StatelessWidget {
                               : FontWeight.w400,
                         ),
                       ),
+
                       Tab(
                         child: TextConstant(
                           title:
-                              'Signed Off${controller.selectedIndex.value != 3
+                              'Final${controller.selectedIndex.value != 3
+                                  ? ""
+                                  : controller.finalCaselistmodel != null
+                                  ? " ( ${controller.finalCaselistmodel?.data?.pagination?.total ?? 0} )"
+                                  : " ( 0 )"}',
+                          textAlign: TextAlign.center,
+                          fontWeight: controller.selectedIndex.value == 3
+                              ? FontWeight.bold
+                              : FontWeight.w400,
+                        ),
+                      ),
+                      Tab(
+                        child: TextConstant(
+                          title:
+                              'Signed Off${controller.selectedIndex.value != 4
                                   ? ""
                                   : controller.signoffCaselistmodel != null
                                   ? " ( ${controller.signoffCaselistmodel?.data?.pagination?.total ?? 0} )"
                                   : " ( 0 )"}',
                           textAlign: TextAlign.center,
-                          fontWeight: controller.selectedIndex.value == 3
+                          fontWeight: controller.selectedIndex.value == 4
                               ? FontWeight.bold
                               : FontWeight.w400,
                         ),
@@ -180,12 +186,14 @@ class HomeScreen extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(top: 14.h),
                   child: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
                     controller: controller.tabController,
                     children: [
                       HomeScreenWidget().tabbarWidget(0),
                       HomeScreenWidget().tabbarWidget(1),
                       HomeScreenWidget().tabbarWidget(2),
                       HomeScreenWidget().tabbarWidget(3),
+                      HomeScreenWidget().tabbarWidget(4),
                     ],
                   ),
                 ),

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'dart:developer';
 
 import 'package:easy_debounce/easy_debounce.dart';
@@ -69,7 +71,7 @@ class ReportTable extends StatelessWidget {
               columns: const [
                 DataColumn(
                   label: Text(
-                    "S.No",
+                    "Code",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -115,7 +117,9 @@ class ReportTable extends StatelessWidget {
                     cells: [
                       DataCell(
                         Text(
-                          j == 0 ? "${i + 1}" : "",
+                          j == 0
+                              ? "${category.groupedTests?[i].groupCode ?? ""}"
+                              : "",
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -695,7 +699,7 @@ class ReportTable extends StatelessWidget {
               columns: const [
                 DataColumn(
                   label: Text(
-                    "S.No",
+                    "Code",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -742,7 +746,8 @@ class ReportTable extends StatelessWidget {
                       DataCell(
                         Text(
                           // category.ungroupedTests![i].charMap.toString(),
-                          "${(category.groupedTests ?? []).length + i + 1}",
+                          category.ungroupedTests?[i].test?.testCode ?? "",
+                          // "${(category.groupedTests ?? []).length + i + 1}",
                           textAlign: TextAlign.center,
                         ),
                       ),

@@ -98,7 +98,7 @@ class Patientes extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     buildHeaderCard(context, patient),
-                                    buildInfoCard(patient),
+                                    buildInfoCard(patient, isshown: false),
                                     const SizedBox(height: 16),
                                   ],
                                 ),
@@ -181,7 +181,7 @@ Widget buildHeaderCard(context, patient, {isedit = false}) {
   );
 }
 
-Widget buildInfoCard(patient) {
+Widget buildInfoCard(patient, {isshown = true}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16),
     child: Column(
@@ -193,8 +193,10 @@ Widget buildInfoCard(patient) {
           "Phone",
           (patient.phoneNumbers?.join(", ") ?? "N/A"),
         ),
-        // infoRow(Icons.email, "Email", patient.email ?? "N/A"),
-        // infoRow(Icons.language, "Address", (patient.address?.line1 ?? "N/A")),
+        if (isshown) ...[
+          infoRow(Icons.email, "Email", patient.email ?? "N/A"),
+          infoRow(Icons.language, "Address", (patient.address?.line1 ?? "N/A")),
+        ],
         // infoRow(Icons.access_time, "Created At", patient.createdAt ?? "N/A"),
         // infoRow(Icons.update, "Updated At", patient.updatedAt ?? "N/A"),
       ],

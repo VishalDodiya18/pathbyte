@@ -20,7 +20,7 @@ class HomeScreenWidget {
     final HomeController controller = Get.find<HomeController>();
 
     PatientDetailsController? Pcontroller;
-    if (tabIndex == 4) Pcontroller = Get.find<PatientDetailsController>();
+    if (tabIndex == 5) Pcontroller = Get.find<PatientDetailsController>();
 
     PagingController<int, Cases> pagingController;
     switch (tabIndex) {
@@ -31,15 +31,18 @@ class HomeScreenWidget {
         pagingController = controller.newPagingController;
         break;
       // case 2:
-      //   pagingController = controller.newPagingController; // temporary
+      //   pagingController = controller.newPagingController;
       //   break;
       case 2:
-        pagingController = controller.finalPagingController;
+        pagingController = controller.inprogressPagingController;
         break;
       case 3:
-        pagingController = controller.signOffPagingController;
+        pagingController = controller.finalPagingController;
         break;
       case 4:
+        pagingController = controller.signOffPagingController;
+        break;
+      case 5:
         pagingController = Pcontroller!.allPagingController;
         break;
       default:
