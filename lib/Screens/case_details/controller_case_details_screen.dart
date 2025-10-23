@@ -529,13 +529,23 @@ class CaseDetailsContoller extends GetxController {
       );
 
       var model = jsonDecode(response.body);
-
+      log(model.toString());
       if (response.statusCode == 500) {
         Logout(message: model["message"] ?? "Your Session is expired");
         return;
       }
       if (response.statusCode == 200 && model["code"] == 200) {
-        Get.back();
+        fetchreportCaseById();
+        Get.snackbar(
+          "Success",
+          isdraft
+              ? "Report saved as draft"
+              : "Report saved as final successfully",
+          colorText: AppColor.whitecolor,
+
+          backgroundColor: AppColor.greencolor,
+        );
+        // Get.back();
       } else {
         //log(model["message"]);
         Get.snackbar(

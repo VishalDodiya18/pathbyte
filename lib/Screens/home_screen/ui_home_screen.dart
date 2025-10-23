@@ -12,6 +12,7 @@ import 'package:pathbyte/Screens/bookcase_screen/ui_bookcase_screen.dart';
 import 'package:pathbyte/Screens/home_screen/controller_home_screen.dart';
 import 'package:pathbyte/Screens/home_screen/filter_screen.dart';
 import 'package:pathbyte/Screens/home_screen/widget_home_screen.dart';
+import 'package:pathbyte/utils/app_config.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -28,7 +29,9 @@ class HomeScreen extends StatelessWidget {
           children: [
             heightBox(14),
             TextConstant(
-              title: 'Cases',
+              title: AppConfig.Role.toUpperCase() == "LABTECHNICIAN"
+                  ? "Reports"
+                  : 'Cases',
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),

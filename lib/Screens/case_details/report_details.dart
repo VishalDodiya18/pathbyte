@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:pathbyte/Constants/elevated_button_constant.dart';
+import 'package:pathbyte/Constants/extensions.dart';
 import 'package:pathbyte/Constants/text_constant.dart';
 import 'package:pathbyte/Constants/widget_constant.dart';
 import 'package:pathbyte/Screens/case_details/controller_case_details_screen.dart';
@@ -51,6 +54,19 @@ class ReportDetails extends StatelessWidget {
                             spacing: 5.0,
                             children: [
                               buildReportRow(
+                                title: "Registration Time :",
+                                value: DateFormat("dd MMM , yyyy 'at' hh:mm a")
+                                    .format(
+                                      controller
+                                              .reportDetailsModel
+                                              ?.data
+                                              ?.reportdetail
+                                              ?.caseDetails
+                                              ?.createdAt ??
+                                          DateTime.now(),
+                                    ),
+                              ),
+                              buildReportRow(
                                 title: "Case ID :",
                                 value:
                                     "#${controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.caseId ?? ""}",
@@ -92,6 +108,22 @@ class ReportDetails extends StatelessWidget {
                                         ?.doctor
                                         ?.firstName ??
                                     "",
+                              ),
+                              buildReportRow(
+                                title: "Status :",
+                                value:
+                                    controller
+                                        .reportDetailsModel
+                                        ?.data
+                                        ?.reportdetail
+                                        ?.caseDetails
+                                        ?.status ??
+                                    "",
+                              ),
+                              buildReportRow(
+                                title: "Total Amount :",
+                                value:
+                                    "${formatIndianCurrency(controller.reportDetailsModel?.data?.reportdetail?.caseDetails?.totalAmount ?? 0)}",
                               ),
                               // buildReportRow(
                               //   title: "Registration Time :",
