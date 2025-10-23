@@ -40,18 +40,18 @@ class Patientes extends StatelessWidget {
                   hintText: 'Search By Patient ID/Name/ No',
                   suffixIcon:
                       contorller.patientSearchController.text.trim().isNotEmpty
-                      ? GestureDetector(
-                          onTap: () {
-                            contorller.patientSearchController.clear();
-                            contorller.update();
-                            FocusScope.of(context).unfocus();
-                            Future.delayed(Duration(milliseconds: 100), () {
-                              contorller.patientPagingController.refresh();
-                            });
-                          },
-                          child: Icon(Icons.clear_rounded, size: 25.h),
-                        )
-                      : null,
+                          ? GestureDetector(
+                              onTap: () {
+                                contorller.patientSearchController.clear();
+                                contorller.update();
+                                FocusScope.of(context).unfocus();
+                                Future.delayed(Duration(milliseconds: 100), () {
+                                  contorller.patientPagingController.refresh();
+                                });
+                              },
+                              child: Icon(Icons.clear_rounded, size: 25.h),
+                            )
+                          : null,
                   onChanged: (p0) {
                     contorller.update();
 
@@ -81,30 +81,29 @@ class Patientes extends StatelessWidget {
                             Center(child: Image.asset(AppImage.nodatafound)),
                         itemBuilder: (context, patient, index) =>
                             GestureDetector(
-                              onTap: () {
-                                Get.lazyPut(
-                                  () => PatientDetailsController(
-                                    patient: patient,
-                                  ),
-                                );
-                                Get.to(PatientDetails());
-                              },
-                              child: Card(
-                                color: AppColor.whitecolor,
-
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                elevation: 2,
-                                child: Column(
-                                  children: [
-                                    buildHeaderCard(context, patient),
-                                    buildInfoCard(patient),
-                                    const SizedBox(height: 16),
-                                  ],
-                                ),
+                          onTap: () {
+                            Get.lazyPut(
+                              () => PatientDetailsController(
+                                patient: patient,
                               ),
+                            );
+                            Get.to(PatientDetails());
+                          },
+                          child: Card(
+                            color: AppColor.whitecolor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
+                            elevation: 2,
+                            child: Column(
+                              children: [
+                                buildHeaderCard(context, patient),
+                                buildInfoCard(patient),
+                                const SizedBox(height: 16),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -135,7 +134,7 @@ class Patientes extends StatelessWidget {
 
 Widget buildHeaderCard(context, patient, {isedit = false}) {
   return Padding(
-    padding: const EdgeInsets.all(20),
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
     child: Row(
       children: [
         CircleAvatar(
@@ -161,11 +160,7 @@ Widget buildHeaderCard(context, patient, {isedit = false}) {
               ),
               Text("Gender: ${patient.gender ?? 'N/A'}"),
               Text(
-                "Age: ${(patient.age ?? 0) != 0
-                    ? (patient.age ?? 0)
-                    : (patient.months ?? 0) != 0
-                    ? (patient.months ?? 0)
-                    : (patient.days ?? 0)}",
+                "Age: ${(patient.age ?? 0) != 0 ? (patient.age ?? 0) : (patient.months ?? 0) != 0 ? (patient.months ?? 0) : (patient.days ?? 0)}",
               ),
             ],
           ),
@@ -194,7 +189,7 @@ Widget buildInfoCard(patient) {
           "Phone",
           (patient.phoneNumbers?.join(", ") ?? "N/A"),
         ),
-        infoRow(Icons.email, "Email", patient.email ?? "N/A"),
+        // infoRow(Icons.email, "Email", patient.email ?? "N/A"),
         infoRow(Icons.language, "Address", (patient.address?.line1 ?? "N/A")),
         // infoRow(Icons.access_time, "Created At", patient.createdAt ?? "N/A"),
         // infoRow(Icons.update, "Updated At", patient.updatedAt ?? "N/A"),

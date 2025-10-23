@@ -11,6 +11,7 @@ import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/state_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:pathbyte/Constants/elevated_button_constant.dart';
+import 'package:pathbyte/Constants/text_constant.dart';
 import 'package:pathbyte/Constants/textfield_constant.dart';
 import 'package:pathbyte/Screens/bottombar.dart';
 import 'package:pathbyte/Screens/home_screen/ui_home_screen.dart';
@@ -58,10 +59,18 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.symmetric(horizontal: 10.0),
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                Center(
+                  child: TextConstant(
+                      title: "Pathbyte",
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20.0),
                 Image.asset(
                   AppImage.app_icon,
                   height: MediaQuery.of(context).size.height * 0.1,
                 ),
+
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 TextFieldConstant(
                   controller: EmailAddress,
@@ -71,8 +80,8 @@ class _LoginPageState extends State<LoginPage> {
                       : RegExp(
                           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                         ).hasMatch(v)
-                      ? null
-                      : "Please Enter Valid Email Address",
+                          ? null
+                          : "Please Enter Valid Email Address",
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.018),
 
@@ -93,8 +102,8 @@ class _LoginPageState extends State<LoginPage> {
                   validator: (v) => v!.isEmpty
                       ? "Please Enter Password"
                       : v.length > 6
-                      ? null
-                      : "Password Must be more than 6 characters",
+                          ? null
+                          : "Password Must be more than 6 characters",
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 // RichText(

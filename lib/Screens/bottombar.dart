@@ -63,12 +63,18 @@ class _BottombarState extends State<Bottombar> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextConstant(title: AppConfig.labname ?? ""),
+                  TextConstant(title: "Dr.Goel's Diagnostic Laboratory"),
+                  // TextConstant(title: AppConfig.labname ?? ""),
                   TextConstant(
-                    title: AppConfig.FullName ?? "",
-                    fontSize: 16,
+                    title: "ISO 9001:2000 Certified",
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
+                  // TextConstant(
+                  //   title: AppConfig.FullName ?? "",
+                  //   fontSize: 16,
+                  //   fontWeight: FontWeight.bold,
+                  // ),
                 ],
               ),
             ],
@@ -221,7 +227,6 @@ class _BottombarState extends State<Bottombar> {
                 )
               : null,
         ),
-
         bottomNavigationBar: AppConfig.Role.toUpperCase() == "LABTECHNICIAN"
             ? const SizedBox()
             : BottomNavigationBar(
@@ -234,7 +239,6 @@ class _BottombarState extends State<Bottombar> {
                 backgroundColor: AppColor.whitecolor,
                 elevation: 15,
                 selectedItemColor: AppColor.primary,
-
                 items: const [
                   BottomNavigationBarItem(
                     icon: Icon(Icons.medical_information),
@@ -246,7 +250,6 @@ class _BottombarState extends State<Bottombar> {
                   ),
                 ],
               ),
-
         body: currentindex == 0 ? HomeScreen() : const Patientes(),
       ),
     );

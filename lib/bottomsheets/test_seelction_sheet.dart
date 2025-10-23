@@ -31,7 +31,6 @@ void showTestBottomSheet(BuildContext context) {
                 ),
                 const Divider(),
                 const SizedBox(height: 12),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: TextField(
@@ -56,7 +55,6 @@ void showTestBottomSheet(BuildContext context) {
                   ),
                 ),
                 const SizedBox(height: 12),
-
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () {
@@ -88,10 +86,9 @@ void showTestBottomSheet(BuildContext context) {
                                   ),
                                   dense: T,
                                   title: Text(
-                                    "${item.name ?? ""} (₹ ${item.price})",
+                                    "${item.name ?? ""} (${item.testCode}) (₹ ${item.price})",
                                     style: TextStyle(fontSize: 16.h),
                                   ),
-
                                   trailing: Checkbox(
                                     value: controller.selectedTests.any(
                                       (element) => element.id == item.id,
@@ -109,9 +106,7 @@ void showTestBottomSheet(BuildContext context) {
                           ),
                         ),
                         const SizedBox(height: 15.0),
-
                         const Divider(),
-
                         Text(
                           "   Gorups of Tests",
                           style: TextStyle(
@@ -119,11 +114,9 @@ void showTestBottomSheet(BuildContext context) {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-
                         Expanded(
                           child: PagedListView<int, Group>(
                             padding: EdgeInsets.symmetric(horizontal: 10.0),
-
                             pagingController: controller.grouptestController,
                             physics: const AlwaysScrollableScrollPhysics(),
                             builderDelegate: PagedChildBuilderDelegate<Group>(
@@ -134,10 +127,9 @@ void showTestBottomSheet(BuildContext context) {
                                   ),
                                   dense: T,
                                   title: Text(
-                                    "${item.name ?? ""} (₹ ${item.price})",
+                                    "${item.name ?? ""} (${item.groupCode}) (₹ ${item.price})",
                                     style: TextStyle(fontSize: 16.h),
                                   ),
-
                                   trailing: Checkbox(
                                     value: controller.selectedGroupTests.any(
                                       (element) => element.id == item.id,
@@ -162,7 +154,6 @@ void showTestBottomSheet(BuildContext context) {
                   padding: const EdgeInsets.all(8.0),
                   child: elevatedButton(
                     title: "Done",
-
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -198,7 +189,6 @@ void showTestBottomSheet2(BuildContext context) {
                 ),
                 const Divider(),
                 const SizedBox(height: 12),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: TextField(
@@ -223,7 +213,6 @@ void showTestBottomSheet2(BuildContext context) {
                   ),
                 ),
                 const SizedBox(height: 12),
-
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () {
@@ -255,10 +244,9 @@ void showTestBottomSheet2(BuildContext context) {
                                   ),
                                   dense: T,
                                   title: Text(
-                                    "${item.name ?? ""} (₹ ${item.price})",
+                                    "${item.name ?? ""} (${item.testCode}) (₹ ${item.price})",
                                     style: TextStyle(fontSize: 16.h),
                                   ),
-
                                   trailing: Checkbox(
                                     value: controller.selectedTests.any(
                                       (element) => element.id == item.id,
@@ -276,9 +264,7 @@ void showTestBottomSheet2(BuildContext context) {
                           ),
                         ),
                         const SizedBox(height: 15.0),
-
                         const Divider(),
-
                         Text(
                           "   Gorups of Tests",
                           style: TextStyle(
@@ -286,11 +272,9 @@ void showTestBottomSheet2(BuildContext context) {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-
                         Expanded(
                           child: PagedListView<int, Group>(
                             padding: EdgeInsets.symmetric(horizontal: 10.0),
-
                             pagingController: controller.grouptestController,
                             physics: const AlwaysScrollableScrollPhysics(),
                             builderDelegate: PagedChildBuilderDelegate<Group>(
@@ -301,10 +285,9 @@ void showTestBottomSheet2(BuildContext context) {
                                   ),
                                   dense: T,
                                   title: Text(
-                                    "${item.name ?? ""} (₹ ${item.price})",
+                                    "${item.name ?? ""} (${item.groupCode}) (₹ ${item.price})",
                                     style: TextStyle(fontSize: 16.h),
                                   ),
-
                                   trailing: Checkbox(
                                     value: controller.selectedGroupTests.any(
                                       (element) => element.id == item.id,
@@ -329,7 +312,6 @@ void showTestBottomSheet2(BuildContext context) {
                   padding: const EdgeInsets.all(8.0),
                   child: elevatedButton(
                     title: "Done",
-
                     onPressed: () {
                       Navigator.pop(context);
                     },

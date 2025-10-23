@@ -37,7 +37,11 @@ class HomeController extends GetxController
   CaseListModel? signoffCaselistmodel;
 
   final List<String> caseStatus = ["New", "Final", "InProgress", "SignOff"];
-  final List<String> amountStatus = ["Paid", "Unpaid", "PartiallyPaid"];
+  final List<String> amountStatus = [
+    "Paid", "Unpaid",
+
+    //  "PartiallyPaid"
+  ];
 
   static const int _pageSize = 10;
 

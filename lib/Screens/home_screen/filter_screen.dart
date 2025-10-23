@@ -56,7 +56,6 @@ class FilterBottomSheet extends StatelessWidget {
                       onTap: () async {
                         final DateTimeRange? picked = await showDateRangePicker(
                           context: context,
-
                           initialDateRange: controller.dates,
                           firstDate: DateTime(2000),
                           lastDate: DateTime(2100),
@@ -74,8 +73,14 @@ class FilterBottomSheet extends StatelessWidget {
                             : "${DateFormat('d MMM, yyyy').format(controller.dates!.start)} -  ${DateFormat('d MMM, yyyy').format(controller.dates!.end)}",
                       ),
                       hintText: "Date Range",
-                      suffixIcon: TablerIcons.calendar_month,
-
+                      suffixIcon: controller.dates == null
+                          ? TablerIcons.calendar_month
+                          : Icons.clear,
+                      suffixOnTap: () => {
+                        controller.dates = null,
+                        controller.update(),
+                        controller.OnRefresh()
+                      },
                       textAlign: TextAlign.center,
                       isReadOnly: true,
                     ),
@@ -128,36 +133,33 @@ class FilterBottomSheet extends StatelessWidget {
                   Icons.keyboard_arrow_down_rounded,
                   size: 30.0,
                 ),
-
                 onTap: () async {
-                  final selected =
-                      await showModalBottomSheet<Lab>(
-                        context: context,
-                        isScrollControlled: true,
-
-                        backgroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
-                        ),
-                        builder: (_) {
-                          return PaginatedSelectionSheet<Lab>(
-                            searchController: controller.labsearch,
-                            title: "Center",
-                            itemId: (item) => item.id.toString(),
-                            controller: controller.labPagingController,
-                            itemLabel: (lab) => lab.name ?? "",
-                            selectedItem: controller.selectedCenter,
-                            onSelect: (lab) {
-                              Navigator.pop(context, lab);
-                            },
-                          );
+                  final selected = await showModalBottomSheet<Lab>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (_) {
+                      return PaginatedSelectionSheet<Lab>(
+                        searchController: controller.labsearch,
+                        title: "Center",
+                        itemId: (item) => item.id.toString(),
+                        controller: controller.labPagingController,
+                        itemLabel: (lab) => lab.name ?? "",
+                        selectedItem: controller.selectedCenter,
+                        onSelect: (lab) {
+                          Navigator.pop(context, lab);
                         },
-                      ).whenComplete(() {
-                        controller.labsearch.clear();
-                        controller.labPagingController.refresh();
-                      });
+                      );
+                    },
+                  ).whenComplete(() {
+                    controller.labsearch.clear();
+                    controller.labPagingController.refresh();
+                  });
 
                   if (selected != null) {
                     controller.selectedCenter = selected;
@@ -186,35 +188,32 @@ class FilterBottomSheet extends StatelessWidget {
                   size: 30.0,
                 ),
                 onTap: () async {
-                  final selected =
-                      await showModalBottomSheet<Doctor>(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.white,
-
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
-                        ),
-                        builder: (_) {
-                          return PaginatedSelectionSheet<Doctor>(
-                            itemId: (item) => item.id.toString(),
-                            searchController: controller.doctorsearch,
-                            title: "Doctor",
-                            controller: controller.doctorPagingController,
-                            itemLabel: (doc) =>
-                                "${doc.firstName} ${doc.lastName}",
-                            selectedItem: controller.selectedDoctor,
-                            onSelect: (doc) {
-                              Navigator.pop(context, doc);
-                            },
-                          );
+                  final selected = await showModalBottomSheet<Doctor>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (_) {
+                      return PaginatedSelectionSheet<Doctor>(
+                        itemId: (item) => item.id.toString(),
+                        searchController: controller.doctorsearch,
+                        title: "Doctor",
+                        controller: controller.doctorPagingController,
+                        itemLabel: (doc) => "${doc.firstName} ${doc.lastName}",
+                        selectedItem: controller.selectedDoctor,
+                        onSelect: (doc) {
+                          Navigator.pop(context, doc);
                         },
-                      ).whenComplete(() {
-                        controller.doctorsearch.clear();
-                        controller.doctorPagingController.refresh();
-                      });
+                      );
+                    },
+                  ).whenComplete(() {
+                    controller.doctorsearch.clear();
+                    controller.doctorPagingController.refresh();
+                  });
 
                   if (selected != null) {
                     controller.selectedDoctor = selected;

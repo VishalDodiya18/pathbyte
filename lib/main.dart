@@ -24,28 +24,23 @@ class MyApp extends StatelessWidget {
         designSize: const Size(428, 926),
         builder: (_, child) {
           return GetMaterialApp(
-            title: 'pathbyte',
-
+            title: 'Pathbyte',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               scaffoldBackgroundColor: Colors.white,
               primaryColor: AppColor.primary,
-
               fontFamily: "Inter",
               bottomSheetTheme: const BottomSheetThemeData(
                 backgroundColor: AppColor.whitecolor,
               ),
               appBarTheme: AppBarTheme(
-                
                 shadowColor: AppColor.transparentcolor,
                 backgroundColor: AppColor.transparentcolor,
                 elevation: 0.0,
-                
                 iconTheme: IconThemeData(color: AppColor.primary),
                 centerTitle: T,
                 titleTextStyle: TextStyle(
                   color: AppColor.primary,
-
                   fontSize: 19.h,
                   fontWeight: FontWeight.w600,
                 ),
