@@ -204,28 +204,28 @@ class ReportDetails extends StatelessWidget {
                                 },
                               ),
                             ),
-                            if (controller
-                                        .reportDetailsModel
-                                        ?.data
-                                        ?.reportdetail
-                                        ?.caseDetails
-                                        ?.status ==
-                                    "InProgress" ||
-                                controller
-                                        .reportDetailsModel
-                                        ?.data
-                                        ?.reportdetail
-                                        ?.caseDetails
-                                        ?.status ==
-                                    "New")
-                              Expanded(
-                                child: elevatedButton(
-                                  title: "Save As Final",
-                                  onPressed: () {
-                                    controller.CreateReportResult(isdraft: F);
-                                  },
-                                ),
+                            // if (controller
+                            //             .reportDetailsModel
+                            //             ?.data
+                            //             ?.reportdetail
+                            //             ?.caseDetails
+                            //             ?.status ==
+                            //         "InProgress" ||
+                            //     controller
+                            //             .reportDetailsModel
+                            //             ?.data
+                            //             ?.reportdetail
+                            //             ?.caseDetails
+                            //             ?.status ==
+                            //         "New")
+                            Expanded(
+                              child: elevatedButton(
+                                title: "Save As Final",
+                                onPressed: () {
+                                  controller.CreateReportResult(isdraft: F);
+                                },
                               ),
+                            ),
                           ],
                         )
                       else ...[
